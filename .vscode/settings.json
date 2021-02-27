@@ -1,0 +1,6 @@
+{
+    "ada.trace.server": "verbose",
+    "ada.projectFile": "drivers/drivers.gpr",
+    "ada.enableDiagnostics": true,
+    "ada.defaultCharset": "utf-8"
+}
