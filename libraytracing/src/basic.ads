@@ -1,6 +1,4 @@
 package Basic is
-   function Answer return String;
-
    Value_Epsilon : constant := 0.0001;
    Min_Value : constant := -1_000_000_000_000.0;
    Max_Value : constant := 1_000_000_000_000.0;

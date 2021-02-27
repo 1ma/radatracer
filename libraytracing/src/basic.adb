@@ -1,9 +1,4 @@
 package body Basic is
-   function Answer return String is
-   begin
-      return "42";
-   end Answer;
-
    function "+" (A, B : Tuple) return Tuple is
       C : constant Tuple := (
          X => A.X + B.X,
@@ -27,10 +22,9 @@ package body Basic is
    end "-";
 
    function "-" (A : Tuple) return Tuple is
-      Zero : constant Tuple := (0.0, 0.0, 0.0, 0.0);
-      Negated : constant Tuple := Zero - A;
+      NotA : constant Tuple := (-A.X, -A.Y, -A.Z, -A.W);
    begin
-      return Negated;
+      return NotA;
    end "-";
 
    function New_Point (X, Y, Z : Value) return Tuple is
