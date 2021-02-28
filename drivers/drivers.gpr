@@ -1,4 +1,4 @@
-with "../libraytracing/libraytracing.gpr";
+with "../libradatracer/radatracer.gpr";
 
 project Drivers is
 

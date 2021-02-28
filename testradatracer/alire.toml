@@ -1,4 +1,4 @@
-name = "testraytracing"
+name = "testradatracer"
 description = "Shiny new project"
 version = "0.0.0"
 
@@ -6,7 +6,7 @@ authors = ["Marcel Hernandez"]
 maintainers = ["Marcel Hernandez <e6990620@gmail.com>"]
 maintainers-logins = ["1ma"]
 
-executables = ["testraytracing"]
+executables = ["testradatracer"]
 
 [[depends-on]]
 aunit = "^21.0.0"
