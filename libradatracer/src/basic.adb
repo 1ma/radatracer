@@ -1,4 +1,9 @@
 package body Basic is
+   overriding function "=" (A, B : Tuple) return Boolean is
+   begin
+      return A.X = B.X and A.Y = B.Y and A.Z = B.Z and A.W = B.W;
+   end "=";
+
    function "+" (A, B : Tuple) return Tuple is
       C : constant Tuple := (
          X => A.X + B.X,
@@ -26,6 +31,18 @@ package body Basic is
    begin
       return NotA;
    end "-";
+
+   function "*" (A : Tuple; B : Value) return Tuple is
+      T : constant Tuple := (A.X * B, A.Y * B, A.Z * B, A.W * B);
+   begin
+      return T;
+   end "*";
+
+   function "/" (A : Tuple; B : Value) return Tuple is
+      T : constant Tuple := (A.X / B, A.Y / B, A.Z / B, A.W / B);
+   begin
+      return T;
+   end "/";
 
    function New_Point (X, Y, Z : Value) return Tuple is
       Point : constant Tuple := (X, Y, Z, 1.0);
