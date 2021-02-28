@@ -8,8 +8,8 @@ package body Basic.Tests is
       P : constant Tuple := Basic.New_Point (4.0, -4.0, 3.0);
       V : constant Tuple := Basic.New_Vector (4.0, -4.0, 3.0);
    begin
-      AUnit.Assertions.Assert (P.W = 1.0, "A Point's W component is 1.0");
-      AUnit.Assertions.Assert (V.W = 0.0, "A Vector's W component is 1.0");
+      AUnit.Assertions.Assert (P.W = 1.0, "A Point's W component is 1");
+      AUnit.Assertions.Assert (V.W = 0.0, "A Vector's W component is 0");
    end Test_First;
 
    overriding procedure Register_Tests (T : in out Test) is
