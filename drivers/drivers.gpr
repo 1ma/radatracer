@@ -6,7 +6,7 @@ project Drivers is
    for Object_Dir use "obj";
    for Create_Missing_Dirs use "True";
    for Exec_Dir use "bin";
-   for Main use ("test_drive.adb");
+   for Main use ("fixed", "test_drive.adb");
 
    type Enabled_Kind is ("enabled", "disabled");
    Compile_Checks : Enabled_Kind := External ("DRIVERS_COMPILE_CHECKS", "enabled");
@@ -61,7 +61,7 @@ project Drivers is
                             "-gnatn"); -- Enable inlining
       when "debug" =>
          Build_Switches := ("-g",   -- Debug info
-                            "-Og"); -- No optimization
+                            "-O0"); -- No optimization
    end case;
 
    package Compiler is

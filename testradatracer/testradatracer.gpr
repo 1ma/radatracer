@@ -62,7 +62,7 @@ project TestRadatracer is
                             "-gnatn"); -- Enable inlining
       when "debug" =>
          Build_Switches := ("-g",   -- Debug info
-                            "-Og"); -- No optimization
+                            "-O0"); -- No optimization
    end case;
 
    package Compiler is
