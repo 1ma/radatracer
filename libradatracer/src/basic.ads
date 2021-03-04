@@ -5,6 +5,7 @@ package Basic is
    Max_Value : constant := 1_000_000.0;
    Value_Epsilon : constant := 0.000_01;
    type Value is delta Value_Epsilon range Min_Value .. Max_Value;
+   for Value'Small use Value_Epsilon;
 
    type Tuple is record
       X : Value := 0.0;
