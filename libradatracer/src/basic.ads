@@ -1,11 +1,9 @@
 package Basic is
    pragma Pure;
 
-   Min_Value : constant := -1_000_000.0;
-   Max_Value : constant := 1_000_000.0;
    Value_Epsilon : constant := 0.000_01;
-   type Value is delta Value_Epsilon range Min_Value .. Max_Value;
-   for Value'Small use Value_Epsilon;
+   Value_Digits : constant := 18;
+   type Value is delta Value_Epsilon digits Value_Digits;
 
    type Tuple is record
       X : Value := 0.0;

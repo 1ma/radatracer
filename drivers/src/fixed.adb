@@ -1,12 +1,12 @@
 with Ada.Text_IO;
 
 procedure Fixed is
-   type Aviam is delta 0.1 range 0.0 .. 10.0;
-   for Aviam'Small use 0.1;
-   F1 : constant Aviam := 0.0;
-   F2 : constant Aviam := 0.1;
+   type MyFixedReal is delta 10.0 ** (-5) digits 18;
+
+   Z : constant MyFixedReal := 0.0;
 begin
-   Ada.Text_IO.Put_Line ("cumansem");
-   Ada.Text_IO.Put_Line (F1'Image);
-   Ada.Text_IO.Put_Line (F2'Image);
+   Ada.Text_IO.Put_Line (MyFixedReal'Size'Image);
+   Ada.Text_IO.Put_Line (MyFixedReal'First'Image);
+   Ada.Text_IO.Put_Line (MyFixedReal'Last'Image);
+   Ada.Text_IO.Put_Line (Z'Image);
 end Fixed;
