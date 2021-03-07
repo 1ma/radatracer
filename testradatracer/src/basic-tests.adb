@@ -28,6 +28,16 @@ package body Basic.Tests is
       Sub1 : constant Tuple := Basic.New_Point (3.0, 2.0, 1.0);
       Sub2 : constant Tuple := Basic.New_Point (5.0, 6.0, 7.0);
       SubR : constant Tuple := Basic.New_Vector (-2.0, -4.0, -6.0);
+
+      Neg1 : constant Tuple := (1.0, -2.0, 3.0, -4.0);
+      NegR : constant Tuple := (-1.0, 2.0, -3.0, 4.0);
+
+      ScalarMult1 : constant Tuple := (1.0, -2.0, 3.0, -4.0);
+      ScalarMultR1 : constant Tuple := (3.5, -7.0, 10.5, -14.0);
+      ScalarMultR2 : constant Tuple := (0.5, -1.0, 1.5, -2.0);
+
+      ScalarDiv1 : constant Tuple := (1.0, -2.0, 3.0, -4.0);
+      ScalarDivR : constant Tuple := (0.5, -1.0, 1.5, -2.0);
    begin
       AUnit.Assertions.Assert (Comp1 = Comp2, "Comp1 and Comp2 are the same Tuple");
       AUnit.Assertions.Assert (Comp1 /= Comp3, "Comp1 and Comp3 are not the same Tuple");
@@ -35,6 +45,15 @@ package body Basic.Tests is
       AUnit.Assertions.Assert (Sum1 + Sum2 = SumR, "Sum test");
 
       AUnit.Assertions.Assert (Sub1 - Sub2 = SubR, "Subtraction test");
+
+      AUnit.Assertions.Assert (-Neg1 = NegR, "Negation test");
+
+      AUnit.Assertions.Assert (ScalarMult1 * 3.5 = ScalarMultR1, "Scalar Multiplication test 1");
+      AUnit.Assertions.Assert (3.5 * ScalarMult1 = ScalarMultR1, "Scalar Multiplication test 2");
+      AUnit.Assertions.Assert (ScalarMult1 * 0.5 = ScalarMultR2, "Scalar Multiplication test 3");
+      AUnit.Assertions.Assert (0.5 * ScalarMult1 = ScalarMultR2, "Scalar Multiplication test 4");
+
+      AUnit.Assertions.Assert (ScalarDiv1 / 2.0 = ScalarDivR, "Scalar Division test");
    end Test_Tuple_Operations;
 
    overriding procedure Register_Tests (T : in out Test) is

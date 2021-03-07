@@ -32,16 +32,22 @@ package body Basic is
       return NotA;
    end "-";
 
-   function "*" (A : Tuple; B : Value) return Tuple is
-      T : constant Tuple := (A.X * B, A.Y * B, A.Z * B, A.W * B);
+   function "*" (T : Tuple; V : Value) return Tuple is
+      Mult : constant Tuple := (T.X * V, T.Y * V, T.Z * V, T.W * V);
    begin
-      return T;
+      return Mult;
    end "*";
 
-   function "/" (A : Tuple; B : Value) return Tuple is
-      T : constant Tuple := (A.X / B, A.Y / B, A.Z / B, A.W / B);
+   function "*" (V : Value; T : Tuple) return Tuple is
+      Mult : constant Tuple := (T.X * V, T.Y * V, T.Z * V, T.W * V);
    begin
-      return T;
+      return Mult;
+   end "*";
+
+   function "/" (T : Tuple; V : Value) return Tuple is
+      Div : constant Tuple := (T.X / V, T.Y / V, T.Z / V, T.W / V);
+   begin
+      return Div;
    end "/";
 
    function New_Point (X, Y, Z : Value) return Tuple is

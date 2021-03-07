@@ -13,11 +13,16 @@ package Basic is
    end record;
 
    overriding function "=" (A, B : Tuple) return Boolean;
+
    function "+" (A, B : Tuple) return Tuple;
+
    function "-" (A, B : Tuple) return Tuple;
    function "-" (A : Tuple) return Tuple;
-   function "*" (A : Tuple; B : Value) return Tuple;
-   function "/" (A : Tuple; B : Value) return Tuple;
+
+   function "*" (T : Tuple; V : Value) return Tuple;
+   function "*" (V : Value; T : Tuple) return Tuple;
+
+   function "/" (T : Tuple; V : Value) return Tuple;
 
    function New_Point (X, Y, Z : Value) return Tuple;
    function New_Vector (X, Y, Z : Value) return Tuple;
