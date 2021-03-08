@@ -1,9 +1,7 @@
 package Basic is
    pragma Pure;
 
-   Value_Epsilon : constant := 0.000_01;
-   Value_Digits : constant := 18;
-   type Value is delta Value_Epsilon digits Value_Digits;
+   type Value is new Float;
 
    type Tuple is record
       X : Value := 0.0;
@@ -12,6 +10,7 @@ package Basic is
       W : Value := 0.0;
    end record;
 
+   overriding function "=" (A, B : Value) return Boolean;
    overriding function "=" (A, B : Tuple) return Boolean;
 
    function "+" (A, B : Tuple) return Tuple;
@@ -23,6 +22,8 @@ package Basic is
    function "*" (V : Value; T : Tuple) return Tuple;
 
    function "/" (T : Tuple; V : Value) return Tuple;
+
+   function Magnitude (T : Tuple) return Value;
 
    function New_Point (X, Y, Z : Value) return Tuple;
    function New_Vector (X, Y, Z : Value) return Tuple;

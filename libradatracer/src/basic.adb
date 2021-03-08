@@ -1,4 +1,14 @@
+with Ada.Numerics.Generic_Elementary_Functions;
+
 package body Basic is
+   package Value_Elementary_Functions is new Ada.Numerics.Generic_Elementary_Functions (Value);
+
+   overriding function "=" (A, B : Value) return Boolean is
+      Epsilon : constant := 0.00001;
+   begin
+      return abs (A - B) < Epsilon;
+   end "=";
+
    overriding function "=" (A, B : Tuple) return Boolean is
    begin
       return A.X = B.X and A.Y = B.Y and A.Z = B.Z and A.W = B.W;
@@ -49,6 +59,11 @@ package body Basic is
    begin
       return Div;
    end "/";
+
+   function Magnitude (T : Tuple) return Value is
+   begin
+      return Value_Elementary_Functions.Sqrt ((T.X * T.X) + (T.Y * T.Y) + (T.Z * T.Z) + (T.W * T.W));
+   end Magnitude;
 
    function New_Point (X, Y, Z : Value) return Tuple is
       Point : constant Tuple := (X, Y, Z, 1.0);
