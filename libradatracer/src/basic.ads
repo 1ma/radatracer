@@ -24,6 +24,9 @@ package Basic is
    function "/" (T : Tuple; V : Value) return Tuple;
 
    function Magnitude (T : Tuple) return Value;
+   function Normalize (T : Tuple) return Tuple;
+   function Dot_Product (A, B : Tuple) return Value;
+   function Cross_Product (A, B : Tuple) return Tuple;
 
    function New_Point (X, Y, Z : Value) return Tuple;
    function New_Vector (X, Y, Z : Value) return Tuple;

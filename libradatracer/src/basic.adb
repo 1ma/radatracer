@@ -65,6 +65,30 @@ package body Basic is
       return Value_Elementary_Functions.Sqrt ((T.X * T.X) + (T.Y * T.Y) + (T.Z * T.Z) + (T.W * T.W));
    end Magnitude;
 
+   function Normalize (T : Tuple) return Tuple is
+      M : constant Value := Magnitude (T);
+      Normalized : constant Tuple := (T.X / M, T.Y / M, T.Z / M, T.W / M);
+   begin
+      return Normalized;
+   end Normalize;
+
+   function Dot_Product (A, B : Tuple) return Value is
+      Dot : constant Value := A.X * B.X + A.Y * B.Y + A.Z * B.Z + A.W * B.W;
+   begin
+      return Dot;
+   end Dot_Product;
+
+   function Cross_Product (A, B : Tuple) return Tuple is
+      Cross : constant Tuple := (
+         X => A.Y * B.Z - A.Z * B.Y,
+         Y => A.Z * B.X - A.X * B.Z,
+         Z => A.X * B.Y - A.Y * B.X,
+         W => 0.0
+      );
+   begin
+      return Cross;
+   end Cross_Product;
+
    function New_Point (X, Y, Z : Value) return Tuple is
       Point : constant Tuple := (X, Y, Z, 1.0);
    begin

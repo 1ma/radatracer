@@ -43,6 +43,17 @@ package body Basic.Tests is
       Magnitude1 : constant Tuple := Basic.New_Vector (1.0, 0.0, 0.0);
       Magnitude2 : constant Tuple := Basic.New_Vector (1.0, 2.0, 3.0);
       Magnitude2R : constant Value := Value (Ada.Numerics.Elementary_Functions.Sqrt (14.0));
+
+      Normalize1 : constant Tuple := Basic.New_Vector (4.0, 0.0, 0.0);
+      Normalize1R : constant Tuple := Basic.New_Vector (1.0, 0.0, 0.0);
+      Normalize2 : constant Tuple := Basic.New_Vector (1.0, 2.0, 3.0);
+      Normalize2R : constant Tuple := Basic.New_Vector (0.26726, 0.53452, 0.80178);
+
+      Product1 : constant Tuple := Basic.New_Vector (1.0, 2.0, 3.0);
+      Product2 : constant Tuple := Basic.New_Vector (2.0, 3.0, 4.0);
+
+      CrossProduct1R : constant Tuple := Basic.New_Vector (-1.0, 2.0, -1.0);
+      CrossProduct2R : constant Tuple := Basic.New_Vector (1.0, -2.0, 1.0);
    begin
       AUnit.Assertions.Assert (Comp1 = Comp2, "Comp1 and Comp2 are the same Tuple");
       AUnit.Assertions.Assert (Comp1 /= Comp3, "Comp1 and Comp3 are not the same Tuple");
@@ -62,6 +73,16 @@ package body Basic.Tests is
 
       AUnit.Assertions.Assert (Basic.Magnitude (Magnitude1) = 1.0, "Vector Magnitude test 1");
       AUnit.Assertions.Assert (Basic.Magnitude (Magnitude2) = Magnitude2R, "Vector Magnitude test 2");
+
+      AUnit.Assertions.Assert (Basic.Normalize (Normalize1) = Normalize1R, "Vector Normalization test 1");
+      AUnit.Assertions.Assert (Basic.Normalize (Normalize2) = Normalize2R, "Vector Normalization test 2");
+      AUnit.Assertions.Assert (Basic.Magnitude (Normalize1R) = 1.0, "Vector Normalization test 3");
+      AUnit.Assertions.Assert (Basic.Magnitude (Normalize2R) = 1.0, "Vector Normalization test 4");
+
+      AUnit.Assertions.Assert (Basic.Dot_Product (Product1, Product2) = 20.0, "Dot Product test");
+
+      AUnit.Assertions.Assert (Basic.Cross_Product (Product1, Product2) = CrossProduct1R, "Cross Product test 1");
+      AUnit.Assertions.Assert (Basic.Cross_Product (Product2, Product1) = CrossProduct2R, "Cross Product test 2");
    end Test_Tuple_Operations;
 
    overriding procedure Register_Tests (T : in out Test) is
