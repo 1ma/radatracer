@@ -1,3 +1,4 @@
+with Ada.Numerics.Elementary_Functions;
 with AUnit.Assertions;
 with Basic;
 
@@ -38,6 +39,10 @@ package body Basic.Tests is
 
       ScalarDiv1 : constant Tuple := (1.0, -2.0, 3.0, -4.0);
       ScalarDivR : constant Tuple := (0.5, -1.0, 1.5, -2.0);
+
+      Magnitude1 : constant Tuple := Basic.New_Vector (1.0, 0.0, 0.0);
+      Magnitude2 : constant Tuple := Basic.New_Vector (1.0, 2.0, 3.0);
+      Magnitude2R : constant Value := Value (Ada.Numerics.Elementary_Functions.Sqrt (14.0));
    begin
       AUnit.Assertions.Assert (Comp1 = Comp2, "Comp1 and Comp2 are the same Tuple");
       AUnit.Assertions.Assert (Comp1 /= Comp3, "Comp1 and Comp3 are not the same Tuple");
@@ -54,6 +59,9 @@ package body Basic.Tests is
       AUnit.Assertions.Assert (0.5 * ScalarMult1 = ScalarMultR2, "Scalar Multiplication test 4");
 
       AUnit.Assertions.Assert (ScalarDiv1 / 2.0 = ScalarDivR, "Scalar Division test");
+
+      AUnit.Assertions.Assert (Basic.Magnitude (Magnitude1) = 1.0, "Vector Magnitude test 1");
+      AUnit.Assertions.Assert (Basic.Magnitude (Magnitude2) = Magnitude2R, "Vector Magnitude test 2");
    end Test_Tuple_Operations;
 
    overriding procedure Register_Tests (T : in out Test) is
