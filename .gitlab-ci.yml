@@ -6,28 +6,28 @@ builds-on-gnat-9:
   stage: build-check
   image: 1maa/fsf-gnat:9
   script:
-    - gprbuild drivers/drivers.gpr
+    - gprbuild bin/capstones.gpr
 
 builds-on-gnat-10:
   stage: build-check
   image: 1maa/fsf-gnat:10
   script:
-    - gprbuild drivers/drivers.gpr
+    - gprbuild bin/capstones.gpr
 
 test-on-gnat-9:
   stage: testing
   image: 1maa/fsf-gnat:9
   before_script:
-    - cd testradatracer
+    - cd tests
     - alr build
   script:
-    - ./bin/harness
+    - ./out/harness
 
 test-on-gnat-10:
   stage: testing
   image: 1maa/fsf-gnat:10
   before_script:
-    - cd testradatracer
+    - cd tests
     - alr build
   script:
-    - ./bin/harness
+    - ./out/harness

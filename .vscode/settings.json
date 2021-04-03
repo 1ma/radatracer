@@ -1,4 +1,4 @@
 {
-    "ada.projectFile": "drivers/drivers.gpr",
+    "ada.projectFile": "bin/capstones.gpr",
     "ada.defaultCharset": "utf-8"
 }

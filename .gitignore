@@ -1,6 +1,5 @@
 .idea/
 alire/
-bin/
+out/
 obj/
-lib/
 alire/

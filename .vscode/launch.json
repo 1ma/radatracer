@@ -8,7 +8,7 @@
          "name": "(gdb) Launch",
          "type": "cppdbg",
          "request": "launch",
-         "program": "${workspaceFolder}/drivers/bin/test_drive",
+         "program": "${workspaceFolder}/bin/out/test_drive",
          "args": [],
          "stopAtEntry": false,
          "cwd": "${workspaceFolder}",
