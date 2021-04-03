@@ -89,15 +89,15 @@ package body Basic is
       return Cross;
    end Cross_Product;
 
-   function New_Point (X, Y, Z : Value) return Tuple is
+   function Make_Point (X, Y, Z : Value) return Tuple is
       Point : constant Tuple := (X, Y, Z, 1.0);
    begin
       return Point;
-   end New_Point;
+   end Make_Point;
 
-   function New_Vector (X, Y, Z : Value) return Tuple is
+   function Make_Vector (X, Y, Z : Value) return Tuple is
       Vector : constant Tuple := (X, Y, Z, 0.0);
    begin
       return Vector;
-   end New_Vector;
+   end Make_Vector;
 end Basic;

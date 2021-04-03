@@ -28,6 +28,6 @@ package Basic is
    function Dot_Product (A, B : Tuple) return Value;
    function Cross_Product (A, B : Tuple) return Tuple;
 
-   function New_Point (X, Y, Z : Value) return Tuple;
-   function New_Vector (X, Y, Z : Value) return Tuple;
+   function Make_Point (X, Y, Z : Value) return Tuple;
+   function Make_Vector (X, Y, Z : Value) return Tuple;
 end Basic;

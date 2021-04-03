@@ -40,13 +40,13 @@ procedure Simple_Ballistics is
    end Tick;
 
    P : Projectile := (
-      Position => Basic.New_Point (0.0, 1.0, 0.0),
-      Velocity => Basic.Normalize (Basic.New_Vector (1.0, 0.0, 0.0))
+      Position => Basic.Make_Point (0.0, 1.0, 0.0),
+      Velocity => Basic.Normalize (Basic.Make_Vector (1.0, 0.0, 0.0))
    );
 
    E : constant Environment := (
-      Gravity => Basic.New_Vector (0.0, -0.1, 0.0),
-      Wind => Basic.New_Vector (-0.01, 0.0, 0.0)
+      Gravity => Basic.Make_Vector (0.0, -0.1, 0.0),
+      Wind => Basic.Make_Vector (-0.01, 0.0, 0.0)
    );
 begin
    while P.Position.Y > 0.0 loop

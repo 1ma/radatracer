@@ -7,8 +7,8 @@ package body Basic.Tests is
    procedure Test_Simple_Tuples (T : in out AUnit.Test_Cases.Test_Case'Class) is
       A : constant Tuple := (4.3, -4.2, 3.1, 1.0);
       B : constant Tuple := (4.3, -4.2, 3.1, 0.0);
-      P : constant Tuple := Basic.New_Point (4.0, -4.0, 3.0);
-      V : constant Tuple := Basic.New_Vector (4.0, -4.0, 3.0);
+      P : constant Tuple := Basic.Make_Point (4.0, -4.0, 3.0);
+      V : constant Tuple := Basic.Make_Vector (4.0, -4.0, 3.0);
    begin
       AUnit.Assertions.Assert (A.X = 4.3 and A.Y = -4.2 and A.Z = 3.1 and A.W = 1.0, "A has expected values");
       AUnit.Assertions.Assert (B.X = 4.3 and B.Y = -4.2 and B.Z = 3.1 and B.W = 0.0, "B has expected values");
@@ -26,9 +26,9 @@ package body Basic.Tests is
       Sum2 : constant Tuple := (-2.0, 3.0, 1.0, 0.0);
       SumR : constant Tuple := (1.0, 1.0, 6.0, 1.0);
 
-      Sub1 : constant Tuple := Basic.New_Point (3.0, 2.0, 1.0);
-      Sub2 : constant Tuple := Basic.New_Point (5.0, 6.0, 7.0);
-      SubR : constant Tuple := Basic.New_Vector (-2.0, -4.0, -6.0);
+      Sub1 : constant Tuple := Basic.Make_Point (3.0, 2.0, 1.0);
+      Sub2 : constant Tuple := Basic.Make_Point (5.0, 6.0, 7.0);
+      SubR : constant Tuple := Basic.Make_Vector (-2.0, -4.0, -6.0);
 
       Neg1 : constant Tuple := (1.0, -2.0, 3.0, -4.0);
       NegR : constant Tuple := (-1.0, 2.0, -3.0, 4.0);
@@ -40,20 +40,20 @@ package body Basic.Tests is
       ScalarDiv1 : constant Tuple := (1.0, -2.0, 3.0, -4.0);
       ScalarDivR : constant Tuple := (0.5, -1.0, 1.5, -2.0);
 
-      Magnitude1 : constant Tuple := Basic.New_Vector (1.0, 0.0, 0.0);
-      Magnitude2 : constant Tuple := Basic.New_Vector (1.0, 2.0, 3.0);
+      Magnitude1 : constant Tuple := Basic.Make_Vector (1.0, 0.0, 0.0);
+      Magnitude2 : constant Tuple := Basic.Make_Vector (1.0, 2.0, 3.0);
       Magnitude2R : constant Value := Value (Ada.Numerics.Elementary_Functions.Sqrt (14.0));
 
-      Normalize1 : constant Tuple := Basic.New_Vector (4.0, 0.0, 0.0);
-      Normalize1R : constant Tuple := Basic.New_Vector (1.0, 0.0, 0.0);
-      Normalize2 : constant Tuple := Basic.New_Vector (1.0, 2.0, 3.0);
-      Normalize2R : constant Tuple := Basic.New_Vector (0.26726, 0.53452, 0.80178);
+      Normalize1 : constant Tuple := Basic.Make_Vector (4.0, 0.0, 0.0);
+      Normalize1R : constant Tuple := Basic.Make_Vector (1.0, 0.0, 0.0);
+      Normalize2 : constant Tuple := Basic.Make_Vector (1.0, 2.0, 3.0);
+      Normalize2R : constant Tuple := Basic.Make_Vector (0.26726, 0.53452, 0.80178);
 
-      Product1 : constant Tuple := Basic.New_Vector (1.0, 2.0, 3.0);
-      Product2 : constant Tuple := Basic.New_Vector (2.0, 3.0, 4.0);
+      Product1 : constant Tuple := Basic.Make_Vector (1.0, 2.0, 3.0);
+      Product2 : constant Tuple := Basic.Make_Vector (2.0, 3.0, 4.0);
 
-      CrossProduct1R : constant Tuple := Basic.New_Vector (-1.0, 2.0, -1.0);
-      CrossProduct2R : constant Tuple := Basic.New_Vector (1.0, -2.0, 1.0);
+      CrossProduct1R : constant Tuple := Basic.Make_Vector (-1.0, 2.0, -1.0);
+      CrossProduct2R : constant Tuple := Basic.Make_Vector (1.0, -2.0, 1.0);
    begin
       AUnit.Assertions.Assert (Comp1 = Comp2, "Comp1 and Comp2 are the same Tuple");
       AUnit.Assertions.Assert (Comp1 /= Comp3, "Comp1 and Comp3 are not the same Tuple");
