@@ -53,6 +53,4 @@ begin
       P := Tick (E, P);
       Print_Tuple (P.Position);
    end loop;
-
-   Print_Tuple (P.Position);
 end Simple_Ballistics;

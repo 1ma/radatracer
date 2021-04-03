@@ -7,9 +7,9 @@ package Canvas is
    for Primary_Color'Size use 8;
 
    type Pixel is record
-      Red : Primary_Color;
-      Green : Primary_Color;
-      Blue : Primary_Color;
+      Red : Primary_Color := 0;
+      Green : Primary_Color := 0;
+      Blue : Primary_Color := 0;
    end record;
 
    function To_Pixel (T : Basic.Tuple) return Pixel;
