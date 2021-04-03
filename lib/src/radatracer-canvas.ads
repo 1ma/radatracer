@@ -1,6 +1,4 @@
-with Basic;
-
-package Canvas is
+package Radatracer.Canvas is
    pragma Pure;
 
    type Primary_Color is range 0 .. 255;
@@ -12,5 +10,5 @@ package Canvas is
       Blue : Primary_Color := 0;
    end record;
 
-   function To_Pixel (T : Basic.Tuple) return Pixel;
-end Canvas;
+   function To_Pixel (T : Tuple) return Pixel;
+end Radatracer.Canvas;

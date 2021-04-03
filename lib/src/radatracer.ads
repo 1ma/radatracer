@@ -1,4 +1,4 @@
-package Basic is
+package Radatracer is
    pragma Pure;
 
    type Value is new Float;
@@ -30,4 +30,4 @@ package Basic is
 
    function Make_Point (X, Y, Z : Value) return Tuple;
    function Make_Vector (X, Y, Z : Value) return Tuple;
-end Basic;
+end Radatracer;

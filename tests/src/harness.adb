@@ -4,15 +4,15 @@ with AUnit.Reporter.Text;
 with AUnit.Run;
 with AUnit.Test_Cases;
 with AUnit.Test_Suites;
-with Basic.Tests;
+with Radatracer.Tests;
 
 procedure Harness is
    function La_Suite return AUnit.Test_Suites.Access_Test_Suite;
    function La_Suite return AUnit.Test_Suites.Access_Test_Suite is
       Suite : constant AUnit.Test_Suites.Access_Test_Suite := new AUnit.Test_Suites.Test_Suite;
-      Basic_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Basic.Tests.Test;
+      Radatracer_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Tests.Test;
    begin
-      Suite.Add_Test (Basic_Tests);
+      Suite.Add_Test (Radatracer_Tests);
       return Suite;
    end La_Suite;
 

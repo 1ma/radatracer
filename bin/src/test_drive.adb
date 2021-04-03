@@ -1,17 +1,17 @@
 with Ada.Text_IO;
-with Basic;
+with Radatracer;
 
-use type Basic.Tuple;
+use type Radatracer.Tuple;
 
 procedure Test_Drive is
-   A : constant Basic.Tuple := (1.0, 1.0, 1.0, 1.0);
-   B : constant Basic.Tuple := (1.0, 2.0, 3.0, 0.0);
-   C : constant Basic.Tuple := A + B;
-   D : constant Basic.Tuple := B - A;
-   E : constant Basic.Tuple := -B;
+   A : constant Radatracer.Tuple := (1.0, 1.0, 1.0, 1.0);
+   B : constant Radatracer.Tuple := (1.0, 2.0, 3.0, 0.0);
+   C : constant Radatracer.Tuple := A + B;
+   D : constant Radatracer.Tuple := B - A;
+   E : constant Radatracer.Tuple := -B;
 
-   procedure Print_Tuple (T : Basic.Tuple);
-   procedure Print_Tuple (T : Basic.Tuple) is
+   procedure Print_Tuple (T : Radatracer.Tuple);
+   procedure Print_Tuple (T : Radatracer.Tuple) is
    begin
       Ada.Text_IO.Put ("X =>");
       Ada.Text_IO.Put (T.X'Image);

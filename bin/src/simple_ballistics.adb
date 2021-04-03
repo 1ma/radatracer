@@ -1,22 +1,22 @@
 with Ada.Text_IO;
-with Basic;
+with Radatracer;
 
-use type Basic.Tuple;
-use type Basic.Value;
+use type Radatracer.Tuple;
+use type Radatracer.Value;
 
 procedure Simple_Ballistics is
    type Projectile is record
-      Position : Basic.Tuple;
-      Velocity : Basic.Tuple;
+      Position : Radatracer.Tuple;
+      Velocity : Radatracer.Tuple;
    end record;
 
    type Environment is record
-      Gravity : Basic.Tuple;
-      Wind : Basic.Tuple;
+      Gravity : Radatracer.Tuple;
+      Wind : Radatracer.Tuple;
    end record;
 
-   procedure Print_Tuple (T : Basic.Tuple);
-   procedure Print_Tuple (T : Basic.Tuple) is
+   procedure Print_Tuple (T : Radatracer.Tuple);
+   procedure Print_Tuple (T : Radatracer.Tuple) is
    begin
       Ada.Text_IO.Put ("X =>");
       Ada.Text_IO.Put (T.X'Image);
@@ -40,13 +40,13 @@ procedure Simple_Ballistics is
    end Tick;
 
    P : Projectile := (
-      Position => Basic.Make_Point (0.0, 1.0, 0.0),
-      Velocity => Basic.Normalize (Basic.Make_Vector (1.0, 0.0, 0.0))
+      Position => Radatracer.Make_Point (0.0, 1.0, 0.0),
+      Velocity => Radatracer.Normalize (Radatracer.Make_Vector (1.0, 0.0, 0.0))
    );
 
    E : constant Environment := (
-      Gravity => Basic.Make_Vector (0.0, -0.1, 0.0),
-      Wind => Basic.Make_Vector (-0.01, 0.0, 0.0)
+      Gravity => Radatracer.Make_Vector (0.0, -0.1, 0.0),
+      Wind => Radatracer.Make_Vector (-0.01, 0.0, 0.0)
    );
 begin
    while P.Position.Y > 0.0 loop

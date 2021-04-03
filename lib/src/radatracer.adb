@@ -1,6 +1,6 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 
-package body Basic is
+package body Radatracer is
    package Value_Elementary_Functions is
       new Ada.Numerics.Generic_Elementary_Functions (Value);
 
@@ -129,4 +129,4 @@ package body Basic is
    begin
       return Result;
    end Make_Vector;
-end Basic;
+end Radatracer;
