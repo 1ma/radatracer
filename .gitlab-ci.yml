@@ -16,6 +16,8 @@ builds-on-gnat-10:
 
 test-on-gnat-9:
   stage: testing
+  needs:
+    - builds-on-gnat-9
   image: 1maa/fsf-gnat:9
   before_script:
     - cd tests
@@ -25,6 +27,8 @@ test-on-gnat-9:
 
 test-on-gnat-10:
   stage: testing
+  needs:
+    - builds-on-gnat-10
   image: 1maa/fsf-gnat:10
   before_script:
     - cd tests
