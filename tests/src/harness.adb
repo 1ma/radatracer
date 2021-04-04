@@ -5,14 +5,17 @@ with AUnit.Run;
 with AUnit.Test_Cases;
 with AUnit.Test_Suites;
 with Radatracer.Tests;
+with Radatracer.Canvas.Tests;
 
 procedure Harness is
    function La_Suite return AUnit.Test_Suites.Access_Test_Suite;
    function La_Suite return AUnit.Test_Suites.Access_Test_Suite is
       Suite : constant AUnit.Test_Suites.Access_Test_Suite := new AUnit.Test_Suites.Test_Suite;
       Radatracer_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Tests.Test;
+      Canvas_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Canvas.Tests.Test;
    begin
       Suite.Add_Test (Radatracer_Tests);
+      Suite.Add_Test (Canvas_Tests);
       return Suite;
    end La_Suite;
 

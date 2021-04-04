@@ -88,12 +88,12 @@ package body Radatracer.Tests is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Test_Simple_Tuples'Access, "Simple Tuple creation tests");
-      Register_Routine (T, Test_Tuple_Operations'Access, "Tuple Operations tests");
+      Register_Routine (T, Test_Tuple_Operations'Access, "Tuple operations tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
       pragma Unreferenced (T);
    begin
-      return AUnit.Format ("Basic");
+      return AUnit.Format ("Radatracer");
    end Name;
 end Radatracer.Tests;
