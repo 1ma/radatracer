@@ -25,6 +25,10 @@ package body Radatracer.Tests is
       Sum2 : constant Tuple := (-2.0, 3.0, 1.0, 0.0);
       SumR : constant Tuple := (1.0, 1.0, 6.0, 1.0);
 
+      Hadamard1 : constant Tuple := (1.0, 0.2, 0.4, 0.0);
+      Hadamard2 : constant Tuple := (0.9, 1.0, 0.1, 0.0);
+      HadamardR : constant Tuple := (0.9, 0.2, 0.04, 0.0);
+
       Sub1 : constant Tuple := Make_Point (3.0, 2.0, 1.0);
       Sub2 : constant Tuple := Make_Point (5.0, 6.0, 7.0);
       SubR : constant Tuple := Make_Vector (-2.0, -4.0, -6.0);
@@ -58,6 +62,8 @@ package body Radatracer.Tests is
       AUnit.Assertions.Assert (Comp1 /= Comp3, "Comp1 and Comp3 are not the same Tuple");
 
       AUnit.Assertions.Assert (Sum1 + Sum2 = SumR, "Sum test");
+
+      AUnit.Assertions.Assert (Hadamard1 * Hadamard2 = HadamardR, "Hadamard product test");
 
       AUnit.Assertions.Assert (Sub1 - Sub2 = SubR, "Subtraction test");
 

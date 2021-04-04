@@ -15,6 +15,8 @@ package Radatracer is
 
    function "+" (A, B : Tuple) return Tuple;
 
+   function "*" (A, B : Tuple) return Tuple;
+
    function "-" (A, B : Tuple) return Tuple;
    function "-" (A : Tuple) return Tuple;
 

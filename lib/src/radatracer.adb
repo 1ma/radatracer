@@ -26,6 +26,17 @@ package body Radatracer is
       return Result;
    end "+";
 
+   function "*" (A, B : Tuple) return Tuple is
+      Result : constant Tuple := (
+         X => A.X * B.X,
+         Y => A.Y * B.Y,
+         Z => A.Z * B.Z,
+         W => A.W * B.W
+      );
+   begin
+      return Result;
+   end "*";
+
    function "-" (A, B : Tuple) return Tuple is
       Result : constant Tuple := (
          X => A.X - B.X,
