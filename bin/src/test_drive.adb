@@ -1,15 +1,14 @@
 with Ada.Text_IO;
+with Radatracer;
+with Radatracer.Canvas;
+with Radatracer.Canvas.IO;
 
 procedure Test_Drive is
-   F : Ada.Text_IO.File_Type;
+   C : Radatracer.Canvas.Canvas := Radatracer.Canvas.Make_Canvas (3, 3);
 begin
-   Ada.Text_IO.Create (File => F, Mode => Ada.Text_IO.Out_File);
-   Ada.Text_IO.Put_Line (F, "Wololo");
+   C (1, 1) := Radatracer.Canvas.To_Pixel (Radatracer.Make_Color (1.0, 0.0, 0.0));
+   C (2, 2) := Radatracer.Canvas.To_Pixel (Radatracer.Make_Color (0.0, 1.0, 0.0));
+   C (3, 3) := Radatracer.Canvas.To_Pixel (Radatracer.Make_Color (0.0, 0.0, 1.0));
 
-   Ada.Text_IO.Reset (File => F, Mode => Ada.Text_IO.In_File);
-
-   while not Ada.Text_IO.End_Of_File (F) loop
-      Ada.Text_IO.Put_Line (Ada.Text_IO.Get_Line (F));
-   end loop;
-   Ada.Text_IO.Close (F);
+   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, C);
 end Test_Drive;
