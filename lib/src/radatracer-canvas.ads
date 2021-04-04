@@ -10,5 +10,9 @@ package Radatracer.Canvas is
       Blue : Primary_Color := 0;
    end record;
 
+   type Canvas is array (Positive range <>, Positive range <>) of Pixel;
+
    function To_Pixel (T : Tuple) return Pixel;
+
+   function Make_Canvas (Width, Height : Positive) return Canvas;
 end Radatracer.Canvas;

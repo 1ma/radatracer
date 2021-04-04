@@ -14,4 +14,11 @@ package body Radatracer.Canvas is
    begin
       return Result;
    end To_Pixel;
+
+   function Make_Canvas (Width, Height : Positive) return Canvas is
+      Black_Pixel : constant Pixel := (Red => 0, Green => 0, Blue => 0);
+      Result : constant Canvas (1 .. Width, 1 .. Height) := (others => (others => Black_Pixel));
+   begin
+      return Result;
+   end Make_Canvas;
 end Radatracer.Canvas;
