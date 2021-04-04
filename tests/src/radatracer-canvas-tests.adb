@@ -12,13 +12,17 @@ package body Radatracer.Canvas.Tests is
    procedure Test_Canvas_Instantiation (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Canvas_Instantiation (T : in out AUnit.Test_Cases.Test_Case'Class) is
       Black_Pixel : constant Pixel := (Red => 0, Green => 0, Blue => 0);
-      C : constant Canvas := Make_Canvas (10, 20);
+      Red_Pixel : constant Pixel := (Red => Primary_Color'Last, Green => 0, Blue => 0);
+      C : Canvas := Make_Canvas (10, 20);
    begin
       for Width in C'Range (1) loop
          for Height in C'Range (2) loop
             AUnit.Assertions.Assert (C (Width, Height) = Black_Pixel, "All pixels of a fresh canvas are black");
          end loop;
       end loop;
+
+      C (2, 3) := Red_Pixel;
+      AUnit.Assertions.Assert (C (2, 3) = Red_Pixel, "Pixels can be rewritten on the canvas");
    end Test_Canvas_Instantiation;
 
    overriding procedure Register_Tests (T : in out Test) is
