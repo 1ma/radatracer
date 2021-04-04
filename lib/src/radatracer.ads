@@ -32,4 +32,5 @@ package Radatracer is
 
    function Make_Point (X, Y, Z : Value) return Tuple;
    function Make_Vector (X, Y, Z : Value) return Tuple;
+   function Make_Color (Red, Green, Blue : Value) return Tuple;
 end Radatracer;

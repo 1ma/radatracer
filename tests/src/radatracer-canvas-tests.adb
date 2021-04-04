@@ -4,7 +4,7 @@ with AUnit.Assertions;
 package body Radatracer.Canvas.Tests is
    procedure Test_Color_Conversion (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Color_Conversion (T : in out AUnit.Test_Cases.Test_Case'Class) is
-      P : constant Pixel := To_Pixel (Make_Point (-0.5, 0.4, 1.7));
+      P : constant Pixel := To_Pixel (Make_Color (-0.5, 0.4, 1.7));
    begin
       AUnit.Assertions.Assert (P.Red = 0 and P.Green = 102 and P.Blue = 255, "Expected conversion");
    end Test_Color_Conversion;

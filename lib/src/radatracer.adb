@@ -140,4 +140,7 @@ package body Radatracer is
    begin
       return Result;
    end Make_Vector;
+
+   function Make_Color (Red, Green, Blue : Value) return Tuple
+      renames Make_Vector;
 end Radatracer;
