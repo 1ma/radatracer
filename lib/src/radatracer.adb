@@ -15,130 +15,117 @@ package body Radatracer is
       return A.X = B.X and A.Y = B.Y and A.Z = B.Z and A.W = B.W;
    end "=";
 
-   function "+" (A, B : Tuple) return Tuple is
-      Result : constant Tuple := (
-         X => A.X + B.X,
-         Y => A.Y + B.Y,
-         Z => A.Z + B.Z,
-         W => A.W + B.W
-      );
+   function "+" (L, R : Tuple) return Tuple is
    begin
-      return Result;
+      return (
+         X => L.X + R.X,
+         Y => L.Y + R.Y,
+         Z => L.Z + R.Z,
+         W => L.W + R.W
+      );
    end "+";
 
-   function "*" (A, B : Tuple) return Tuple is
-      Result : constant Tuple := (
-         X => A.X * B.X,
-         Y => A.Y * B.Y,
-         Z => A.Z * B.Z,
-         W => A.W * B.W
-      );
+   function "*" (L, R : Tuple) return Tuple is
    begin
-      return Result;
+      return (
+         X => L.X * R.X,
+         Y => L.Y * R.Y,
+         Z => L.Z * R.Z,
+         W => L.W * R.W
+      );
    end "*";
 
-   function "-" (A, B : Tuple) return Tuple is
-      Result : constant Tuple := (
-         X => A.X - B.X,
-         Y => A.Y - B.Y,
-         Z => A.Z - B.Z,
-         W => A.W - B.W
-      );
+   function "-" (L, R : Tuple) return Tuple is
    begin
-      return Result;
+      return (
+         X => L.X - R.X,
+         Y => L.Y - R.Y,
+         Z => L.Z - R.Z,
+         W => L.W - R.W
+      );
    end "-";
 
-   function "-" (A : Tuple) return Tuple is
-      Result : constant Tuple := (
-         X => -A.X,
-         Y => -A.Y,
-         Z => -A.Z,
-         W => -A.W
-      );
+   function "-" (T : Tuple) return Tuple is
    begin
-      return Result;
+      return (
+         X => -T.X,
+         Y => -T.Y,
+         Z => -T.Z,
+         W => -T.W
+      );
    end "-";
 
-   function "*" (T : Tuple; V : Value) return Tuple is
-      Result : constant Tuple := (
-         X => T.X * V,
-         Y => T.Y * V,
-         Z => T.Z * V,
-         W => T.W * V
-      );
+   function "*" (L : Tuple; R : Value) return Tuple is
    begin
-      return Result;
+      return (
+         X => L.X * R,
+         Y => L.Y * R,
+         Z => L.Z * R,
+         W => L.W * R
+      );
    end "*";
 
-   function "*" (V : Value; T : Tuple) return Tuple is
-      Result : constant Tuple := (
-         X => T.X * V,
-         Y => T.Y * V,
-         Z => T.Z * V,
-         W => T.W * V
-      );
+   function "*" (L : Value; R : Tuple) return Tuple is
    begin
-      return Result;
+      return (
+         X => R.X * L,
+         Y => R.Y * L,
+         Z => R.Z * L,
+         W => R.W * L
+      );
    end "*";
 
-   function "/" (T : Tuple; V : Value) return Tuple is
-      Result : constant Tuple := (
-         X => T.X / V,
-         Y => T.Y / V,
-         Z => T.Z / V,
-         W => T.W / V
-      );
+   function "/" (L : Tuple; R : Value) return Tuple is
    begin
-      return Result;
+      return (
+         X => L.X / R,
+         Y => L.Y / R,
+         Z => L.Z / R,
+         W => L.W / R
+      );
    end "/";
 
    function Magnitude (T : Tuple) return Value is
-      Result : constant Value := Value_Elementary_Functions.Sqrt (
+   begin
+      return Value_Elementary_Functions.Sqrt (
          (T.X * T.X) + (T.Y * T.Y) + (T.Z * T.Z) + (T.W * T.W)
       );
-   begin
-      return Result;
    end Magnitude;
 
    function Normalize (T : Tuple) return Tuple is
       T_Magn : constant Value := Magnitude (T);
-      Result : constant Tuple := (
+   begin
+      return (
          X => T.X / T_Magn,
          Y => T.Y / T_Magn,
          Z => T.Z / T_Magn,
          W => T.W / T_Magn
       );
-   begin
-      return Result;
    end Normalize;
 
-   function Dot_Product (A, B : Tuple) return Value is
-      Result : constant Value := A.X * B.X + A.Y * B.Y + A.Z * B.Z + A.W * B.W;
+   function Dot_Product (L, R : Tuple) return Value is
    begin
-      return Result;
+      return L.X * R.X + L.Y * R.Y + L.Z * R.Z + L.W * R.W;
    end Dot_Product;
 
-   function Cross_Product (A, B : Tuple) return Tuple is
-      Result : constant Tuple := (
-         X => A.Y * B.Z - A.Z * B.Y,
-         Y => A.Z * B.X - A.X * B.Z,
-         Z => A.X * B.Y - A.Y * B.X,
+   function Cross_Product (L, R : Tuple) return Tuple is
+   begin
+      return (
+         X => L.Y * R.Z - L.Z * R.Y,
+         Y => L.Z * R.X - L.X * R.Z,
+         Z => L.X * R.Y - L.Y * R.X,
          W => 0.0
       );
-   begin
-      return Result;
    end Cross_Product;
 
    function Make_Point (X, Y, Z : Value) return Tuple is
-      Result : constant Tuple := (X, Y, Z, 1.0);
    begin
-      return Result;
+      return (X, Y, Z, 1.0);
    end Make_Point;
 
    function Make_Vector (X, Y, Z : Value) return Tuple is
-      Result : constant Tuple := (X, Y, Z, 0.0);
    begin
-      return Result;
+      return (X, Y, Z, 0.0);
    end Make_Vector;
 
    function Make_Color (Red, Green, Blue : Value) return Tuple

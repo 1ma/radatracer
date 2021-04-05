@@ -10,7 +10,7 @@ package Radatracer.Canvas is
       Blue : Primary_Color := 0;
    end record;
 
-   type Canvas is array (Positive range <>, Positive range <>) of Pixel;
+   type Canvas is array (Natural range <>, Natural range <>) of Pixel;
 
    function To_Pixel (T : Tuple) return Pixel;
 

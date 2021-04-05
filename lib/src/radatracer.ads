@@ -13,22 +13,22 @@ package Radatracer is
    overriding function "=" (A, B : Value) return Boolean;
    overriding function "=" (A, B : Tuple) return Boolean;
 
-   function "+" (A, B : Tuple) return Tuple;
+   function "+" (L, R : Tuple) return Tuple;
 
-   function "*" (A, B : Tuple) return Tuple;
+   function "*" (L, R : Tuple) return Tuple;
 
-   function "-" (A, B : Tuple) return Tuple;
-   function "-" (A : Tuple) return Tuple;
+   function "-" (L, R : Tuple) return Tuple;
+   function "-" (T : Tuple) return Tuple;
 
-   function "*" (T : Tuple; V : Value) return Tuple;
-   function "*" (V : Value; T : Tuple) return Tuple;
+   function "*" (L : Tuple; R : Value) return Tuple;
+   function "*" (L : Value; R : Tuple) return Tuple;
 
-   function "/" (T : Tuple; V : Value) return Tuple;
+   function "/" (L : Tuple; R : Value) return Tuple;
 
    function Magnitude (T : Tuple) return Value;
    function Normalize (T : Tuple) return Tuple;
-   function Dot_Product (A, B : Tuple) return Value;
-   function Cross_Product (A, B : Tuple) return Tuple;
+   function Dot_Product (L, R : Tuple) return Value;
+   function Cross_Product (L, R : Tuple) return Tuple;
 
    function Make_Point (X, Y, Z : Value) return Tuple;
    function Make_Vector (X, Y, Z : Value) return Tuple;

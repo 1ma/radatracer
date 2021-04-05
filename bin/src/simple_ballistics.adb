@@ -1,6 +1,4 @@
 with Ada.Text_IO;
-with Radatracer;
-with Radatracer.Canvas;
 with Radatracer.Canvas.IO;
 
 use type Radatracer.Tuple;
@@ -17,14 +15,11 @@ procedure Simple_Ballistics is
       Wind : Radatracer.Tuple;
    end record;
 
-   function Tick (E : Environment; P : Projectile) return Projectile;
-   function Tick (E : Environment; P : Projectile) return Projectile is
-      P2 : constant Projectile := (
-         Position => P.Position + P.Velocity,
-         Velocity => P.Velocity + E.Gravity + E.Wind
-      );
+   procedure Tick (E : Environment; P : in out Projectile);
+   procedure Tick (E : Environment; P : in out Projectile) is
    begin
-      return P2;
+      P.Position := P.Position + P.Velocity;
+      P.Velocity := P.Velocity + E.Gravity + E.Wind;
    end Tick;
 
    P : Projectile := (
@@ -39,20 +34,20 @@ procedure Simple_Ballistics is
 
    Red_Pixel : constant Radatracer.Canvas.Pixel := (255, 0, 0);
 
-   C : Radatracer.Canvas.Canvas := Radatracer.Canvas.Make_Canvas (900, 550);
+   Canvas : Radatracer.Canvas.Canvas := Radatracer.Canvas.Make_Canvas (900, 550);
+
+   X, Y : Integer;
 begin
-   while True loop
-      P := Tick (E, P);
+   loop
+      X := Integer (P.Position.X);
+      Y := Canvas'Length (2) - Integer (P.Position.Y);
 
-      declare
-         X : constant Integer := Integer (P.Position.X);
-         Y : constant Integer := C'Length (2) - Integer (P.Position.Y);
-      begin
-         exit when X < 0 or X > C'Length (1) or Y < 0 or Y > C'Length (2);
+      exit when (X not in Canvas'Range (1)) or (Y not in Canvas'Range (2));
 
-         C (X, Y) := Red_Pixel;
-      end;
+      Canvas (X, Y) := Red_Pixel;
+
+      Tick (E, P);
    end loop;
 
-   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, C);
+   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas);
 end Simple_Ballistics;
