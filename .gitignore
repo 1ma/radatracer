@@ -1,3 +1,6 @@
+*.out
+*.png
+*.ppm
 .idea/
 alire/
 out/

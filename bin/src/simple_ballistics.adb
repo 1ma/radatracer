@@ -1,5 +1,7 @@
 with Ada.Text_IO;
 with Radatracer;
+with Radatracer.Canvas;
+with Radatracer.Canvas.IO;
 
 use type Radatracer.Tuple;
 use type Radatracer.Value;
@@ -15,20 +17,6 @@ procedure Simple_Ballistics is
       Wind : Radatracer.Tuple;
    end record;
 
-   procedure Print_Tuple (T : Radatracer.Tuple);
-   procedure Print_Tuple (T : Radatracer.Tuple) is
-   begin
-      Ada.Text_IO.Put ("X =>");
-      Ada.Text_IO.Put (T.X'Image);
-      Ada.Text_IO.Put (", Y =>");
-      Ada.Text_IO.Put (T.Y'Image);
-      Ada.Text_IO.Put (", Z =>");
-      Ada.Text_IO.Put (T.Z'Image);
-      Ada.Text_IO.Put (", W =>");
-      Ada.Text_IO.Put (T.W'Image);
-      Ada.Text_IO.New_Line;
-   end Print_Tuple;
-
    function Tick (E : Environment; P : Projectile) return Projectile;
    function Tick (E : Environment; P : Projectile) return Projectile is
       P2 : constant Projectile := (
@@ -41,16 +29,30 @@ procedure Simple_Ballistics is
 
    P : Projectile := (
       Position => Radatracer.Make_Point (0.0, 1.0, 0.0),
-      Velocity => Radatracer.Normalize (Radatracer.Make_Vector (1.0, 0.0, 0.0))
+      Velocity => 11.25 * Radatracer.Normalize (Radatracer.Make_Vector (1.0, 1.8, 0.0))
    );
 
    E : constant Environment := (
       Gravity => Radatracer.Make_Vector (0.0, -0.1, 0.0),
       Wind => Radatracer.Make_Vector (-0.01, 0.0, 0.0)
    );
+
+   Red_Pixel : constant Radatracer.Canvas.Pixel := (255, 0, 0);
+
+   C : Radatracer.Canvas.Canvas := Radatracer.Canvas.Make_Canvas (900, 550);
 begin
-   while P.Position.Y > 0.0 loop
+   while True loop
       P := Tick (E, P);
-      Print_Tuple (P.Position);
+
+      declare
+         X : constant Integer := Integer (P.Position.X);
+         Y : constant Integer := C'Length (2) - Integer (P.Position.Y);
+      begin
+         exit when X < 0 or X > C'Length (1) or Y < 0 or Y > C'Length (2);
+
+         C (X, Y) := Red_Pixel;
+      end;
    end loop;
+
+   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, C);
 end Simple_Ballistics;
