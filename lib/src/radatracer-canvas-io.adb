@@ -10,9 +10,9 @@ package body Radatracer.Canvas.IO is
    begin
       Print_PPM_Header (FT, C'Length (1), C'Length (2));
 
-      for Width in C'Range (1) loop
+      for Height in C'Range (2) loop
          Current_Line_Length := 0;
-         for Height in C'Range (2) loop
+         for Width in C'Range (1) loop
             Print_PPM_Color (FT, C (Width, Height).Red, Current_Line_Length);
             Print_PPM_Color (FT, C (Width, Height).Green, Current_Line_Length);
             Print_PPM_Color (FT, C (Width, Height).Blue, Current_Line_Length);
