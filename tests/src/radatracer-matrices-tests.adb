@@ -39,6 +39,9 @@ package body Radatracer.Matrices.Tests is
       AUnit.Assertions.Assert (M1 * M2 = M3, "Matrix4 multiplication test");
 
       AUnit.Assertions.Assert (M4 * T1 = T2, "Matrix4 * Tuple multiplication test");
+
+      AUnit.Assertions.Assert (Identity_Matrix4 * M1 = M1, "Identity Matrix4 multiplication test 1");
+      AUnit.Assertions.Assert (M1 * Identity_Matrix4 = M1, "Identity Matrix4 multiplication test 2");
    end Test_Matrix_Operations;
 
    overriding procedure Register_Tests (T : in out Test) is
