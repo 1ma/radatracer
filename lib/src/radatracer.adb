@@ -4,15 +4,15 @@ package body Radatracer is
    package Value_Elementary_Functions is
       new Ada.Numerics.Generic_Elementary_Functions (Value);
 
-   overriding function "=" (A, B : Value) return Boolean is
+   overriding function "=" (L, R : Value) return Boolean is
       Epsilon : constant Value := 0.00001;
    begin
-      return abs (A - B) < Epsilon;
+      return abs (L - R) < Epsilon;
    end "=";
 
-   overriding function "=" (A, B : Tuple) return Boolean is
+   overriding function "=" (L, R : Tuple) return Boolean is
    begin
-      return A.X = B.X and A.Y = B.Y and A.Z = B.Z and A.W = B.W;
+      return L.X = R.X and L.Y = R.Y and L.Z = R.Z and L.W = R.W;
    end "=";
 
    function "+" (L, R : Tuple) return Tuple is

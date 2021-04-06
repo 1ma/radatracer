@@ -10,8 +10,8 @@ package Radatracer is
       W : Value := 0.0;
    end record;
 
-   overriding function "=" (A, B : Value) return Boolean;
-   overriding function "=" (A, B : Tuple) return Boolean;
+   overriding function "=" (L, R : Value) return Boolean;
+   overriding function "=" (L, R : Tuple) return Boolean;
 
    function "+" (L, R : Tuple) return Tuple;
 
