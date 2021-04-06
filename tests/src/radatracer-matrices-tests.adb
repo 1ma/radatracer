@@ -30,7 +30,6 @@ package body Radatracer.Matrices.Tests is
          (2.0, 4.0, 4.0, 2.0),
          (8.0, 6.0, 4.0, 1.0),
          (0.0, 0.0, 0.0, 1.0)
-
       );
 
       T1 : constant Tuple := (1.0, 2.0, 3.0, 1.0);
@@ -41,7 +40,6 @@ package body Radatracer.Matrices.Tests is
          (9.0, 8.0, 0.0, 8.0),
          (1.0, 8.0, 5.0, 3.0),
          (0.0, 0.0, 5.0, 8.0)
-
       );
 
       M6 : constant Matrix4 := (
@@ -49,7 +47,11 @@ package body Radatracer.Matrices.Tests is
          (9.0, 8.0, 8.0, 0.0),
          (3.0, 0.0, 5.0, 5.0),
          (0.0, 8.0, 3.0, 8.0)
+      );
 
+      M7 : constant Matrix2 := (
+         (1.0, 5.0),
+         (-3.0, 2.0)
       );
    begin
       AUnit.Assertions.Assert (M1 * M2 = M3, "Matrix4 multiplication test");
@@ -61,6 +63,8 @@ package body Radatracer.Matrices.Tests is
 
       AUnit.Assertions.Assert (Transpose (M5) = M6, "Matrix4 transposition multiplication test 1");
       AUnit.Assertions.Assert (Transpose (Identity_Matrix4) = Identity_Matrix4, "Matrix4 transposition multiplication test 2");
+
+      AUnit.Assertions.Assert (Determinant (M7) = 17.0, "Matrix2 determinant test");
    end Test_Matrix_Operations;
 
    overriding procedure Register_Tests (T : in out Test) is

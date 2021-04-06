@@ -17,4 +17,6 @@ package Radatracer.Matrices is
    function "*" (L : Matrix4; R : Tuple) return Tuple;
 
    function Transpose (M : Matrix4) return Matrix4;
+
+   function Determinant (M : Matrix2) return Value;
 end Radatracer.Matrices;

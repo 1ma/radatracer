@@ -48,4 +48,9 @@ package body Radatracer.Matrices is
          (M (0, 3), M (1, 3), M (2, 3), M (3, 3))
       );
    end Transpose;
+
+   function Determinant (M : Matrix2) return Value is
+   begin
+      return M (0, 0) * M (1, 1) - M (0, 1) * M (1, 0);
+   end Determinant;
 end Radatracer.Matrices;
