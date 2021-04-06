@@ -13,8 +13,6 @@ package Radatracer.Matrices is
       (0.0, 0.0, 0.0, 1.0)
    );
 
-   overriding function "=" (L, R : Matrix) return Boolean;
-
    function "*" (L, R : Matrix4) return Matrix4;
    function "*" (L : Matrix4; R : Tuple) return Tuple;
 

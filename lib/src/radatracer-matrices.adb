@@ -1,17 +1,4 @@
 package body Radatracer.Matrices is
-   overriding function "=" (L, R : Matrix) return Boolean is
-   begin
-      for Row in L'Range (1) loop
-         for Column in L'Range (2) loop
-            if L (Row, Column) /= R (Row, Column) then
-               return False;
-            end if;
-         end loop;
-      end loop;
-
-      return True;
-   end "=";
-
    function "*" (L, R : Matrix4) return Matrix4 is
    begin
       return (
