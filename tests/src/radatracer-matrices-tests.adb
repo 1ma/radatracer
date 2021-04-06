@@ -24,8 +24,21 @@ package body Radatracer.Matrices.Tests is
          (40.0, 58.0, 110.0, 102.0),
          (16.0, 26.0, 46.0, 42.0)
       );
+
+      M4 : constant Matrix4 := (
+         (1.0, 2.0, 3.0, 4.0),
+         (2.0, 4.0, 4.0, 2.0),
+         (8.0, 6.0, 4.0, 1.0),
+         (0.0, 0.0, 0.0, 1.0)
+
+      );
+
+      T1 : constant Tuple := (1.0, 2.0, 3.0, 1.0);
+      T2 : constant Tuple := (18.0, 24.0, 33.0, 1.0);
    begin
       AUnit.Assertions.Assert (M1 * M2 = M3, "Matrix4 multiplication test");
+
+      AUnit.Assertions.Assert (M4 * T1 = T2, "Matrix4 * Tuple multiplication test");
    end Test_Matrix_Operations;
 
    overriding procedure Register_Tests (T : in out Test) is

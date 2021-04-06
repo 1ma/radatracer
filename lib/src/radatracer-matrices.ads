@@ -9,4 +9,5 @@ package Radatracer.Matrices is
    overriding function "=" (L, R : Matrix) return Boolean;
 
    function "*" (L, R : Matrix4) return Matrix4;
+   function "*" (L : Matrix4; R : Tuple) return Tuple;
 end Radatracer.Matrices;
