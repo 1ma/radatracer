@@ -48,6 +48,7 @@ package body Radatracer.Canvas.IO.Tests is
       AUnit.Assertions.Assert (Ada.Text_IO.Get_Line (FT) = "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0", "");
       AUnit.Assertions.Assert (Ada.Text_IO.Get_Line (FT) = "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0", "");
       AUnit.Assertions.Assert (Ada.Text_IO.Get_Line (FT) = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255", "");
+      AUnit.Assertions.Assert (Ada.Text_IO.End_Of_File (FT), "");
 
       Ada.Text_IO.Reset (File => FT, Mode => Ada.Text_IO.Out_File);
 
@@ -62,6 +63,7 @@ package body Radatracer.Canvas.IO.Tests is
       AUnit.Assertions.Assert (Ada.Text_IO.Get_Line (FT) = "153 255 204 153 255 204 153 255 204 153 255 204 153", "");
       AUnit.Assertions.Assert (Ada.Text_IO.Get_Line (FT) = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204", "");
       AUnit.Assertions.Assert (Ada.Text_IO.Get_Line (FT) = "153 255 204 153 255 204 153 255 204 153 255 204 153", "");
+      AUnit.Assertions.Assert (Ada.Text_IO.End_Of_File (FT), "");
    end Test_Canvas_IO;
 
    overriding procedure Register_Tests (T : in out Test) is
