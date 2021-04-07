@@ -53,4 +53,53 @@ package body Radatracer.Matrices is
    begin
       return M (0, 0) * M (1, 1) - M (0, 1) * M (1, 0);
    end Determinant;
+
+   function Submatrix (M : Matrix3; Row, Column : Natural) return Matrix2 is
+      I_Offset, J_Offset : Natural range 0 .. 1 := 0;
+      S : Matrix2;
+   begin
+      for I in M'Range (1) loop
+         J_Offset := 0;
+         if I = Row then
+            I_Offset := 1;
+         else
+            for J in M'Range (2) loop
+               if J = Column then
+                  J_Offset := 1;
+               else
+                  S (I - I_Offset, J - J_Offset) := M (I, J);
+               end if;
+            end loop;
+         end if;
+      end loop;
+
+      return S;
+   end Submatrix;
+
+   function Submatrix (M : Matrix4; Row, Column : Natural) return Matrix3 is
+      I_Offset, J_Offset : Natural range 0 .. 1 := 0;
+      S : Matrix3;
+   begin
+      for I in M'Range (1) loop
+         J_Offset := 0;
+         if I = Row then
+            I_Offset := 1;
+         else
+            for J in M'Range (2) loop
+               if J = Column then
+                  J_Offset := 1;
+               else
+                  S (I - I_Offset, J - J_Offset) := M (I, J);
+               end if;
+            end loop;
+         end if;
+      end loop;
+
+      return S;
+   end Submatrix;
+
+   function Minor (M : Matrix3; Row, Column : Natural) return Value is
+   begin
+      return Determinant (Submatrix (M, Row, Column));
+   end Minor;
 end Radatracer.Matrices;

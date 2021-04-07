@@ -1,9 +1,6 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 
 package body Radatracer is
-   package Value_Elementary_Functions is
-      new Ada.Numerics.Generic_Elementary_Functions (Value);
-
    overriding function "=" (L, R : Value) return Boolean is
       Epsilon : constant Value := 0.00001;
    begin
@@ -86,6 +83,7 @@ package body Radatracer is
    end "/";
 
    function Magnitude (T : Tuple) return Value is
+      package Value_Elementary_Functions is new Ada.Numerics.Generic_Elementary_Functions (Value);
    begin
       return Value_Elementary_Functions.Sqrt (
          (T.X * T.X) + (T.Y * T.Y) + (T.Z * T.Z) + (T.W * T.W)

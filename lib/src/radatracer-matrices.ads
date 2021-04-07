@@ -2,9 +2,9 @@ package Radatracer.Matrices is
    pragma Pure;
 
    type Matrix is array (Natural range <>, Natural range <>) of Value;
-   subtype Matrix2 is Matrix (0 .. 1, 0 .. 1);
-   subtype Matrix3 is Matrix (0 .. 2, 0 .. 2);
-   subtype Matrix4 is Matrix (0 .. 3, 0 .. 3);
+   type Matrix2 is new Matrix (0 .. 1, 0 .. 1);
+   type Matrix3 is new Matrix (0 .. 2, 0 .. 2);
+   type Matrix4 is new Matrix (0 .. 3, 0 .. 3);
 
    Identity_Matrix4 : constant Matrix4 := (
       (1.0, 0.0, 0.0, 0.0),
@@ -19,4 +19,9 @@ package Radatracer.Matrices is
    function Transpose (M : Matrix4) return Matrix4;
 
    function Determinant (M : Matrix2) return Value;
+
+   function Submatrix (M : Matrix3; Row, Column : Natural) return Matrix2;
+   function Submatrix (M : Matrix4; Row, Column : Natural) return Matrix3;
+
+   function Minor (M : Matrix3; Row, Column : Natural) return Value;
 end Radatracer.Matrices;

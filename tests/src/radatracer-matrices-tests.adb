@@ -53,6 +53,36 @@ package body Radatracer.Matrices.Tests is
          (1.0, 5.0),
          (-3.0, 2.0)
       );
+
+      M8 : constant Matrix3 := (
+         (1.0, 5.0, 0.0),
+         (-3.0, 2.0, 7.0),
+         (0.0, 6.0, -3.0)
+      );
+
+      M9 : constant Matrix2 := (
+         (-3.0, 2.0),
+         (0.0, 6.0)
+      );
+
+      M10 : constant Matrix4 := (
+         (-6.0, 1.0, 1.0, 6.0),
+         (-8.0, 5.0, 8.0, 6.0),
+         (-1.0, 0.0, 8.0, 2.0),
+         (-7.0, 1.0, -1.0, 1.0)
+      );
+
+      M11 : constant Matrix3 := (
+         (-6.0, 1.0, 6.0),
+         (-8.0, 8.0, 6.0),
+         (-7.0, -1.0, 1.0)
+      );
+
+      M12 : constant Matrix3 := (
+         (3.0, 5.0, 0.0),
+         (2.0, -1.0, -7.0),
+         (6.0, -1.0, 5.0)
+      );
    begin
       AUnit.Assertions.Assert (M1 * M2 = M3, "Matrix4 multiplication test");
 
@@ -65,6 +95,12 @@ package body Radatracer.Matrices.Tests is
       AUnit.Assertions.Assert (Transpose (Identity_Matrix4) = Identity_Matrix4, "Matrix4 transposition multiplication test 2");
 
       AUnit.Assertions.Assert (Determinant (M7) = 17.0, "Matrix2 determinant test");
+
+      AUnit.Assertions.Assert (Submatrix (M8, 0, 2) = M9, "Submatrix3 test");
+      AUnit.Assertions.Assert (Submatrix (M10, 2, 1) = M11, "Submatrix4 test");
+
+      AUnit.Assertions.Assert (Determinant (Submatrix (M12, 1, 0)) = 25.0, "Minor Matrix3 test 1");
+      AUnit.Assertions.Assert (Minor (M12, 1, 0) = 25.0, "Minor Matrix3 test 2");
    end Test_Matrix_Operations;
 
    overriding procedure Register_Tests (T : in out Test) is

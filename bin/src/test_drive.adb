@@ -2,13 +2,13 @@ with Ada.Text_IO;
 with Radatracer.Matrices;
 
 use type Radatracer.Value;
-use type Radatracer.Matrices.Matrix;
+use type Radatracer.Matrices.Matrix4;
 
 procedure Test_Drive is
    package Value_IO is new Ada.Text_IO.Float_IO (Radatracer.Value);
 
-   procedure Print_Matrix (M : Radatracer.Matrices.Matrix);
-   procedure Print_Matrix (M : Radatracer.Matrices.Matrix) is
+   procedure Print_Matrix (M : Radatracer.Matrices.Matrix4);
+   procedure Print_Matrix (M : Radatracer.Matrices.Matrix4) is
    begin
       for Row in M'Range (1) loop
          for Column in M'Range (2) loop
