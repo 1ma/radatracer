@@ -83,6 +83,19 @@ package body Radatracer.Matrices.Tests is
          (2.0, -1.0, -7.0),
          (6.0, -1.0, 5.0)
       );
+
+      M13 : constant Matrix3 := (
+         (1.0, 2.0, 6.0),
+         (-5.0, 8.0, -4.0),
+         (2.0, 6.0, 4.0)
+      );
+
+      M14 : constant Matrix4 := (
+         (-2.0, -8.0, 3.0, 5.0),
+         (-3.0, 1.0, 7.0, 3.0),
+         (1.0, 2.0, -9.0, 6.0),
+         (-6.0, 7.0, 7.0, -9.0)
+      );
    begin
       AUnit.Assertions.Assert (M1 * M2 = M3, "Matrix4 multiplication test");
 
@@ -106,6 +119,17 @@ package body Radatracer.Matrices.Tests is
       AUnit.Assertions.Assert (Cofactor (M12, 0, 0) = -12.0, "Cofactor Matrix3 test 2");
       AUnit.Assertions.Assert (Minor (M12, 1, 0) = 25.0, "Cofactor Matrix3 test 3");
       AUnit.Assertions.Assert (Cofactor (M12, 1, 0) = -25.0, "Cofactor Matrix3 test 4");
+
+      AUnit.Assertions.Assert (Cofactor (M13, 0, 0) = 56.0, "Determinant Matrix3 test 1");
+      AUnit.Assertions.Assert (Cofactor (M13, 0, 1) = 12.0, "Determinant Matrix3 test 2");
+      AUnit.Assertions.Assert (Cofactor (M13, 0, 2) = -46.0, "Determinant Matrix3 test 3");
+      AUnit.Assertions.Assert (Determinant (M13) = -196.0, "Determinant Matrix3 test 4");
+
+      AUnit.Assertions.Assert (Cofactor (M14, 0, 0) = 690.0, "Determinant Matrix4 test 1");
+      AUnit.Assertions.Assert (Cofactor (M14, 0, 1) = 447.0, "Determinant Matrix4 test 2");
+      AUnit.Assertions.Assert (Cofactor (M14, 0, 2) = 210.0, "Determinant Matrix4 test 3");
+      AUnit.Assertions.Assert (Cofactor (M14, 0, 3) = 51.0, "Determinant Matrix4 test 4");
+      AUnit.Assertions.Assert (Determinant (M14) = -4071.0, "Determinant Matrix4 test 5");
    end Test_Matrix_Operations;
 
    overriding procedure Register_Tests (T : in out Test) is

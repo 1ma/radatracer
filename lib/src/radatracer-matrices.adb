@@ -49,11 +49,6 @@ package body Radatracer.Matrices is
       );
    end Transpose;
 
-   function Determinant (M : Matrix2) return Value is
-   begin
-      return M (0, 0) * M (1, 1) - M (0, 1) * M (1, 0);
-   end Determinant;
-
    function Submatrix (M : Matrix3; Row, Column : Natural) return Matrix2 is
       I_Offset, J_Offset : Natural range 0 .. 1 := 0;
       S : Matrix2;
@@ -103,14 +98,55 @@ package body Radatracer.Matrices is
       return Determinant (Submatrix (M, Row, Column));
    end Minor;
 
+   function Minor (M : Matrix4; Row, Column : Natural) return Value is
+   begin
+      return Determinant (Submatrix (M, Row, Column));
+   end Minor;
+
    function Cofactor (M : Matrix3; Row, Column : Natural) return Value is
       Negate : constant Boolean := (Row + Column) mod 2 = 1;
-      Min : constant Value := Minor (M, Row, Column);
+      Result : constant Value := Minor (M, Row, Column);
    begin
       if Negate then
-         return -Min;
+         return -Result;
       end if;
 
-      return Min;
+      return Result;
    end Cofactor;
+
+   function Cofactor (M : Matrix4; Row, Column : Natural) return Value is
+      Negate : constant Boolean := (Row + Column) mod 2 = 1;
+      Result : constant Value := Minor (M, Row, Column);
+   begin
+      if Negate then
+         return -Result;
+      end if;
+
+      return Result;
+   end Cofactor;
+
+   function Determinant (M : Matrix2) return Value is
+   begin
+      return M (0, 0) * M (1, 1) - M (0, 1) * M (1, 0);
+   end Determinant;
+
+   function Determinant (M : Matrix3) return Value is
+      Result : Value := 0.0;
+   begin
+      for J in M'Range (2) loop
+         Result := Result + M (0, J) * Cofactor (M, 0, J);
+      end loop;
+
+      return Result;
+   end Determinant;
+
+   function Determinant (M : Matrix4) return Value is
+      Result : Value := 0.0;
+   begin
+      for J in M'Range (2) loop
+         Result := Result + M (0, J) * Cofactor (M, 0, J);
+      end loop;
+
+      return Result;
+   end Determinant;
 end Radatracer.Matrices;

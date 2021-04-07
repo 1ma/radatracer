@@ -18,12 +18,16 @@ package Radatracer.Matrices is
 
    function Transpose (M : Matrix4) return Matrix4;
 
-   function Determinant (M : Matrix2) return Value;
-
    function Submatrix (M : Matrix3; Row, Column : Natural) return Matrix2;
    function Submatrix (M : Matrix4; Row, Column : Natural) return Matrix3;
 
    function Minor (M : Matrix3; Row, Column : Natural) return Value;
+   function Minor (M : Matrix4; Row, Column : Natural) return Value;
 
    function Cofactor (M : Matrix3; Row, Column : Natural) return Value;
+   function Cofactor (M : Matrix4; Row, Column : Natural) return Value;
+
+   function Determinant (M : Matrix2) return Value;
+   function Determinant (M : Matrix3) return Value;
+   function Determinant (M : Matrix4) return Value;
 end Radatracer.Matrices;
