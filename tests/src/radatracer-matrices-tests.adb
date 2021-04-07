@@ -101,6 +101,11 @@ package body Radatracer.Matrices.Tests is
 
       AUnit.Assertions.Assert (Determinant (Submatrix (M12, 1, 0)) = 25.0, "Minor Matrix3 test 1");
       AUnit.Assertions.Assert (Minor (M12, 1, 0) = 25.0, "Minor Matrix3 test 2");
+
+      AUnit.Assertions.Assert (Minor (M12, 0, 0) = -12.0, "Cofactor Matrix3 test 1");
+      AUnit.Assertions.Assert (Cofactor (M12, 0, 0) = -12.0, "Cofactor Matrix3 test 2");
+      AUnit.Assertions.Assert (Minor (M12, 1, 0) = 25.0, "Cofactor Matrix3 test 3");
+      AUnit.Assertions.Assert (Cofactor (M12, 1, 0) = -25.0, "Cofactor Matrix3 test 4");
    end Test_Matrix_Operations;
 
    overriding procedure Register_Tests (T : in out Test) is

@@ -102,4 +102,15 @@ package body Radatracer.Matrices is
    begin
       return Determinant (Submatrix (M, Row, Column));
    end Minor;
+
+   function Cofactor (M : Matrix3; Row, Column : Natural) return Value is
+      Negate : constant Boolean := (Row + Column) mod 2 = 1;
+      Min : constant Value := Minor (M, Row, Column);
+   begin
+      if Negate then
+         return -Min;
+      end if;
+
+      return Min;
+   end Cofactor;
 end Radatracer.Matrices;

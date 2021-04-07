@@ -24,4 +24,6 @@ package Radatracer.Matrices is
    function Submatrix (M : Matrix4; Row, Column : Natural) return Matrix3;
 
    function Minor (M : Matrix3; Row, Column : Natural) return Value;
+
+   function Cofactor (M : Matrix3; Row, Column : Natural) return Value;
 end Radatracer.Matrices;
