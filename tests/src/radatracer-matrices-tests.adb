@@ -96,6 +96,80 @@ package body Radatracer.Matrices.Tests is
          (1.0, 2.0, -9.0, 6.0),
          (-6.0, 7.0, 7.0, -9.0)
       );
+
+      M15 : constant Matrix4 := (
+         (6.0, 4.0, 4.0, 4.0),
+         (5.0, 5.0, 7.0, 6.0),
+         (4.0, -9.0, 3.0, -7.0),
+         (9.0, 1.0, 7.0, -6.0)
+      );
+
+      M16 : constant Matrix4 := (
+         (-4.0, 2.0, -2.0, -3.0),
+         (9.0, 6.0, 2.0, 6.0),
+         (0.0, -5.0, 1.0, -5.0),
+         (0.0, 0.0, 0.0, 0.0)
+      );
+
+      M17 : constant Matrix4 := (
+         (-5.0, 2.0, 6.0, -8.0),
+         (1.0, -5.0, 1.0, 8.0),
+         (7.0, 7.0, -6.0, -7.0),
+         (1.0, -3.0, 7.0, 4.0)
+      );
+
+      M18 : constant Matrix4 := Invert (M17);
+
+      M19 : constant Matrix4 := (
+         (0.21805, 0.45113, 0.24060, -0.04511),
+         (-0.80827, -1.45677, -0.44361, 0.52068),
+         (-0.07895, -0.22368, -0.05263, 0.19737),
+         (-0.52256, -0.81391, -0.30075, 0.30639)
+      );
+
+      M20 : constant Matrix4 := (
+         (8.0, -5.0, 9.0, 2.0),
+         (7.0, 5.0, 6.0, 1.0),
+         (-6.0, 0.0, 9.0, 6.0),
+         (-3.0, 0.0, -9.0, -4.0)
+      );
+
+      M21 : constant Matrix4 := (
+         (-0.15385, -0.15385, -0.28205, -0.53846),
+         (-0.07692, 0.12308, 0.02564, 0.03077),
+         (0.35897, 0.35897, 0.43590, 0.92308),
+         (-0.69231, -0.69231, -0.76923, -1.92308)
+      );
+
+      M22 : constant Matrix4 := (
+         (9.0, 3.0, 0.0, 9.0),
+         (-5.0, -2.0, -6.0, -3.0),
+         (-4.0, 9.0, 6.0, 4.0),
+         (-7.0, 6.0, 6.0, 2.0)
+      );
+
+      M23 : constant Matrix4 := (
+         (-0.04074, -0.07778, 0.14444, -0.22222),
+         (-0.07778, 0.03333, 0.36667, -0.33333),
+         (-0.02901, -0.14630, -0.10926, 0.12963),
+         (0.17778, 0.06667, -0.26667, 0.33333)
+      );
+
+      M24 : constant Matrix4 := (
+         (3.0, -9.0, 7.0, 3.0),
+         (3.0, -8.0, 2.0, -9.0),
+         (-4.0, 4.0, 4.0, 1.0),
+         (-6.0, 5.0, -1.0, 1.0)
+      );
+
+      M25 : constant Matrix4 := (
+         (8.0, 2.0, 2.0, 2.0),
+         (3.0, -1.0, 7.0, 0.0),
+         (7.0, 0.0, 5.0, 4.0),
+         (6.0, -2.0, 0.0, 5.0)
+      );
+
+      M26 : constant Matrix4 := M24 * M25;
    begin
       AUnit.Assertions.Assert (M1 * M2 = M3, "Matrix4 multiplication test");
 
@@ -103,6 +177,7 @@ package body Radatracer.Matrices.Tests is
 
       AUnit.Assertions.Assert (Identity_Matrix4 * M1 = M1, "Identity Matrix4 multiplication test 1");
       AUnit.Assertions.Assert (M1 * Identity_Matrix4 = M1, "Identity Matrix4 multiplication test 2");
+      AUnit.Assertions.Assert (Identity_Matrix4 * T1 = T1, "Identity Matrix4 multiplication test 3");
 
       AUnit.Assertions.Assert (Transpose (M5) = M6, "Matrix4 transposition multiplication test 1");
       AUnit.Assertions.Assert (Transpose (Identity_Matrix4) = Identity_Matrix4, "Matrix4 transposition multiplication test 2");
@@ -130,6 +205,25 @@ package body Radatracer.Matrices.Tests is
       AUnit.Assertions.Assert (Cofactor (M14, 0, 2) = 210.0, "Determinant Matrix4 test 3");
       AUnit.Assertions.Assert (Cofactor (M14, 0, 3) = 51.0, "Determinant Matrix4 test 4");
       AUnit.Assertions.Assert (Determinant (M14) = -4071.0, "Determinant Matrix4 test 5");
+
+      AUnit.Assertions.Assert (Determinant (M15) = -2120.0, "Invertibility Matrix4 test 1");
+      AUnit.Assertions.Assert (Is_Invertible (M15), "Invertibility Matrix4 test 2");
+      AUnit.Assertions.Assert (Determinant (M16) = 0.0, "Invertibility Matrix4 test 3");
+      AUnit.Assertions.Assert (not Is_Invertible (M16), "Invertibility Matrix4 test 4");
+
+      AUnit.Assertions.Assert (Determinant (M17) = 532.0, "Inversion Matrix4 test 1");
+      AUnit.Assertions.Assert (Cofactor (M17, 2, 3) = -160.0, "Inversion Matrix4 test 2");
+      AUnit.Assertions.Assert (M18 (3, 2) = -160.0 / 532.0, "Inversion Matrix4 test 3");
+      AUnit.Assertions.Assert (Cofactor (M17, 3, 2) = 105.0, "Inversion Matrix4 test 4");
+      AUnit.Assertions.Assert (M18 (2, 3) = 105.0 / 532.0, "Inversion Matrix4 test 5");
+      AUnit.Assertions.Assert (M18 = M19, "Inversion Matrix4 test 6");
+      AUnit.Assertions.Assert (Invert (M20) = M21, "Inversion Matrix4 test 7");
+      AUnit.Assertions.Assert (Invert (M22) = M23, "Inversion Matrix4 test 8");
+      AUnit.Assertions.Assert (M26 * Invert (M25) = M24, "Inversion Matrix4 test 9");
+
+      AUnit.Assertions.Assert (Identity_Matrix4 = Invert (Identity_Matrix4), "Extra tests from end of Chapter III, test 1");
+      AUnit.Assertions.Assert (M2 * Invert (M2) = Identity_Matrix4, "Extra tests from end of Chapter III, test 2");
+      AUnit.Assertions.Assert (Transpose (Invert (M2)) = Invert (Transpose (M2)), "Extra tests from end of Chapter III, test 3");
    end Test_Matrix_Operations;
 
    overriding procedure Register_Tests (T : in out Test) is

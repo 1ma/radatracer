@@ -13,6 +13,10 @@ package Radatracer.Matrices is
       (0.0, 0.0, 0.0, 1.0)
    );
 
+   overriding function "=" (L, R : Matrix2) return Boolean;
+   overriding function "=" (L, R : Matrix3) return Boolean;
+   overriding function "=" (L, R : Matrix4) return Boolean;
+
    function "*" (L, R : Matrix4) return Matrix4;
    function "*" (L : Matrix4; R : Tuple) return Tuple;
 
@@ -30,4 +34,9 @@ package Radatracer.Matrices is
    function Determinant (M : Matrix2) return Value;
    function Determinant (M : Matrix3) return Value;
    function Determinant (M : Matrix4) return Value;
+
+   function Is_Invertible (M : Matrix4) return Boolean;
+
+   function Invert (M : Matrix4) return Matrix4
+      with Pre => Is_Invertible (M);
 end Radatracer.Matrices;

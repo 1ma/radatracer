@@ -1,4 +1,48 @@
 package body Radatracer.Matrices is
+   overriding function "=" (L, R : Matrix2) return Boolean is
+   begin
+      return
+        L (0, 0) = R (0, 0) and
+        L (0, 1) = R (0, 1) and
+        L (1, 0) = R (1, 0) and
+        L (1, 1) = R (1, 1);
+   end "=";
+
+   overriding function "=" (L, R : Matrix3) return Boolean is
+   begin
+      return
+        L (0, 0) = R (0, 0) and
+        L (0, 1) = R (0, 1) and
+        L (0, 2) = R (0, 2) and
+        L (1, 0) = R (1, 0) and
+        L (1, 1) = R (1, 1) and
+        L (1, 2) = R (1, 2) and
+        L (2, 0) = R (2, 0) and
+        L (2, 1) = R (2, 1) and
+        L (2, 2) = R (2, 2);
+   end "=";
+
+   overriding function "=" (L, R : Matrix4) return Boolean is
+   begin
+      return
+        L (0, 0) = R (0, 0) and
+        L (0, 1) = R (0, 1) and
+        L (0, 2) = R (0, 2) and
+        L (0, 3) = R (0, 3) and
+        L (1, 0) = R (1, 0) and
+        L (1, 1) = R (1, 1) and
+        L (1, 2) = R (1, 2) and
+        L (1, 3) = R (1, 3) and
+        L (2, 0) = R (2, 0) and
+        L (2, 1) = R (2, 1) and
+        L (2, 2) = R (2, 2) and
+        L (2, 3) = R (2, 3) and
+        L (3, 0) = R (3, 0) and
+        L (3, 1) = R (3, 1) and
+        L (3, 2) = R (3, 2) and
+        L (3, 3) = R (3, 3);
+   end "=";
+
    function "*" (L, R : Matrix4) return Matrix4 is
    begin
       return (
@@ -149,4 +193,21 @@ package body Radatracer.Matrices is
 
       return Result;
    end Determinant;
+
+   function Is_Invertible (M : Matrix4) return Boolean is
+   begin
+      return Determinant (M) /= 0.0;
+   end Is_Invertible;
+
+   function Invert (M : Matrix4) return Matrix4 is
+      D : constant Value := Determinant (M);
+      Result : Matrix4;
+   begin
+      for R in M'Range (1) loop
+         for C in M'Range (2) loop
+            Result (C, R) := Cofactor (M, R, C) / D;
+         end loop;
+      end loop;
+      return Result;
+   end Invert;
 end Radatracer.Matrices;
