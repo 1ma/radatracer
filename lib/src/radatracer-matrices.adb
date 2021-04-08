@@ -1,4 +1,75 @@
+with Ada.Numerics.Generic_Elementary_Functions;
+
 package body Radatracer.Matrices is
+   package Value_Elementary_Functions is
+      new Ada.Numerics.Generic_Elementary_Functions (Value);
+
+   function Translation (X, Y, Z : Value) return Matrix4 is
+   begin
+      return (
+         (1.0, 0.0, 0.0, X),
+         (0.0, 1.0, 0.0, Y),
+         (0.0, 0.0, 1.0, Z),
+         (0.0, 0.0, 0.0, 1.0)
+      );
+   end Translation;
+
+   function Scaling (X, Y, Z : Value) return Matrix4 is
+   begin
+      return (
+         (X, 0.0, 0.0, 0.0),
+         (0.0, Y, 0.0, 0.0),
+         (0.0, 0.0, Z, 0.0),
+         (0.0, 0.0, 0.0, 1.0)
+      );
+   end Scaling;
+
+   function Rotation_X (R : Radian) return Matrix4 is
+      Cos_R : constant Value := Value_Elementary_Functions.Cos (Value (R));
+      Sin_R : constant Value := Value_Elementary_Functions.Sin (Value (R));
+   begin
+      return (
+         (1.0, 0.0, 0.0, 0.0),
+         (0.0, Cos_R, -Sin_R, 0.0),
+         (0.0, Sin_R, Cos_R, 0.0),
+         (0.0, 0.0, 0.0, 1.0)
+      );
+   end Rotation_X;
+
+   function Rotation_Y (R : Radian) return Matrix4 is
+      Cos_R : constant Value := Value_Elementary_Functions.Cos (Value (R));
+      Sin_R : constant Value := Value_Elementary_Functions.Sin (Value (R));
+   begin
+      return (
+         (Cos_R, 0.0, Sin_R, 0.0),
+         (0.0, 1.0, 0.0, 0.0),
+         (-Sin_R, 0.0, Cos_R, 0.0),
+         (0.0, 0.0, 0.0, 1.0)
+      );
+   end Rotation_Y;
+
+   function Rotation_Z (R : Radian) return Matrix4 is
+      Cos_R : constant Value := Value_Elementary_Functions.Cos (Value (R));
+      Sin_R : constant Value := Value_Elementary_Functions.Sin (Value (R));
+   begin
+      return (
+         (Cos_R, -Sin_R, 0.0, 0.0),
+         (Sin_R, Cos_R, 0.0, 0.0),
+         (0.0, 0.0, 1.0, 0.0),
+         (0.0, 0.0, 0.0, 1.0)
+      );
+   end Rotation_Z;
+
+   function Shearing (X_Y, X_Z, Y_X, Y_Z, Z_X, Z_Y : Value) return Matrix4 is
+   begin
+      return (
+         (1.0, X_Y, X_Z, 0.0),
+         (Y_X, 1.0, Y_Z, 0.0),
+         (Z_X, Z_Y, 1.0, 0.0),
+         (0.0, 0.0, 0.0, 1.0)
+      );
+   end Shearing;
+
    overriding function "=" (L, R : Matrix2) return Boolean is
    begin
       return
