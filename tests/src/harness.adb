@@ -27,6 +27,8 @@ procedure Harness is
    Result : AUnit.Status;
    Reporter : AUnit.Reporter.Text.Text_Reporter;
 begin
+   AUnit.Reporter.Text.Set_Use_ANSI_Colors (Reporter, True);
+
    Result := Runner (Reporter);
 
    if Result /= AUnit.Status'(Success) then
