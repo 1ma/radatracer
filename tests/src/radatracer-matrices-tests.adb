@@ -236,8 +236,8 @@ package body Radatracer.Matrices.Tests is
       P2 : constant Tuple := Make_Point (2.0, 3.0, 4.0);
       V2 : constant Tuple := Make_Vector (-4.0, 6.0, 8.0);
 
-      Half_Quarter : constant Radian := Ada.Numerics.Pi / 4.0;
-      Full_Quarter : constant Radian := Ada.Numerics.Pi / 2.0;
+      Half_Quarter : constant Float := Ada.Numerics.Pi / 4.0;
+      Full_Quarter : constant Float := Ada.Numerics.Pi / 2.0;
       P3 : constant Tuple := Make_Point (0.0, 1.0, 0.0);
       P4 : constant Tuple := Make_Point (0.0, 0.0, 1.0);
    begin

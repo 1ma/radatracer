@@ -1,9 +1,5 @@
-with Ada.Numerics;
-
 package Radatracer.Matrices is
    pragma Pure;
-
-   type Radian is new Float range 0.0 .. 2.0 * Ada.Numerics.Pi;
 
    type Matrix is array (Natural range <>, Natural range <>) of Value;
    type Matrix2 is new Matrix (0 .. 1, 0 .. 1);
@@ -21,9 +17,9 @@ package Radatracer.Matrices is
 
    function Scaling (X, Y, Z : Value) return Matrix4;
 
-   function Rotation_X (R : Radian) return Matrix4;
-   function Rotation_Y (R : Radian) return Matrix4;
-   function Rotation_Z (R : Radian) return Matrix4;
+   function Rotation_X (R : Float) return Matrix4;
+   function Rotation_Y (R : Float) return Matrix4;
+   function Rotation_Z (R : Float) return Matrix4;
 
    function Shearing (X_Y, X_Z, Y_X, Y_Z, Z_X, Z_Y : Value) return Matrix4;
 

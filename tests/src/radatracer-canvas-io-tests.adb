@@ -13,7 +13,6 @@ package body Radatracer.Canvas.IO.Tests is
    procedure Test_Canvas_Instantiation (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Canvas_Instantiation (T : in out AUnit.Test_Cases.Test_Case'Class) is
       Black_Pixel : constant Pixel := (Red => 0, Green => 0, Blue => 0);
-      Red_Pixel : constant Pixel := (Red => Primary_Color'Last, Green => 0, Blue => 0);
       C : Canvas := Make_Canvas (10, 20);
    begin
       for Width in C'Range (1) loop

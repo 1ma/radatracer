@@ -32,8 +32,6 @@ procedure Simple_Ballistics is
       Wind => Radatracer.Make_Vector (-0.01, 0.0, 0.0)
    );
 
-   Red_Pixel : constant Radatracer.Canvas.Pixel := (255, 0, 0);
-
    Canvas : Radatracer.Canvas.Canvas := Radatracer.Canvas.Make_Canvas (900, 550);
 
    X, Y : Integer;
@@ -44,7 +42,7 @@ begin
 
       exit when (X not in Canvas'Range (1)) or (Y not in Canvas'Range (2));
 
-      Canvas (X, Y) := Red_Pixel;
+      Canvas (X, Y) := Radatracer.Canvas.Red_Pixel;
 
       Tick (E, P);
    end loop;

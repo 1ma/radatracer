@@ -24,7 +24,7 @@ package body Radatracer.Matrices is
       );
    end Scaling;
 
-   function Rotation_X (R : Radian) return Matrix4 is
+   function Rotation_X (R : Float) return Matrix4 is
       Cos_R : constant Value := Value_Elementary_Functions.Cos (Value (R));
       Sin_R : constant Value := Value_Elementary_Functions.Sin (Value (R));
    begin
@@ -36,7 +36,7 @@ package body Radatracer.Matrices is
       );
    end Rotation_X;
 
-   function Rotation_Y (R : Radian) return Matrix4 is
+   function Rotation_Y (R : Float) return Matrix4 is
       Cos_R : constant Value := Value_Elementary_Functions.Cos (Value (R));
       Sin_R : constant Value := Value_Elementary_Functions.Sin (Value (R));
    begin
@@ -48,7 +48,7 @@ package body Radatracer.Matrices is
       );
    end Rotation_Y;
 
-   function Rotation_Z (R : Radian) return Matrix4 is
+   function Rotation_Z (R : Float) return Matrix4 is
       Cos_R : constant Value := Value_Elementary_Functions.Cos (Value (R));
       Sin_R : constant Value := Value_Elementary_Functions.Sin (Value (R));
    begin

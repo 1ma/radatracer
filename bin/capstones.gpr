@@ -6,7 +6,11 @@ project Capstones is
    for Object_Dir use "obj";
    for Create_Missing_Dirs use "True";
    for Exec_Dir use "out";
-   for Main use ("simple_ballistics.adb", "test_drive.adb");
+   for Main use (
+      "clock.adb",
+      "simple_ballistics.adb",
+      "test_drive.adb"
+   );
 
    type Enabled_Kind is ("enabled", "disabled");
    Compile_Checks : Enabled_Kind := External ("CAPSTONES_COMPILE_CHECKS", "enabled");
