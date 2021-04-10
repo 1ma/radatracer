@@ -83,21 +83,19 @@ package body Radatracer is
    end "/";
 
    function Magnitude (T : Tuple) return Value is
-      package Value_Elementary_Functions is new Ada.Numerics.Generic_Elementary_Functions (Value);
+      package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
    begin
-      return Value_Elementary_Functions.Sqrt (
-         (T.X * T.X) + (T.Y * T.Y) + (T.Z * T.Z) + (T.W * T.W)
-      );
+      return Math.Sqrt ((T.X * T.X) + (T.Y * T.Y) + (T.Z * T.Z) + (T.W * T.W));
    end Magnitude;
 
    function Normalize (T : Tuple) return Tuple is
-      T_Magn : constant Value := Magnitude (T);
+      T_Magnitude : constant Value := Magnitude (T);
    begin
       return (
-         X => T.X / T_Magn,
-         Y => T.Y / T_Magn,
-         Z => T.Z / T_Magn,
-         W => T.W / T_Magn
+         X => T.X / T_Magnitude,
+         Y => T.Y / T_Magnitude,
+         Z => T.Z / T_Magnitude,
+         W => T.W / T_Magnitude
       );
    end Normalize;
 
