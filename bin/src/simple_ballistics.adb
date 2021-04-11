@@ -23,7 +23,7 @@ procedure Simple_Ballistics is
    end Tick;
 
    P : Projectile := (
-      Position => Radatracer.Make_Point (0.0, 1.0, 0.0),
+      Position => Radatracer.Make_Point (0, 1, 0),
       Velocity => 11.25 * Radatracer.Normalize (Radatracer.Make_Vector (1.0, 1.8, 0.0))
    );
 

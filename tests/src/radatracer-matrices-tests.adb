@@ -229,42 +229,42 @@ package body Radatracer.Matrices.Tests is
    procedure Test_Matrix_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Matrix_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class) is
       T1 : constant Matrix4 := Translation (5.0, -3.0, 2.0);
-      P1 : constant Tuple := Make_Point (-3.0, 4.0, 5.0);
-      V1 : constant Tuple := Make_Vector (-3.0, 4.0, 5.0);
+      P1 : constant Tuple := Make_Point (-3, 4, 5);
+      V1 : constant Tuple := Make_Vector (-3, 4, 5);
 
       T2 : constant Matrix4 := Scaling (2.0, 3.0, 4.0);
-      P2 : constant Tuple := Make_Point (2.0, 3.0, 4.0);
-      V2 : constant Tuple := Make_Vector (-4.0, 6.0, 8.0);
+      P2 : constant Tuple := Make_Point (2, 3, 4);
+      V2 : constant Tuple := Make_Vector (-4, 6, 8);
 
       Half_Quarter : constant Float := Ada.Numerics.Pi / 4.0;
       Full_Quarter : constant Float := Ada.Numerics.Pi / 2.0;
-      P3 : constant Tuple := Make_Point (0.0, 1.0, 0.0);
-      P4 : constant Tuple := Make_Point (0.0, 0.0, 1.0);
+      P3 : constant Tuple := Make_Point (0, 1, 0);
+      P4 : constant Tuple := Make_Point (0, 0, 1);
    begin
-      AUnit.Assertions.Assert (T1 * P1 = Make_Point (2.0, 1.0, 7.0), "Translation test 1");
-      AUnit.Assertions.Assert (Invert (T1) * P1 = Make_Point (-8.0, 7.0, 3.0), "Translation test 2");
+      AUnit.Assertions.Assert (T1 * P1 = Make_Point (2, 1, 7), "Translation test 1");
+      AUnit.Assertions.Assert (Invert (T1) * P1 = Make_Point (-8, 7, 3), "Translation test 2");
       AUnit.Assertions.Assert (T1 * V1 = V1, "Translation test 3");
 
-      AUnit.Assertions.Assert (T2 * Make_Point (-4.0, 6.0, 8.0) = Make_Point (-8.0, 18.0, 32.0), "Scaling test 1");
-      AUnit.Assertions.Assert (T2 * V2 = Make_Vector (-8.0, 18.0, 32.0), "Scaling test 2");
-      AUnit.Assertions.Assert (Invert (T2) * V2 = Make_Vector (-2.0, 2.0, 2.0), "Scaling test 3");
-      AUnit.Assertions.Assert (Scaling (-1.0, 1.0, 1.0) * P2 = Make_Point (-2.0, 3.0, 4.0), "Scaling test 4");
+      AUnit.Assertions.Assert (T2 * Make_Point (-4, 6, 8) = Make_Point (-8, 18, 32), "Scaling test 1");
+      AUnit.Assertions.Assert (T2 * V2 = Make_Vector (-8, 18, 32), "Scaling test 2");
+      AUnit.Assertions.Assert (Invert (T2) * V2 = Make_Vector (-2, 2, 2), "Scaling test 3");
+      AUnit.Assertions.Assert (Scaling (-1.0, 1.0, 1.0) * P2 = Make_Point (-2, 3, 4), "Scaling test 4");
 
       AUnit.Assertions.Assert (Rotation_X (Half_Quarter) * P3 = Make_Point (0.0, 0.70711, 0.70711), "Rotation_X test 1");
-      AUnit.Assertions.Assert (Rotation_X (Full_Quarter) * P3 = Make_Point (0.0, 0.0, 1.0), "Rotation_X test 2");
+      AUnit.Assertions.Assert (Rotation_X (Full_Quarter) * P3 = Make_Point (0, 0, 1), "Rotation_X test 2");
       AUnit.Assertions.Assert (Invert (Rotation_X (Half_Quarter)) * P3 = Make_Point (0.0, 0.70711, -0.70711), "Rotation_X test 3");
 
       AUnit.Assertions.Assert (Rotation_Y (Half_Quarter) * P4 = Make_Point (0.70711, 0.0, 0.70711), "Rotation_Y test 1");
-      AUnit.Assertions.Assert (Rotation_Y (Full_Quarter) * P4 = Make_Point (1.0, 0.0, 0.0), "Rotation_Y test 2");
+      AUnit.Assertions.Assert (Rotation_Y (Full_Quarter) * P4 = Make_Point (1, 0, 0), "Rotation_Y test 2");
 
       AUnit.Assertions.Assert (Rotation_Z (Half_Quarter) * P3 = Make_Point (-0.70711, 0.70711, 0.0), "Rotation_Z test 1");
-      AUnit.Assertions.Assert (Rotation_Z (Full_Quarter) * P3 = Make_Point (-1.0, 0.0, 0.0), "Rotation_Z test 2");
+      AUnit.Assertions.Assert (Rotation_Z (Full_Quarter) * P3 = Make_Point (-1, 0, 0), "Rotation_Z test 2");
 
-      AUnit.Assertions.Assert (Shearing (0.0, 1.0, 0.0, 0.0, 0.0, 0.0) * P2 = Make_Point (6.0, 3.0, 4.0), "Shearing test 1");
-      AUnit.Assertions.Assert (Shearing (0.0, 0.0, 1.0, 0.0, 0.0, 0.0) * P2 = Make_Point (2.0, 5.0, 4.0), "Shearing test 2");
-      AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 1.0, 0.0, 0.0) * P2 = Make_Point (2.0, 7.0, 4.0), "Shearing test 3");
-      AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 0.0, 1.0, 0.0) * P2 = Make_Point (2.0, 3.0, 6.0), "Shearing test 4");
-      AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 0.0, 0.0, 1.0) * P2 = Make_Point (2.0, 3.0, 7.0), "Shearing test 5");
+      AUnit.Assertions.Assert (Shearing (0.0, 1.0, 0.0, 0.0, 0.0, 0.0) * P2 = Make_Point (6, 3, 4), "Shearing test 1");
+      AUnit.Assertions.Assert (Shearing (0.0, 0.0, 1.0, 0.0, 0.0, 0.0) * P2 = Make_Point (2, 5, 4), "Shearing test 2");
+      AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 1.0, 0.0, 0.0) * P2 = Make_Point (2, 7, 4), "Shearing test 3");
+      AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 0.0, 1.0, 0.0) * P2 = Make_Point (2, 3, 6), "Shearing test 4");
+      AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 0.0, 0.0, 1.0) * P2 = Make_Point (2, 3, 7), "Shearing test 5");
    end Test_Matrix_Transformations;
 
    overriding procedure Register_Tests (T : in out Test) is

@@ -11,7 +11,7 @@ procedure Clock is
    Canvas : Radatracer.Canvas.Canvas := Radatracer.Canvas.Make_Canvas (Side_Length, Side_Length);
 
    Hour : Radatracer.Tuple;
-   Midnight : constant Radatracer.Tuple := Radatracer.Make_Point (0.0, 1.0, 0.0);
+   Midnight : constant Radatracer.Tuple := Radatracer.Make_Point (0, 1, 0);
 
    Radians : Float;
 
