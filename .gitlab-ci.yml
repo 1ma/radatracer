@@ -6,13 +6,13 @@ builds-on-gnat-9:
   stage: build-check
   image: 1maa/fsf-gnat:9
   script:
-    - gprbuild bin/capstones.gpr
+    - gprbuild -XRADATRACER_BUILD_MODE=optimize -XCAPSTONES_BUILD_MODE=optimize bin/capstones.gpr
 
 builds-on-gnat-10:
   stage: build-check
   image: 1maa/fsf-gnat:10
   script:
-    - gprbuild bin/capstones.gpr
+    - gprbuild -XRADATRACER_BUILD_MODE=optimize -XCAPSTONES_BUILD_MODE=optimize bin/capstones.gpr
 
 test-on-gnat-9:
   stage: testing
@@ -21,7 +21,7 @@ test-on-gnat-9:
   image: 1maa/fsf-gnat:9
   before_script:
     - cd tests
-    - alr build
+    - alr build -XRADATRACER_BUILD_MODE=optimize -XTESTRADATRACER_BUILD_MODE=optimize
   script:
     - ./out/harness
 
@@ -32,6 +32,6 @@ test-on-gnat-10:
   image: 1maa/fsf-gnat:10
   before_script:
     - cd tests
-    - alr build
+    - alr build -XRADATRACER_BUILD_MODE=optimize -XTESTRADATRACER_BUILD_MODE=optimize
   script:
     - ./out/harness
