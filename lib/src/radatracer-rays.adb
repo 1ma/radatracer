@@ -1,11 +1,6 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 
 package body Radatracer.Rays is
-   function Position (R : Ray; T : Value) return Tuple is
-   begin
-      return R.Origin + R.Direction * T;
-   end Position;
-
    function Intersect (S : Sphere; R : Ray) return Value_Array is
       Sphere_Ray_Vector : constant Tuple := R.Origin - S.Origin;
 

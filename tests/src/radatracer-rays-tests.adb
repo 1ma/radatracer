@@ -2,11 +2,9 @@ with Ada.Numerics;
 with AUnit.Assertions;
 
 package body Radatracer.Rays.Tests is
-   procedure Test_Ray_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class);
-   procedure Test_Ray_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class) is
+   procedure Test_Ray_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Ray_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class) is
       S : constant Sphere := (others => <>);
-
-      R : constant Ray := (Origin => Make_Point (2, 3, 4), Direction => Make_Vector (1, 0, 0));
 
       R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
       R2 : constant Ray := (Origin => Make_Point (0, 1, -5), Direction => Make_Vector (0, 0, 1));
@@ -19,22 +17,17 @@ package body Radatracer.Rays.Tests is
       I4 : constant Value_Array := (-1.0, 1.0);
       I5 : constant Value_Array := (-6.0, -4.0);
    begin
-      AUnit.Assertions.Assert (Position (R, 0.0) = Make_Point (2, 3, 4), "Ray position test 1");
-      AUnit.Assertions.Assert (Position (R, 1.0) = Make_Point (3, 3, 4), "Ray position test 2");
-      AUnit.Assertions.Assert (Position (R, -1.0) = Make_Point (1, 3, 4), "Ray position test 3");
-      AUnit.Assertions.Assert (Position (R, 2.5) = Make_Point (4.5, 3.0, 4.0), "Ray position test 4");
-
       AUnit.Assertions.Assert (Intersect (S, R1) = I1, "Ray-Sphere intersection test 1 - intersection at 2 points");
       AUnit.Assertions.Assert (Intersect (S, R2) = I2, "Ray-Sphere intersection test 2 - intersection at 1 point (tangent point)");
       AUnit.Assertions.Assert (Intersect (S, R3) = I3, "Ray-Sphere intersection test 3 - no intersection");
       AUnit.Assertions.Assert (Intersect (S, R4) = I4, "Ray-Sphere intersection test 4 - ray originates inside the sphere");
       AUnit.Assertions.Assert (Intersect (S, R5) = I5, "Ray-Sphere intersection test 5 - sphere is behind the ray");
-   end Test_Ray_Calculations;
+   end Test_Ray_Intersections;
 
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
-      Register_Routine (T, Test_Ray_Calculations'Access, "Ray calculations tests");
+      Register_Routine (T, Test_Ray_Intersections'Access, "Ray intersections tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

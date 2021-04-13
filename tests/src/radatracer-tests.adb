@@ -90,11 +90,22 @@ package body Radatracer.Tests is
       AUnit.Assertions.Assert (Cross_Product (Product2, Product1) = CrossProduct2R, "Cross Product test 2");
    end Test_Tuple_Operations;
 
+   procedure Test_Ray_Position (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Ray_Position (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      R : constant Ray := (Origin => Make_Point (2, 3, 4), Direction => Make_Vector (1, 0, 0));
+   begin
+      AUnit.Assertions.Assert (Position (R, 0.0) = Make_Point (2, 3, 4), "Ray position test 1");
+      AUnit.Assertions.Assert (Position (R, 1.0) = Make_Point (3, 3, 4), "Ray position test 2");
+      AUnit.Assertions.Assert (Position (R, -1.0) = Make_Point (1, 3, 4), "Ray position test 3");
+      AUnit.Assertions.Assert (Position (R, 2.5) = Make_Point (4.5, 3.0, 4.0), "Ray position test 4");
+   end Test_Ray_Position;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Test_Simple_Tuples'Access, "Simple Tuple creation tests");
       Register_Routine (T, Test_Tuple_Operations'Access, "Tuple operations tests");
+      Register_Routine (T, Test_Ray_Position'Access, "Ray position tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

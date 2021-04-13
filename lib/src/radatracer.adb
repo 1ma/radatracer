@@ -136,4 +136,9 @@ package body Radatracer is
 
    function Make_Color (Red, Green, Blue : Value) return Tuple
       renames Make_Vector;
+
+   function Position (R : Ray; T : Value) return Tuple is
+   begin
+      return R.Origin + R.Direction * T;
+   end Position;
 end Radatracer;

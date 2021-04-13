@@ -37,4 +37,11 @@ package Radatracer is
    function Make_Vector (X, Y, Z : Integer) return Tuple;
 
    function Make_Color (Red, Green, Blue : Value) return Tuple;
+
+   type Ray is record
+      Origin : Tuple;
+      Direction : Tuple;
+   end record;
+
+   function Position (R : Ray; T : Value) return Tuple;
 end Radatracer;
