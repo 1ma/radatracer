@@ -27,8 +27,8 @@ package body Radatracer.Objects is
          package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
 
          Normal_Result : constant Intersection_Array := (
-            (T => (-B - Math.Sqrt (Discriminant)) / A, O => S'Access),
-            (T => (-B + Math.Sqrt (Discriminant)) / A, O => S'Access)
+            (T_Value => (-B - Math.Sqrt (Discriminant)) / A, Object => S'Access),
+            (T_Value => (-B + Math.Sqrt (Discriminant)) / A, Object => S'Access)
          );
       begin
          return Normal_Result;

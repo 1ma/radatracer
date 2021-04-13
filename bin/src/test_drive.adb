@@ -1,40 +1,33 @@
 with Ada.Text_IO;
-with Radatracer.Matrices;
-
-use type Radatracer.Value;
-use type Radatracer.Matrices.Matrix4;
+with Radatracer.Objects;
 
 procedure Test_Drive is
-   package Value_IO is new Ada.Text_IO.Float_IO (Radatracer.Value);
-
-   procedure Print_Matrix (M : Radatracer.Matrices.Matrix4);
-   procedure Print_Matrix (M : Radatracer.Matrices.Matrix4) is
-   begin
-      for Row in M'Range (1) loop
-         for Column in M'Range (2) loop
-            Value_IO.Put (Item => M (Row, Column), Exp => 0);
-            Ada.Text_IO.Put (" ");
-         end loop;
-         Ada.Text_IO.New_Line;
-      end loop;
-      Ada.Text_IO.New_Line;
-   end Print_Matrix;
-
-   M1 : constant Radatracer.Matrices.Matrix4 := (
-      (1.0, 2.0, 3.0, 4.0),
-      (5.0, 6.0, 7.0, 8.0),
-      (9.0, 8.0, 7.0, 6.0),
-      (5.0, 4.0, 3.0, 2.0)
+   A : constant Radatracer.Objects.Intersection_Array := (
+      (
+         T_Value => 1.0,
+         Object => new Radatracer.Objects.Sphere'(
+            Origin => Radatracer.Make_Point (1, 2, 3)
+         )
+      ),
+      (
+         T_Value => 3.0,
+         Object => new Radatracer.Objects.Square'(
+            Lower_Left_Corner => Radatracer.Make_Point (2, 2, 2),
+            Side_Length => 10.5
+         )
+      )
    );
 
-   M2 : constant Radatracer.Matrices.Matrix4 := (
-      (-2.0, 1.0, 2.0, 3.0),
-      (3.0, 2.0, 1.0, -1.0),
-      (4.0, 3.0, 6.0, 5.0),
-      (1.0, 2.0, 7.0, 8.0)
-   );
-
-   M3 : constant Radatracer.Matrices.Matrix4 := M1 * M2;
 begin
-   Print_Matrix (M3);
+   for I in A'Range loop
+      Ada.Text_IO.Put ("Element # " & Integer'Image (I) & " - Class: ");
+
+      if A (I).Object.all in Radatracer.Objects.Sphere'Class then
+         Ada.Text_IO.Put_Line ("Sphere");
+      end if;
+
+      if A (I).Object.all in Radatracer.Objects.Square'Class then
+         Ada.Text_IO.Put_Line ("Square");
+      end if;
+   end loop;
 end Test_Drive;
