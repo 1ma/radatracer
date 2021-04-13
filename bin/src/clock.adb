@@ -8,7 +8,7 @@ use type Radatracer.Value;
 
 procedure Clock is
    Side_Length : constant := 100;
-   Canvas : Radatracer.Canvas.Canvas := Radatracer.Canvas.Make_Canvas (Side_Length, Side_Length);
+   Canvas : Radatracer.Canvas.Canvas (0 .. Side_Length - 1, 0 .. Side_Length - 1);
 
    Hour : Radatracer.Tuple;
    Midnight : constant Radatracer.Tuple := Radatracer.Make_Point (0, 1, 0);

@@ -32,7 +32,9 @@ procedure Simple_Ballistics is
       Wind => Radatracer.Make_Vector (-0.01, 0.0, 0.0)
    );
 
-   Canvas : Radatracer.Canvas.Canvas := Radatracer.Canvas.Make_Canvas (900, 550);
+   Width : constant := 900;
+   Height : constant := 550;
+   Canvas : Radatracer.Canvas.Canvas (0 .. Width - 1, 0 .. Height - 1);
 
    X, Y : Integer;
 begin

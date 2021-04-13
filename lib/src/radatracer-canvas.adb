@@ -1,9 +1,11 @@
 package body Radatracer.Canvas is
+   function Clamp (V, Min, Max : Value) return Value;
+
    function To_Pixel (T : Tuple) return Pixel is
       Max_Value : constant Float := Float (Primary_Color'Last);
-      Red_Hue : constant Float := Float (Value'Min (1.0, Value'Max (0.0, T.X)));
-      Green_Hue : constant Float := Float (Value'Min (1.0, Value'Max (0.0, T.Y)));
-      Blue_Hue : constant Float := Float (Value'Min (1.0, Value'Max (0.0, T.Z)));
+      Red_Hue : constant Float := Float (Clamp (T.X, 0.0, 1.0));
+      Green_Hue : constant Float := Float (Clamp (T.Y, 0.0, 1.0));
+      Blue_Hue : constant Float := Float (Clamp (T.Z, 0.0, 1.0));
    begin
       return (
          Red => Primary_Color (Float'Rounding (Red_Hue * Max_Value)),
@@ -12,15 +14,16 @@ package body Radatracer.Canvas is
       );
    end To_Pixel;
 
-   function Make_Canvas (Width, Height : Positive) return Canvas is
-      Black_Pixel : constant Pixel := (Red => 0, Green => 0, Blue => 0);
+   function Clamp (V, Min, Max : Value) return Value is
    begin
-      return Make_Canvas (Width, Height, Black_Pixel);
-   end Make_Canvas;
+      if V < Min then
+         return Min;
+      end if;
 
-   function Make_Canvas (Width, Height : Positive; Initial_Color : Pixel) return Canvas is
-      Result : constant Canvas (0 .. Width - 1, 0 .. Height - 1) := (others => (others => Initial_Color));
-   begin
-      return Result;
-   end Make_Canvas;
+      if V > Max then
+         return Max;
+      end if;
+
+      return V;
+   end Clamp;
 end Radatracer.Canvas;

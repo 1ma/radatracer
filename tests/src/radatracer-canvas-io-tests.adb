@@ -13,7 +13,7 @@ package body Radatracer.Canvas.IO.Tests is
    procedure Test_Canvas_Instantiation (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Canvas_Instantiation (T : in out AUnit.Test_Cases.Test_Case'Class) is
       Black_Pixel : constant Pixel := (Red => 0, Green => 0, Blue => 0);
-      C : Canvas := Make_Canvas (10, 20);
+      C : Canvas (1 .. 10, 1 .. 20);
    begin
       for Width in C'Range (1) loop
          for Height in C'Range (2) loop
@@ -28,8 +28,8 @@ package body Radatracer.Canvas.IO.Tests is
    procedure Test_Canvas_IO (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Canvas_IO (T : in out AUnit.Test_Cases.Test_Case'Class) is
       FT : Ada.Text_IO.File_Type;
-      C1 : Canvas := Make_Canvas (5, 3);
-      C2 : constant Canvas := Make_Canvas (10, 2, To_Pixel (Make_Color (1.0, 0.8, 0.6)));
+      C1 : Canvas (0 .. 4, 0 .. 2);
+      C2 : constant Canvas (0 .. 9, 0 .. 1) := (others => (others => To_Pixel (Make_Color (1.0, 0.8, 0.6))));
    begin
       Ada.Text_IO.Create (File => FT, Mode => Ada.Text_IO.Out_File);
 
