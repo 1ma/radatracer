@@ -18,6 +18,8 @@ package body Radatracer.Canvas.IO is
             Print_PPM_Color (FT, C (Width, Height).Blue, Current_Line_Length);
          end loop;
       end loop;
+
+      Ada.Text_IO.New_Line (FT);
    end Write_PPM;
 
    procedure Print_PPM_Header (FT : Ada.Text_IO.File_Type; Width, Height : Positive) is
