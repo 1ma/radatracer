@@ -280,4 +280,13 @@ package body Radatracer.Matrices is
       end loop;
       return Result;
    end Invert;
+
+   function Transform (R : Ray; M : Matrix4) return Ray is
+   begin
+      return (
+         Origin => M * R.Origin,
+         Direction => M * R.Direction
+      );
+   end Transform;
+
 end Radatracer.Matrices;

@@ -267,11 +267,26 @@ package body Radatracer.Matrices.Tests is
       AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 0.0, 0.0, 1.0) * P2 = Make_Point (2, 3, 7), "Shearing test 5");
    end Test_Matrix_Transformations;
 
+   procedure Test_Ray_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Ray_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      R : constant Ray := (Make_Point (1, 2, 3), Make_Vector (0, 1, 0));
+
+      M1 : constant Matrix4 := Translation (3.0, 4.0, 5.0);
+      T1 : constant Ray := (Make_Point (4, 6, 8), Make_Vector (0, 1, 0));
+
+      M2 : constant Matrix4 := Scaling (2.0, 3.0, 4.0);
+      T2 : constant Ray := (Make_Point (2, 6, 12), Make_Vector (0, 3, 0));
+   begin
+      AUnit.Assertions.Assert (Transform (R, M1) = T1, "Ray transformation test 1 - translation - Ray.Direction stays the same");
+      AUnit.Assertions.Assert (Transform (R, M2) = T2, "Ray transformation test 2 - scaling - Ray.Direction is scaled too");
+   end Test_Ray_Transformations;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Test_Matrix_Operations'Access, "Matrix operations tests");
       Register_Routine (T, Test_Matrix_Transformations'Access, "Matrix transformations tests");
+      Register_Routine (T, Test_Ray_Transformations'Access, "Matrix transformations tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

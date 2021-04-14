@@ -1,5 +1,6 @@
 with Ada.Numerics;
 with AUnit.Assertions;
+with Radatracer.Matrices;
 
 package body Radatracer.Objects.Tests is
 
@@ -7,25 +8,44 @@ package body Radatracer.Objects.Tests is
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class) is
       use type Radatracer.Objects.Intersection_Vectors.Vector;
 
-      S : constant Sphere := (Origin => Make_Point (0, 0, 0));
+      S1 : constant Sphere := (
+         Origin => Make_Point (0, 0, 0),
+         Transformation => <>
+      );
 
-      R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
-      R2 : constant Ray := (Origin => Make_Point (0, 1, -5), Direction => Make_Vector (0, 0, 1));
-      R3 : constant Ray := (Origin => Make_Point (0, 2, -5), Direction => Make_Vector (0, 0, 1));
-      R4 : constant Ray := (Origin => Make_Point (0, 0, 0), Direction => Make_Vector (0, 0, 1));
-      R5 : constant Ray := (Origin => Make_Point (0, 0, 5), Direction => Make_Vector (0, 0, 1));
+      S2 : constant Sphere := (
+         Origin => <>,
+         Transformation => Radatracer.Matrices.Scaling (2.0, 2.0, 2.0)
+      );
 
-      V1 : constant Intersection_Vectors.Vector := (T_Value => 4.0, Object => S) & (T_Value => 6.0, Object => S);
-      V2 : constant Intersection_Vectors.Vector := (T_Value => 5.0, Object => S) & (T_Value => 5.0, Object => S);
+      S3 : constant Sphere := (
+         Origin => <>,
+         Transformation => Radatracer.Matrices.Translation (5.0, 0.0, 0.0)
+      );
+
+      R1 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
+      R2 : constant Ray := (Make_Point (0, 1, -5), Make_Vector (0, 0, 1));
+      R3 : constant Ray := (Make_Point (0, 2, -5), Make_Vector (0, 0, 1));
+      R4 : constant Ray := (Make_Point (0, 0, 0), Make_Vector (0, 0, 1));
+      R5 : constant Ray := (Make_Point (0, 0, 5), Make_Vector (0, 0, 1));
+      R6 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
+      R7 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
+
+      V1 : constant Intersection_Vectors.Vector := (4.0, S1) & (6.0, S1);
+      V2 : constant Intersection_Vectors.Vector := (5.0, S1) & (5.0, S1);
       V3 : Intersection_Vectors.Vector;
-      V4 : constant Intersection_Vectors.Vector := (T_Value => -1.0, Object => S) & (T_Value => 1.0, Object => S);
-      V5 : constant Intersection_Vectors.Vector := (T_Value => -6.0, Object => S) & (T_Value => -4.0, Object => S);
+      V4 : constant Intersection_Vectors.Vector := (-1.0, S1) & (1.0, S1);
+      V5 : constant Intersection_Vectors.Vector := (-6.0, S1) & (-4.0, S1);
+      V6 : constant Intersection_Vectors.Vector := (3.0, S2) & (7.0, S2);
+      V7 : Intersection_Vectors.Vector;
    begin
-      AUnit.Assertions.Assert (Intersect (S, R1) = V1, "Ray-Sphere intersection test 1 - intersection at 2 points");
-      AUnit.Assertions.Assert (Intersect (S, R2) = V2, "Ray-Sphere intersection test 2 - intersection at 1 point (tangent point)");
-      AUnit.Assertions.Assert (Intersect (S, R3) = V3, "Ray-Sphere intersection test 3 - no intersection");
-      AUnit.Assertions.Assert (Intersect (S, R4) = V4, "Ray-Sphere intersection test 4 - ray originates inside the sphere");
-      AUnit.Assertions.Assert (Intersect (S, R5) = V5, "Ray-Sphere intersection test 5 - sphere is behind the ray");
+      AUnit.Assertions.Assert (Intersect (S1, R1) = V1, "Ray-Sphere intersection test 1 - intersection at 2 points");
+      AUnit.Assertions.Assert (Intersect (S1, R2) = V2, "Ray-Sphere intersection test 2 - intersection at 1 point (tangent point)");
+      AUnit.Assertions.Assert (Intersect (S1, R3) = V3, "Ray-Sphere intersection test 3 - no intersection");
+      AUnit.Assertions.Assert (Intersect (S1, R4) = V4, "Ray-Sphere intersection test 4 - ray originates inside the sphere");
+      AUnit.Assertions.Assert (Intersect (S1, R5) = V5, "Ray-Sphere intersection test 5 - sphere is behind the ray");
+      AUnit.Assertions.Assert (Intersect (S2, R6) = V6, "Ray-Sphere intersection test 6 - sphere is scaled");
+      AUnit.Assertions.Assert (Intersect (S3, R7) = V7, "Ray-Sphere intersection test 7 - sphere is translated away from the ray");
    end Test_Ray_Sphere_Intersections;
 
    procedure Test_Intersection_Hits (T : in out AUnit.Test_Cases.Test_Case'Class);
@@ -33,7 +53,10 @@ package body Radatracer.Objects.Tests is
       use type Intersection_Vectors.Cursor;
       use type Intersection_Vectors.Vector;
 
-      S : constant Sphere := (Origin => Make_Point (0, 0, 0));
+      S : constant Sphere := (
+         Origin => Make_Point (0, 0, 0),
+         Transformation => <>
+      );
 
       I1_1 : constant Intersection := (1.0, S);
       I1_2 : constant Intersection := (2.0, S);

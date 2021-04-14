@@ -26,9 +26,11 @@ package body Radatracer.Objects is
       package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
       Result : Intersection_Vectors.Vector;
 
-      Sphere_Ray_Vector : constant Tuple := R.Origin - S.Origin;
-      A : constant Value := 2.0 * Dot_Product (R.Direction, R.Direction);
-      B : constant Value := 2.0 * Dot_Product (R.Direction, Sphere_Ray_Vector);
+      Transformed_Ray : constant Ray := Radatracer.Matrices.Transform (R, Radatracer.Matrices.Invert (S.Transformation));
+
+      Sphere_Ray_Vector : constant Tuple := Transformed_Ray.Origin - S.Origin;
+      A : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Transformed_Ray.Direction);
+      B : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Sphere_Ray_Vector);
       C : constant Value := Dot_Product (Sphere_Ray_Vector, Sphere_Ray_Vector) - 1.0;
       Discriminant : constant Value := (B * B) - (2.0 * A * C);
    begin

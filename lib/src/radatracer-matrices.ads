@@ -49,4 +49,6 @@ package Radatracer.Matrices is
 
    function Invert (M : Matrix4) return Matrix4
       with Pre => Is_Invertible (M);
+
+   function Transform (R : Ray; M : Matrix4) return Ray;
 end Radatracer.Matrices;
