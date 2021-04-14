@@ -7,7 +7,7 @@ use type Radatracer.Objects.Intersection_Vectors.Vector;
 procedure Test_Drive is
    I : constant Radatracer.Objects.Intersection := (
       T_Value => 1.0,
-      Object => (Origin => <>, Transformation => <>)
+      Object => (Inverted_Transformation => <>)
    );
 
    A : Radatracer.Objects.Intersection_Vectors.Vector := I & I;

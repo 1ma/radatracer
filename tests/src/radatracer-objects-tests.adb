@@ -8,20 +8,9 @@ package body Radatracer.Objects.Tests is
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class) is
       use type Radatracer.Objects.Intersection_Vectors.Vector;
 
-      S1 : constant Sphere := (
-         Origin => Make_Point (0, 0, 0),
-         Inverted_Transformation => <>
-      );
-
-      S2 : constant Sphere := (
-         Origin => <>,
-         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (2.0, 2.0, 2.0))
-      );
-
-      S3 : constant Sphere := (
-         Origin => <>,
-         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Translation (5.0, 0.0, 0.0))
-      );
+      S1 : constant Sphere := (Inverted_Transformation => <>);
+      S2 : constant Sphere := (Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (2.0, 2.0, 2.0)));
+      S3 : constant Sphere := (Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Translation (5.0, 0.0, 0.0)));
 
       R1 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
       R2 : constant Ray := (Make_Point (0, 1, -5), Make_Vector (0, 0, 1));
@@ -53,10 +42,7 @@ package body Radatracer.Objects.Tests is
       use type Intersection_Vectors.Cursor;
       use type Intersection_Vectors.Vector;
 
-      S : constant Sphere := (
-         Origin => Make_Point (0, 0, 0),
-         Inverted_Transformation => <>
-      );
+      S : constant Sphere := (Inverted_Transformation => <>);
 
       I1_1 : constant Intersection := (1.0, S);
       I1_2 : constant Intersection := (2.0, S);
