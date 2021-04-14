@@ -1,8 +1,7 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 
 package body Radatracer.Matrices is
-   package Value_Elementary_Functions is
-      new Ada.Numerics.Generic_Elementary_Functions (Value);
+   package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
 
    function Translation (X, Y, Z : Value) return Matrix4 is
    begin
@@ -25,8 +24,8 @@ package body Radatracer.Matrices is
    end Scaling;
 
    function Rotation_X (R : Float) return Matrix4 is
-      Cos_R : constant Value := Value_Elementary_Functions.Cos (Value (R));
-      Sin_R : constant Value := Value_Elementary_Functions.Sin (Value (R));
+      Cos_R : constant Value := Math.Cos (Value (R));
+      Sin_R : constant Value := Math.Sin (Value (R));
    begin
       return (
          (1.0, 0.0, 0.0, 0.0),
@@ -37,8 +36,8 @@ package body Radatracer.Matrices is
    end Rotation_X;
 
    function Rotation_Y (R : Float) return Matrix4 is
-      Cos_R : constant Value := Value_Elementary_Functions.Cos (Value (R));
-      Sin_R : constant Value := Value_Elementary_Functions.Sin (Value (R));
+      Cos_R : constant Value := Math.Cos (Value (R));
+      Sin_R : constant Value := Math.Sin (Value (R));
    begin
       return (
          (Cos_R, 0.0, Sin_R, 0.0),
@@ -49,8 +48,8 @@ package body Radatracer.Matrices is
    end Rotation_Y;
 
    function Rotation_Z (R : Float) return Matrix4 is
-      Cos_R : constant Value := Value_Elementary_Functions.Cos (Value (R));
-      Sin_R : constant Value := Value_Elementary_Functions.Sin (Value (R));
+      Cos_R : constant Value := Math.Cos (Value (R));
+      Sin_R : constant Value := Math.Sin (Value (R));
    begin
       return (
          (Cos_R, -Sin_R, 0.0, 0.0),
