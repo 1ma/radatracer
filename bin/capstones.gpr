@@ -32,7 +32,7 @@ project Capstones is
          "-gnatwe",    -- Warnings as errors &
          "-gnatyg",    -- GNAT Style checks
          "-gnaty-d",   -- Disable no DOS line terminators
-         "-gnatyM140", -- Maximum line length
+         "-gnatyM160", -- Maximum line length
          "-gnatyO",    -- Overriding subprograms explicitly marked as such
          "-gnata",     -- Enable assertions and contracts
          "-gnatw.X",   -- Disable warnings for No_Exception_Propagation

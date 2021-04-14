@@ -1,12 +1,12 @@
-name = "testradatracer"
-description = "Shiny new project"
+name = "tests"
+description = "libradatracer AUnit test suite"
 version = "0.0.0"
 
 authors = ["Marcel Hernandez"]
 maintainers = ["Marcel Hernandez <e6990620@gmail.com>"]
 maintainers-logins = ["1ma"]
 
-executables = ["testradatracer"]
+executables = ["out/harness"]
 
 [[depends-on]]
 aunit = "^21.0.0"
