@@ -1,10 +1,25 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 
 package body Radatracer.Objects is
-   function Hit (Intersections : Intersection_Vectors.Vector) return Integer is
-      pragma Unreferenced (Intersections);
+   function "<" (L, R : Intersection) return Boolean is
    begin
-      return -1;
+      return L.T_Value < R.T_Value;
+   end "<";
+
+   function Hit (Intersections : Intersection_Vectors.Vector) return Intersection_Vectors.Cursor is
+      package Intersection_Vector_Sorting is new Intersection_Vectors.Generic_Sorting;
+
+      Sorted_Intersections : Intersection_Vectors.Vector := Intersections;
+   begin
+      Intersection_Vector_Sorting.Sort (Sorted_Intersections);
+
+      for Cursor in Sorted_Intersections.Iterate loop
+         if Sorted_Intersections (Cursor).T_Value >= 0.0 then
+            return Intersections.Find (Sorted_Intersections (Cursor));
+         end if;
+      end loop;
+
+      return Intersection_Vectors.No_Element;
    end Hit;
 
    function Intersect (S : Sphere; R : Ray) return Intersection_Vectors.Vector is
