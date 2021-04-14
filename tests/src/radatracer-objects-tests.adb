@@ -10,17 +10,17 @@ package body Radatracer.Objects.Tests is
 
       S1 : constant Sphere := (
          Origin => Make_Point (0, 0, 0),
-         Transformation => <>
+         Inverted_Transformation => <>
       );
 
       S2 : constant Sphere := (
          Origin => <>,
-         Transformation => Radatracer.Matrices.Scaling (2.0, 2.0, 2.0)
+         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (2.0, 2.0, 2.0))
       );
 
       S3 : constant Sphere := (
          Origin => <>,
-         Transformation => Radatracer.Matrices.Translation (5.0, 0.0, 0.0)
+         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Translation (5.0, 0.0, 0.0))
       );
 
       R1 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
@@ -55,7 +55,7 @@ package body Radatracer.Objects.Tests is
 
       S : constant Sphere := (
          Origin => Make_Point (0, 0, 0),
-         Transformation => <>
+         Inverted_Transformation => <>
       );
 
       I1_1 : constant Intersection := (1.0, S);

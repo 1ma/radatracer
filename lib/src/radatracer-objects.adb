@@ -1,6 +1,11 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 
 package body Radatracer.Objects is
+   procedure Set_Transformation (S : in out Sphere; Transformation : Radatracer.Matrices.Matrix4) is
+   begin
+      S.Inverted_Transformation := Radatracer.Matrices.Invert (Transformation);
+   end Set_Transformation;
+
    function "<" (L, R : Intersection) return Boolean is
    begin
       return L.T_Value < R.T_Value;
@@ -26,7 +31,7 @@ package body Radatracer.Objects is
       package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
       Result : Intersection_Vectors.Vector;
 
-      Transformed_Ray : constant Ray := Radatracer.Matrices.Transform (R, Radatracer.Matrices.Invert (S.Transformation));
+      Transformed_Ray : constant Ray := Radatracer.Matrices.Transform (R, S.Inverted_Transformation);
 
       Sphere_Ray_Vector : constant Tuple := Transformed_Ray.Origin - S.Origin;
       A : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Transformed_Ray.Direction);

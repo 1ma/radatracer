@@ -4,8 +4,10 @@ with Radatracer.Matrices;
 package Radatracer.Objects is
    type Sphere is record
       Origin : Tuple := Make_Point (0, 0, 0);
-      Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
+      Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
    end record;
+
+   procedure Set_Transformation (S : in out Sphere; Transformation : Radatracer.Matrices.Matrix4);
 
    type Intersection is record
       T_Value : Value;
