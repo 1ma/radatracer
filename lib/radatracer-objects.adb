@@ -49,9 +49,15 @@ package body Radatracer.Objects is
       return Result;
    end Intersect;
 
-   function Normal_At (S : Sphere; T : Tuple) return Tuple is
-      Origin : constant Tuple := Make_Point (0, 0, 0);
+   function Normal_At (S : Sphere; World_Point : Tuple) return Tuple is
+      use type Radatracer.Matrices.Matrix4;
+
+      Object_Origin : constant Tuple := Make_Point (0, 0, 0);
+      Object_Point : constant Tuple := S.Inverted_Transformation * World_Point;
+      Object_Normal : constant Tuple := Object_Point - Object_Origin;
+      World_Normal : Tuple := Radatracer.Matrices.Transpose (S.Inverted_Transformation) * Object_Normal;
    begin
-      return Normalize (T - Origin);
+      World_Normal.W := 0.0;
+      return Normalize (World_Normal);
    end Normal_At;
 end Radatracer.Objects;

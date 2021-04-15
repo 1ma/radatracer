@@ -27,5 +27,7 @@ package Radatracer.Objects is
 
    function Intersect (S : Sphere; R : Ray) return Intersection_Vectors.Vector;
 
-   function Normal_At (S : Sphere; T : Tuple) return Tuple;
+   function Normal_At (S : Sphere; World_Point : Tuple) return Tuple
+      with Pre => Is_Point (World_Point),
+           Post => Is_Vector (Normal_At'Result);
 end Radatracer.Objects;
