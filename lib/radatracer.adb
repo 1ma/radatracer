@@ -82,6 +82,36 @@ package body Radatracer is
       );
    end "/";
 
+   function Is_Point (T : Tuple) return Boolean is
+   begin
+      return T.W = 1.0;
+   end Is_Point;
+
+   function Make_Point (X, Y, Z : Value) return Tuple is
+   begin
+      return (X, Y, Z, 1.0);
+   end Make_Point;
+
+   function Make_Point (X, Y, Z : Integer) return Tuple is
+   begin
+      return Make_Point (Value (X), Value (Y), Value (Z));
+   end Make_Point;
+
+   function Is_Vector (T : Tuple) return Boolean is
+   begin
+      return T.W = 0.0;
+   end Is_Vector;
+
+   function Make_Vector (X, Y, Z : Value) return Tuple is
+   begin
+      return (X, Y, Z, 0.0);
+   end Make_Vector;
+
+   function Make_Vector (X, Y, Z : Integer) return Tuple is
+   begin
+      return Make_Vector (Value (X), Value (Y), Value (Z));
+   end Make_Vector;
+
    function Magnitude (T : Tuple) return Value is
       package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
    begin
@@ -113,29 +143,6 @@ package body Radatracer is
          W => 0.0
       );
    end Cross_Product;
-
-   function Make_Point (X, Y, Z : Value) return Tuple is
-   begin
-      return (X, Y, Z, 1.0);
-   end Make_Point;
-
-   function Make_Point (X, Y, Z : Integer) return Tuple is
-   begin
-      return Make_Point (Value (X), Value (Y), Value (Z));
-   end Make_Point;
-
-   function Make_Vector (X, Y, Z : Value) return Tuple is
-   begin
-      return (X, Y, Z, 0.0);
-   end Make_Vector;
-
-   function Make_Vector (X, Y, Z : Integer) return Tuple is
-   begin
-      return Make_Vector (Value (X), Value (Y), Value (Z));
-   end Make_Vector;
-
-   function Make_Color (Red, Green, Blue : Value) return Tuple
-      renames Make_Vector;
 
    function Position (R : Ray; T : Value) return Tuple is
    begin

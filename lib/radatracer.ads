@@ -25,18 +25,20 @@ package Radatracer is
 
    function "/" (L : Tuple; R : Value) return Tuple;
 
-   function Magnitude (T : Tuple) return Value;
-   function Normalize (T : Tuple) return Tuple;
-   function Dot_Product (L, R : Tuple) return Value;
-   function Cross_Product (L, R : Tuple) return Tuple;
-
+   function Is_Point (T : Tuple) return Boolean;
    function Make_Point (X, Y, Z : Value) return Tuple;
    function Make_Point (X, Y, Z : Integer) return Tuple;
 
+   function Is_Vector (T : Tuple) return Boolean;
    function Make_Vector (X, Y, Z : Value) return Tuple;
    function Make_Vector (X, Y, Z : Integer) return Tuple;
 
-   function Make_Color (Red, Green, Blue : Value) return Tuple;
+   function Magnitude (T : Tuple) return Value;
+   function Normalize (T : Tuple) return Tuple
+      with Pre => Is_Vector (T) and Magnitude (T) /= 0.0;
+
+   function Dot_Product (L, R : Tuple) return Value;
+   function Cross_Product (L, R : Tuple) return Tuple;
 
    type Ray is record
       Origin : Tuple;
