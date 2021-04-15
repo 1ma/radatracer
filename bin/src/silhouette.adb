@@ -11,7 +11,7 @@ use type Radatracer.Objects.Intersection_Vectors.Cursor;
 procedure Silhouette is
    Ray_Origin : constant Radatracer.Tuple := Radatracer.Make_Point (0, 0, -5);
 
-   Canvas_Pixels : constant := 1670;
+   Canvas_Pixels : constant := 1024;
 
    Wall_Z : constant Radatracer.Value := 10.0;
    Wall_Size : constant Radatracer.Value := 7.0;
@@ -30,7 +30,10 @@ procedure Silhouette is
 
    Hit : Radatracer.Objects.Intersection_Vectors.Cursor;
 
-   Canvas : Radatracer.Canvas.Canvas (0 .. Canvas_Pixels - 1, 0 .. Canvas_Pixels - 1);
+   subtype Scene_Canvas is Radatracer.Canvas.Canvas (1 .. Canvas_Pixels, 1 .. Canvas_Pixels);
+   type Scene_Canvas_Access is access Scene_Canvas;
+
+   Canvas : constant Scene_Canvas_Access := new Scene_Canvas;
 begin
    for Y in Canvas'Range (2) loop
       World_Y := Half_Wall - Pixel_Size * Radatracer.Value (Y);
@@ -50,5 +53,5 @@ begin
       end loop;
    end loop;
 
-   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas);
+   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas.all);
 end Silhouette;
