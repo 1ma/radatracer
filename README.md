@@ -30,3 +30,9 @@ An [AUnit](https://alire.ada.dev/crates/aunit) test suite that exercises `librad
 
 The driver program for the test suite is one of the main executables mentioned above, `bin/aunit_harness.adb`, so
 it builds the same way.
+
+## Pipeline
+
+A Gitlab pipeline builds the project and passes the tests with FSF GNAT 10.2 and 9.3 in a dockerized Ubuntu environment.
+
+The `1maa/fsf-gnat` image used in the pipeline is generated from [this Dockerfile](https://gitlab.com/1ma/dockertronics/-/blob/master/gnat/9/Dockerfile).
