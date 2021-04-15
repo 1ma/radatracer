@@ -30,4 +30,8 @@ package Radatracer.Objects is
    function Normal_At (S : Sphere; World_Point : Tuple) return Tuple
       with Pre => Is_Point (World_Point),
            Post => Is_Vector (Normal_At'Result);
+
+   function Reflect (V, Normal : Tuple) return Tuple
+      with Pre =>  Is_Vector (V) and Is_Vector (Normal),
+           Post => Is_Vector (Reflect'Result);
 end Radatracer.Objects;

@@ -60,4 +60,9 @@ package body Radatracer.Objects is
       World_Normal.W := 0.0;
       return Normalize (World_Normal);
    end Normal_At;
+
+   function Reflect (V, Normal : Tuple) return Tuple is
+   begin
+      return V - Normal * 2.0 * Dot_Product (V, Normal);
+   end Reflect;
 end Radatracer.Objects;

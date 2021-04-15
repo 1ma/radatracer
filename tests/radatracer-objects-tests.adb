@@ -1,4 +1,4 @@
-with Ada.Numerics.Generic_Elementary_Functions;
+with Ada.Numerics;
 with AUnit.Assertions;
 with Radatracer.Matrices;
 
@@ -68,10 +68,8 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (V4 (Hit (V4)) = I4_4, "Ray-Sphere hit test 3 - unsorted positive and negative T_Values");
    end Test_Intersection_Hits;
 
-   procedure Test_Normal_At_Sphere (T : in out AUnit.Test_Cases.Test_Case'Class);
-   procedure Test_Normal_At_Sphere (T : in out AUnit.Test_Cases.Test_Case'Class) is
-      package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
-
+   procedure Test_Sphere_Normals (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Sphere_Normals (T : in out AUnit.Test_Cases.Test_Case'Class) is
       use type Radatracer.Matrices.Matrix4;
 
       S : Sphere := (Inverted_Transformation => Radatracer.Matrices.Identity_Matrix4);
@@ -87,14 +85,22 @@ package body Radatracer.Objects.Tests is
 
       Set_Transformation (S, Radatracer.Matrices.Scaling (1.0, 0.5, 1.0) * Radatracer.Matrices.Rotation_Z (Ada.Numerics.Pi / 5.0));
       AUnit.Assertions.Assert (Normal_At (S, Make_Point (0.0, 0.70711, -0.70711)) = Make_Vector (0.0, 0.97014, -0.24254), "Sphere normal test 7");
-   end Test_Normal_At_Sphere;
+   end Test_Sphere_Normals;
+
+   procedure Test_Reflections (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Reflections (T : in out AUnit.Test_Cases.Test_Case'Class) is
+   begin
+      AUnit.Assertions.Assert (Reflect (Make_Vector (1, -1, 0), Make_Vector (0, 1, 0)) = Make_Vector (1, 1, 0), "Reflection test 1");
+      AUnit.Assertions.Assert (Reflect (Make_Vector (0, -1, 0), Make_Vector (0.70711, 0.70711, 0.0)) = Make_Vector (1, 0, 0), "Reflection test 2");
+   end Test_Reflections;
 
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Test_Ray_Sphere_Intersections'Access, "Ray-Sphere intersection tests");
       Register_Routine (T, Test_Intersection_Hits'Access, "Ray-Sphere hits tests");
-      Register_Routine (T, Test_Normal_At_Sphere'Access, "Sphere normal vector tests");
+      Register_Routine (T, Test_Sphere_Normals'Access, "Sphere normal vector tests");
+      Register_Routine (T, Test_Reflections'Access, "Sphere normal vector tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
