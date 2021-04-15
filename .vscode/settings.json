@@ -1,4 +1,4 @@
 {
-    "ada.projectFile": "bin/capstones.gpr",
+    "ada.projectFile": "executables.gpr",
     "ada.defaultCharset": "utf-8"
 }

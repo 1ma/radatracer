@@ -1,16 +1,16 @@
-with "aunit.gpr";
-with "../lib/radatracer.gpr";
+project Radatracer is
 
-project Tests is
+   for Library_Name use "radatracer";
+   for Library_Version use "0.0.0";
 
-   for Source_Dirs use ("src");
-   for Object_Dir use "obj";
+   for Source_Dirs use ("lib");
+   for Object_Dir use "obj/lib";
    for Create_Missing_Dirs use "True";
-   for Exec_Dir use "out";
-   for Main use ("harness.adb");
+   for Library_Dir use "out";
+   for Library_Kind use "static";
 
    type Build_Kind is ("debug", "optimize");
-   Build_Mode : Build_Kind := External ("TESTS_BUILD_MODE", "debug");
+   Build_Mode : Build_Kind := External ("RADATRACER_BUILD_MODE", "debug");
 
    Build_Switches := ();
    case Build_Mode is
@@ -41,4 +41,4 @@ project Tests is
       for Switches ("Ada") use ("-Es"); --  Symbolic traceback
    end Binder;
 
-end Tests;
+end Radatracer;

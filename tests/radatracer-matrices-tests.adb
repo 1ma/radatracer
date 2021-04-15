@@ -286,7 +286,7 @@ package body Radatracer.Matrices.Tests is
    begin
       Register_Routine (T, Test_Matrix_Operations'Access, "Matrix operations tests");
       Register_Routine (T, Test_Matrix_Transformations'Access, "Matrix transformations tests");
-      Register_Routine (T, Test_Ray_Transformations'Access, "Matrix transformations tests");
+      Register_Routine (T, Test_Ray_Transformations'Access, "Ray transformations tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

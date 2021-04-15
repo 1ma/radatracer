@@ -1,5 +1,5 @@
-name = "tests"
-description = "libradatracer AUnit test suite"
+name = "executables"
+description = "libradatracer project"
 version = "0.0.0"
 
 authors = ["Marcel Hernandez"]

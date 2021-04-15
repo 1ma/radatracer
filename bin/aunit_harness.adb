@@ -9,7 +9,7 @@ with Radatracer.Matrices.Tests;
 with Radatracer.Objects.Tests;
 with Radatracer.Tests;
 
-procedure Harness is
+procedure AUnit_Harness is
    function Radatracer_Test_Suite return AUnit.Test_Suites.Access_Test_Suite;
    function Radatracer_Test_Suite return AUnit.Test_Suites.Access_Test_Suite is
       Suite : constant AUnit.Test_Suites.Access_Test_Suite := new AUnit.Test_Suites.Test_Suite;
@@ -37,4 +37,4 @@ begin
    if Result /= AUnit.Status'(Success) then
       Ada.Command_Line.Set_Exit_Status (1);
    end if;
-end Harness;
+end AUnit_Harness;
