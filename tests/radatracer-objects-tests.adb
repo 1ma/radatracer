@@ -1,4 +1,4 @@
-with Ada.Numerics;
+with Ada.Numerics.Generic_Elementary_Functions;
 with AUnit.Assertions;
 with Radatracer.Matrices;
 
@@ -68,11 +68,26 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (V4 (Hit (V4)) = I4_4, "Ray-Sphere hit test 3 - unsorted positive and negative T_Values");
    end Test_Intersection_Hits;
 
+   procedure Test_Normal_At_Sphere (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Normal_At_Sphere (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
+
+      S : constant Sphere := (Inverted_Transformation => <>);
+      V : constant Value := Math.Sqrt (3.0) / 3.0;
+   begin
+      AUnit.Assertions.Assert (Normal_At (S, Make_Point (1, 0, 0)) = Make_Vector (1, 0, 0), "Sphere normal test 1");
+      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0, 1, 0)) = Make_Vector (0, 1, 0), "Sphere normal test 2");
+      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0, 0, 1)) = Make_Vector (0, 0, 1), "Sphere normal test 3");
+      AUnit.Assertions.Assert (Normal_At (S, Make_Point (V, V, V)) = Make_Vector (V, V, V), "Sphere normal test 4");
+      AUnit.Assertions.Assert (Normalize (Make_Vector (V, V, V)) = Make_Vector (V, V, V), "Sphere normal test 5 - normal vectors are normalized");
+   end Test_Normal_At_Sphere;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Test_Ray_Sphere_Intersections'Access, "Ray-Sphere intersection tests");
       Register_Routine (T, Test_Intersection_Hits'Access, "Ray-Sphere hits tests");
+      Register_Routine (T, Test_Normal_At_Sphere'Access, "Sphere normal vector tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

@@ -48,4 +48,10 @@ package body Radatracer.Objects is
 
       return Result;
    end Intersect;
+
+   function Normal_At (S : Sphere; T : Tuple) return Tuple is
+      Origin : constant Tuple := Make_Point (0, 0, 0);
+   begin
+      return Normalize (T - Origin);
+   end Normal_At;
 end Radatracer.Objects;

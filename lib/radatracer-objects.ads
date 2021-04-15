@@ -26,4 +26,6 @@ package Radatracer.Objects is
    --  This is how Vector.Find is designed in the Ada.Containers.Vector package.
 
    function Intersect (S : Sphere; R : Ray) return Intersection_Vectors.Vector;
+
+   function Normal_At (S : Sphere; T : Tuple) return Tuple;
 end Radatracer.Objects;
