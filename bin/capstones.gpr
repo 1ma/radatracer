@@ -8,6 +8,7 @@ project Capstones is
    for Exec_Dir use "out";
    for Main use (
       "clock.adb",
+      "silhouette.adb",
       "simple_ballistics.adb",
       "test_drive.adb"
    );
