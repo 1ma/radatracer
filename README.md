@@ -21,10 +21,12 @@ A collection of driver programs that are linked to `libradatracer.a` and use its
 
 Each program maps roughly to the capstone exercises of each chapter (again, some programs are iterated upon).
 
-As the library, these programs only need GPRBuild and a GNAT toolchain to be built: `gprbuild bin/capstones.gpr`
+To build the executables you also need [Alire](https://alire.ada.dev/) as well as GNAT and GPRBuild: `alr build`
+The executables are under `out/`.
 
 ### tests/
 
 An [AUnit](https://alire.ada.dev/crates/aunit) test suite that exercises `libradatracer.a`
 
-To build the test suite you also need [Alire](https://alire.ada.dev/) as well as GNAT and GPRBuild: `cd tests; alr build`
+The driver program for the test suite is one of the main executables mentioned above, `bin/aunit_harness.adb`, so
+it builds the same way.
