@@ -3,6 +3,8 @@ package Radatracer is
 
    type Value is new Float;
 
+   overriding function "=" (L, R : Value) return Boolean;
+
    type Tuple is record
       X : Value := 0.0;
       Y : Value := 0.0;
@@ -10,7 +12,6 @@ package Radatracer is
       W : Value := 0.0;
    end record;
 
-   overriding function "=" (L, R : Value) return Boolean;
    overriding function "=" (L, R : Tuple) return Boolean;
 
    function "+" (L, R : Tuple) return Tuple;
@@ -26,27 +27,37 @@ package Radatracer is
    function "/" (L : Tuple; R : Value) return Tuple;
 
    function Is_Point (T : Tuple) return Boolean;
+
    function Make_Point (X, Y, Z : Value) return Tuple
       with Post => Is_Point (Make_Point'Result);
+
    function Make_Point (X, Y, Z : Integer) return Tuple
       with Post => Is_Point (Make_Point'Result);
 
    function Is_Vector (T : Tuple) return Boolean;
+
    function Make_Vector (X, Y, Z : Value) return Tuple
       with Post => Is_Vector (Make_Vector'Result);
+
    function Make_Vector (X, Y, Z : Integer) return Tuple
       with Post => Is_Vector (Make_Vector'Result);
 
    function Magnitude (T : Tuple) return Value;
-   function Normalize (T : Tuple) return Tuple
-      with Pre => Is_Vector (T) and Magnitude (T) /= 0.0;
 
-   function Dot_Product (L, R : Tuple) return Value;
-   function Cross_Product (L, R : Tuple) return Tuple;
+   function Normalize (V : Tuple) return Tuple
+      with Pre => Is_Vector (V) and Magnitude (V) /= 0.0,
+           Post => Is_Vector (Normalize'Result);
+
+   function Dot_Product (L, R : Tuple) return Value
+      with Pre => Is_Vector (L) and Is_Vector (R);
+
+   function Cross_Product (L, R : Tuple) return Tuple
+      with Pre => Is_Vector (L) and Is_Vector (R),
+           Post => Is_Vector (Cross_Product'Result);
 
    type Ray is record
-      Origin : Tuple;
-      Direction : Tuple;
+      Origin : Tuple := Make_Point (0, 0, 0);
+      Direction : Tuple := Make_Vector (0, 0, 0);
    end record
       with Dynamic_Predicate => Is_Point (Origin) and Is_Vector (Direction);
 

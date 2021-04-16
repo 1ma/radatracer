@@ -78,13 +78,12 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (Normal_At (S, Make_Point (0, 1, 0)) = Make_Vector (0, 1, 0), "Sphere normal test 2");
       AUnit.Assertions.Assert (Normal_At (S, Make_Point (0, 0, 1)) = Make_Vector (0, 0, 1), "Sphere normal test 3");
       AUnit.Assertions.Assert (Normal_At (S, Make_Point (0.57735, 0.57735, 0.57735)) = Make_Vector (0.57735, 0.57735, 0.57735), "Sphere normal test 4");
-      AUnit.Assertions.Assert (Normalize (Make_Vector (0.57735, 0.57735, 0.57735)) = Make_Vector (0.57735, 0.57735, 0.57735), "Sphere normal test 5");
 
       Set_Transformation (S, Radatracer.Matrices.Translation (0.0, 1.0, 0.0));
-      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0.0, 1.70711, -0.70711)) = Make_Vector (0.0, 0.70711, -0.70711), "Sphere normal test 6");
+      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0.0, 1.70711, -0.70711)) = Make_Vector (0.0, 0.70711, -0.70711), "Sphere normal test 5");
 
       Set_Transformation (S, Radatracer.Matrices.Scaling (1.0, 0.5, 1.0) * Radatracer.Matrices.Rotation_Z (Ada.Numerics.Pi / 5.0));
-      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0.0, 0.70711, -0.70711)) = Make_Vector (0.0, 0.97014, -0.24254), "Sphere normal test 7");
+      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0.0, 0.70711, -0.70711)) = Make_Vector (0.0, 0.97014, -0.24254), "Sphere normal test 6");
    end Test_Sphere_Normals;
 
    procedure Test_Reflections (T : in out AUnit.Test_Cases.Test_Case'Class);

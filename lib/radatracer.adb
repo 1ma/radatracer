@@ -118,20 +118,20 @@ package body Radatracer is
       return Math.Sqrt ((T.X * T.X) + (T.Y * T.Y) + (T.Z * T.Z) + (T.W * T.W));
    end Magnitude;
 
-   function Normalize (T : Tuple) return Tuple is
-      T_Magnitude : constant Value := Magnitude (T);
+   function Normalize (V : Tuple) return Tuple is
+      V_Magnitude : constant Value := Magnitude (V);
    begin
       return (
-         X => T.X / T_Magnitude,
-         Y => T.Y / T_Magnitude,
-         Z => T.Z / T_Magnitude,
-         W => T.W / T_Magnitude
+         X => V.X / V_Magnitude,
+         Y => V.Y / V_Magnitude,
+         Z => V.Z / V_Magnitude,
+         W => V.W / V_Magnitude
       );
    end Normalize;
 
    function Dot_Product (L, R : Tuple) return Value is
    begin
-      return L.X * R.X + L.Y * R.Y + L.Z * R.Z + L.W * R.W;
+      return L.X * R.X + L.Y * R.Y + L.Z * R.Z;
    end Dot_Product;
 
    function Cross_Product (L, R : Tuple) return Tuple is
