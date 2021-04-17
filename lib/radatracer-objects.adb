@@ -1,4 +1,5 @@
 with Ada.Numerics.Generic_Elementary_Functions;
+with Radatracer.Canvas;
 
 package body Radatracer.Objects is
    procedure Set_Transformation (S : in out Sphere; Transformation : Radatracer.Matrices.Matrix4) is
@@ -65,4 +66,34 @@ package body Radatracer.Objects is
    begin
       return V - Normal * 2.0 * Dot_Product (V, Normal);
    end Reflect;
+
+   function Lightning (M : Material; PL : Point_Light; Position : Tuple; Eye_Vector : Tuple; Normal_Vector : Tuple) return Tuple is
+      package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
+
+      Effective_Color : constant Tuple := M.Color * PL.Intensity;
+      Light_Vector : constant Tuple := Normalize (PL.Position - Position);
+      Ambient : constant Tuple := Effective_Color * M.Ambient;
+      Light_Dot_Normal : constant Value := Dot_Product (Light_Vector, Normal_Vector);
+      Diffuse, Specular : Tuple;
+
+      Reflect_Vector : Tuple;
+      Reflect_Dot_Eye : Value;
+   begin
+      if Light_Dot_Normal < 0.0 then
+         Diffuse := (0.0, 0.0, 0.0, 0.0);
+         Specular := (0.0, 0.0, 0.0, 0.0);
+      else
+         Diffuse := Effective_Color * M.Diffuse * Light_Dot_Normal;
+         Reflect_Vector := Reflect (-Light_Vector, Normal_Vector);
+         Reflect_Dot_Eye := Dot_Product (Reflect_Vector, Eye_Vector);
+
+         if Reflect_Dot_Eye <= 0.0 then
+            Specular := (0.0, 0.0, 0.0, 0.0);
+         else
+            Specular := PL.Intensity * M.Specular * (Reflect_Dot_Eye ** Natural (M.Shininess));
+         end if;
+      end if;
+
+      return Ambient + Diffuse + Specular;
+   end Lightning;
 end Radatracer.Objects;

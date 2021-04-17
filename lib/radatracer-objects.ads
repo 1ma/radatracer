@@ -9,10 +9,11 @@ package Radatracer.Objects is
       with Dynamic_Predicate => Is_Point (Position);
 
    type Material is record
-      Ambient : Float := 0.1;
-      Diffuse : Float := 0.9;
-      Specular : Float := 0.9;
-      Shininess : Float := 200.0;
+      Color : Tuple := (1.0, 1.0, 1.0, 0.0);
+      Ambient : Value := 0.1;
+      Diffuse : Value := 0.9;
+      Specular : Value := 0.9;
+      Shininess : Value := 200.0;
    end record;
 
    type Sphere is record
@@ -48,4 +49,6 @@ package Radatracer.Objects is
    function Reflect (V, Normal : Tuple) return Tuple
       with Pre =>  Is_Vector (V) and Is_Vector (Normal),
            Post => Is_Vector (Reflect'Result);
+
+   function Lightning (M : Material; PL : Point_Light; Position : Tuple; Eye_Vector : Tuple; Normal_Vector : Tuple) return Tuple;
 end Radatracer.Objects;

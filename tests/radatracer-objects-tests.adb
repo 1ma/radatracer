@@ -1,5 +1,6 @@
 with Ada.Numerics;
 with AUnit.Assertions;
+with Radatracer.Canvas;
 with Radatracer.Matrices;
 
 package body Radatracer.Objects.Tests is
@@ -93,13 +94,29 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (Reflect (Make_Vector (0, -1, 0), Make_Vector (0.70711, 0.70711, 0.0)) = Make_Vector (1, 0, 0), "Reflection test 2");
    end Test_Reflections;
 
+   procedure Test_Lightning (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Lightning (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      M : constant Material := (others => <>);
+      Position : constant Tuple := Make_Point (0, 0, 0);
+
+      Eye_Vector_1 : constant Tuple := Make_Vector (0, 0, -1);
+      Normal_Vector_1 : constant Tuple := Make_Vector (0, 0, -1);
+      Light_1 : constant Point_Light := (Intensity => Radatracer.Canvas.Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, -10));
+   begin
+      AUnit.Assertions.Assert (
+         Lightning (M, Light_1, Position, Eye_Vector_1, Normal_Vector_1) = Radatracer.Canvas.Make_Color (1.9, 1.9, 1.9),
+         "Lightning with the eye between the light and the surface"
+      );
+   end Test_Lightning;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Test_Ray_Sphere_Intersections'Access, "Ray-Sphere intersection tests");
       Register_Routine (T, Test_Intersection_Hits'Access, "Ray-Sphere hits tests");
       Register_Routine (T, Test_Sphere_Normals'Access, "Sphere normal vector tests");
-      Register_Routine (T, Test_Reflections'Access, "Sphere normal vector tests");
+      Register_Routine (T, Test_Reflections'Access, "Reflection tests");
+      Register_Routine (T, Test_Lightning'Access, "Lightning tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
