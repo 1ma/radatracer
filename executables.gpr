@@ -10,6 +10,7 @@ project Executables is
    for Main use (
       "aunit_harness.adb",
       "clock.adb",
+      "phong.adb",
       "silhouette.adb",
       "simple_ballistics.adb",
       "test_drive.adb"
