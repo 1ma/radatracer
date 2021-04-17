@@ -90,12 +90,6 @@ package body Radatracer.Objects is
          if Reflect_Dot_Eye <= 0.0 then
             Specular := (0.0, 0.0, 0.0, 0.0);
          else
-            --  Found a case of Reflect_Dot_Eye = 1.00000453 that skewed the
-            --  following power operator noticeably from the expected 1.0
-            if Reflect_Dot_Eye = 1.0 then
-               Reflect_Dot_Eye := 1.0;
-            end if;
-
             Specular := PL.Intensity * M.Specular * (Reflect_Dot_Eye ** Natural (M.Shininess));
          end if;
       end if;

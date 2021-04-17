@@ -135,7 +135,7 @@ package body Radatracer.Objects.Tests is
       );
 
       AUnit.Assertions.Assert (
-         Lightning (M, Light_4, Position, Eye_Vector_4, Normal_Vector_4) = Radatracer.Canvas.Make_Color (1.6364, 1.6364, 1.6364),
+         Lightning (M, Light_4, Position, Eye_Vector_4, Normal_Vector_4) = Radatracer.Canvas.Make_Color (1.63721, 1.63721, 1.63721),
          "Lightning with the eye in the path of the reflection vector"
       );
 
