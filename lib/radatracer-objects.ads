@@ -2,8 +2,22 @@ with Ada.Containers.Vectors;
 with Radatracer.Matrices;
 
 package Radatracer.Objects is
+   type Point_Light is record
+      Intensity : Tuple;
+      Position : Tuple;
+   end record
+      with Dynamic_Predicate => Is_Point (Position);
+
+   type Material is record
+      Ambient : Float := 0.1;
+      Diffuse : Float := 0.9;
+      Specular : Float := 0.9;
+      Shininess : Float := 200.0;
+   end record;
+
    type Sphere is record
       Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
+      M : Material;
    end record;
 
    procedure Set_Transformation (S : in out Sphere; Transformation : Radatracer.Matrices.Matrix4);

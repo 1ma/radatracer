@@ -25,7 +25,8 @@ procedure Silhouette is
    Sphere : constant Radatracer.Objects.Sphere := (
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Shearing (1.0, 0.0, 0.0, 0.0, 0.0, 0.0) * Radatracer.Matrices.Scaling (0.5, 1.0, 1.0)
-      )
+      ),
+      M => <>
    );
 
    Hit : Radatracer.Objects.Intersection_Vectors.Cursor;
