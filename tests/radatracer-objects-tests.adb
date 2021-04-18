@@ -4,6 +4,31 @@ with Radatracer.Canvas;
 with Radatracer.Matrices;
 
 package body Radatracer.Objects.Tests is
+   function Default_World return World;
+   function Default_World return World is
+      use type Sphere_Vectors.Vector;
+
+      Sphere1 : constant Sphere := (
+         Inverted_Transformation => <>,
+         Material => (
+            Color => Make_Color (0.8, 1.0, 0.6),
+            Ambient => <>,
+            Diffuse => 0.7,
+            Specular => 0.2,
+            Shininess => <>
+         )
+      );
+
+      Sphere2 : constant Sphere := (
+         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (0.5, 0.5, 0.5)),
+         Material => <>
+      );
+   begin
+      return (
+         Light => (Position => Make_Point (-10, -10, -10), Intensity => <>),
+         Objects => Sphere1 & Sphere2
+      );
+   end Default_World;
 
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class) is

@@ -3,8 +3,8 @@ with Radatracer.Matrices;
 
 package Radatracer.Objects is
    type Point_Light is record
-      Intensity : Color;
-      Position : Point;
+      Intensity : Color := Make_Color (1.0, 1.0, 1.0);
+      Position : Point := Make_Point (0, 0, 0);
    end record;
 
    type Material is record
@@ -17,7 +17,7 @@ package Radatracer.Objects is
 
    type Sphere is record
       Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
-      M : Material;
+      Material : Radatracer.Objects.Material;
    end record;
 
    procedure Set_Transformation (S : in out Sphere; Transformation : Radatracer.Matrices.Matrix4);
@@ -47,4 +47,14 @@ package Radatracer.Objects is
    function Reflect (V, Normal : Vector) return Vector;
 
    function Lightning (M : Material; PL : Point_Light; Position : Point; Eye_Vector : Vector; Normal_Vector : Vector) return Color;
+
+   package Sphere_Vectors is new Ada.Containers.Vectors (
+      Index_Type => Natural,
+      Element_Type => Sphere
+   );
+
+   type World is record
+      Light : Point_Light;
+      Objects : Sphere_Vectors.Vector;
+   end record;
 end Radatracer.Objects;

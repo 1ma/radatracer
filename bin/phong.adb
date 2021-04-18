@@ -26,7 +26,7 @@ procedure Phong is
 
    Sphere : constant Radatracer.Objects.Sphere := (
       Inverted_Transformation => <>,
-      M => (Color => Radatracer.Make_Color (1.0, 0.0, 0.0), others => <>)
+      Material => (Color => Radatracer.Make_Color (1.0, 0.0, 0.0), others => <>)
    );
 
    Hit : Radatracer.Objects.Intersection_Vectors.Cursor;
@@ -59,7 +59,9 @@ begin
             Normal_Vector := Radatracer.Objects.Normal_At (Intersections (Hit).Object, Point);
             Eye_Vector := -Ray.Direction;
 
-            Canvas (X, Y) := Radatracer.Canvas.To_Pixel (Radatracer.Objects.Lightning (Intersections (Hit).Object.M, Light, Point, Eye_Vector, Normal_Vector));
+            Canvas (X, Y) := Radatracer.Canvas.To_Pixel (
+               Radatracer.Objects.Lightning (Intersections (Hit).Object.Material, Light, Point, Eye_Vector, Normal_Vector)
+            );
          end if;
       end loop;
    end loop;

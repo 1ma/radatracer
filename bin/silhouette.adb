@@ -26,7 +26,7 @@ procedure Silhouette is
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Shearing (1.0, 0.0, 0.0, 0.0, 0.0, 0.0) * Radatracer.Matrices.Scaling (0.5, 1.0, 1.0)
       ),
-      M => <>
+      Material => <>
    );
 
    Hit : Radatracer.Objects.Intersection_Vectors.Cursor;
