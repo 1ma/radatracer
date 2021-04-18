@@ -1,5 +1,4 @@
 with Ada.Numerics.Generic_Elementary_Functions;
-with Radatracer.Canvas;
 
 package body Radatracer.Objects is
    procedure Set_Transformation (S : in out Sphere; Transformation : Radatracer.Matrices.Matrix4) is
@@ -32,11 +31,11 @@ package body Radatracer.Objects is
       package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
       Result : Intersection_Vectors.Vector;
 
-      Sphere_Origin : constant Tuple := Make_Point (0, 0, 0);
+      Sphere_Origin : constant Point := Make_Point (0, 0, 0);
 
       Transformed_Ray : constant Ray := Radatracer.Matrices.Transform (R, S.Inverted_Transformation);
 
-      Sphere_Ray_Vector : constant Tuple := Transformed_Ray.Origin - Sphere_Origin;
+      Sphere_Ray_Vector : constant Vector := Transformed_Ray.Origin - Sphere_Origin;
       A : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Transformed_Ray.Direction);
       B : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Sphere_Ray_Vector);
       C : constant Value := Dot_Product (Sphere_Ray_Vector, Sphere_Ray_Vector) - 1.0;
@@ -50,42 +49,40 @@ package body Radatracer.Objects is
       return Result;
    end Intersect;
 
-   function Normal_At (S : Sphere; World_Point : Tuple) return Tuple is
+   function Normal_At (S : Sphere; World_Point : Point) return Vector is
       use type Radatracer.Matrices.Matrix4;
 
-      Object_Origin : constant Tuple := Make_Point (0, 0, 0);
-      Object_Point : constant Tuple := S.Inverted_Transformation * World_Point;
-      Object_Normal : constant Tuple := Object_Point - Object_Origin;
+      Object_Origin : constant Point := Make_Point (0, 0, 0);
+      Object_Point : constant Point := S.Inverted_Transformation * World_Point;
+      Object_Normal : constant Vector := Object_Point - Object_Origin;
       World_Normal : Tuple := Radatracer.Matrices.Transpose (S.Inverted_Transformation) * Object_Normal;
    begin
       World_Normal.W := 0.0;
-      return Normalize (World_Normal);
+      return Normalize (Vector (World_Normal));
    end Normal_At;
 
-   function Reflect (V, Normal : Tuple) return Tuple is
+   function Reflect (V, Normal : Vector) return Vector is
    begin
       return V - Normal * 2.0 * Dot_Product (V, Normal);
    end Reflect;
 
-   function Lightning (M : Material; PL : Point_Light; Position : Tuple; Eye_Vector : Tuple; Normal_Vector : Tuple) return Tuple is
-      Light_Vector : constant Tuple := Normalize (PL.Position - Position);
+   function Lightning (M : Material; PL : Point_Light; Position : Point; Eye_Vector : Vector; Normal_Vector : Vector) return Color is
+      Light_Vector : constant Vector := Normalize (PL.Position - Position);
       Light_Dot_Normal : constant Value := Dot_Product (Light_Vector, Normal_Vector);
 
-      Effective_Color : constant Tuple := M.Color * PL.Intensity;
-      Ambient : constant Tuple := Effective_Color * M.Ambient;
+      Effective_Color : constant Color := M.C * PL.Intensity;
+      Ambient : constant Color := Effective_Color * M.Ambient;
    begin
       if Light_Dot_Normal < 0.0 then
          return Ambient;
       end if;
 
       declare
-         package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
-
-         Reflect_Vector : constant Tuple := Reflect (-Light_Vector, Normal_Vector);
+         Reflect_Vector : constant Vector := Reflect (-Light_Vector, Normal_Vector);
          Reflect_Dot_Eye : constant Value := Dot_Product (Reflect_Vector, Eye_Vector);
 
-         Diffuse : constant Tuple := Effective_Color * M.Diffuse * Light_Dot_Normal;
-         Specular : Tuple := (0.0, 0.0, 0.0, 0.0);
+         Diffuse : constant Color := Effective_Color * M.Diffuse * Light_Dot_Normal;
+         Specular : Color := Make_Color (0.0, 0.0, 0.0);
       begin
          if Reflect_Dot_Eye > 0.0 then
             Specular := PL.Intensity * M.Specular * (Reflect_Dot_Eye ** Natural (M.Shininess));

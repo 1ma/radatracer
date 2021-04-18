@@ -6,13 +6,13 @@ use type Radatracer.Value;
 
 procedure Simple_Ballistics is
    type Projectile is record
-      Position : Radatracer.Tuple;
-      Velocity : Radatracer.Tuple;
+      Position : Radatracer.Point;
+      Velocity : Radatracer.Vector;
    end record;
 
    type Environment is record
-      Gravity : Radatracer.Tuple;
-      Wind : Radatracer.Tuple;
+      Gravity : Radatracer.Vector;
+      Wind : Radatracer.Vector;
    end record;
 
    procedure Tick (E : Environment; P : in out Projectile);

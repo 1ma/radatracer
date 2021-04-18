@@ -229,17 +229,17 @@ package body Radatracer.Matrices.Tests is
    procedure Test_Matrix_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Matrix_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class) is
       T1 : constant Matrix4 := Translation (5.0, -3.0, 2.0);
-      P1 : constant Tuple := Make_Point (-3, 4, 5);
-      V1 : constant Tuple := Make_Vector (-3, 4, 5);
+      P1 : constant Point := Make_Point (-3, 4, 5);
+      V1 : constant Vector := Make_Vector (-3, 4, 5);
 
       T2 : constant Matrix4 := Scaling (2.0, 3.0, 4.0);
-      P2 : constant Tuple := Make_Point (2, 3, 4);
-      V2 : constant Tuple := Make_Vector (-4, 6, 8);
+      P2 : constant Point := Make_Point (2, 3, 4);
+      V2 : constant Vector := Make_Vector (-4, 6, 8);
 
       Half_Quarter : constant Float := Ada.Numerics.Pi / 4.0;
       Full_Quarter : constant Float := Ada.Numerics.Pi / 2.0;
-      P3 : constant Tuple := Make_Point (0, 1, 0);
-      P4 : constant Tuple := Make_Point (0, 0, 1);
+      P3 : constant Point := Make_Point (0, 1, 0);
+      P4 : constant Point := Make_Point (0, 0, 1);
    begin
       AUnit.Assertions.Assert (T1 * P1 = Make_Point (2, 1, 7), "Translation test 1");
       AUnit.Assertions.Assert (Invert (T1) * P1 = Make_Point (-8, 7, 3), "Translation test 2");

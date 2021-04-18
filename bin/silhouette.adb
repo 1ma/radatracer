@@ -9,7 +9,7 @@ use type Radatracer.Matrices.Matrix4;
 use type Radatracer.Objects.Intersection_Vectors.Cursor;
 
 procedure Silhouette is
-   Ray_Origin : constant Radatracer.Tuple := Radatracer.Make_Point (0, 0, -5);
+   Ray_Origin : constant Radatracer.Point := Radatracer.Make_Point (0, 0, -5);
 
    Canvas_Pixels : constant := 1024;
 

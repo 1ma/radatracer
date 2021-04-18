@@ -22,16 +22,6 @@ package body Radatracer is
       );
    end "+";
 
-   function "*" (L, R : Tuple) return Tuple is
-   begin
-      return (
-         X => L.X * R.X,
-         Y => L.Y * R.Y,
-         Z => L.Z * R.Z,
-         W => L.W * R.W
-      );
-   end "*";
-
    function "-" (L, R : Tuple) return Tuple is
    begin
       return (
@@ -51,6 +41,16 @@ package body Radatracer is
          W => -T.W
       );
    end "-";
+
+   function "*" (L, R : Tuple) return Tuple is
+   begin
+      return (
+         X => L.X * R.X,
+         Y => L.Y * R.Y,
+         Z => L.Z * R.Z,
+         W => L.W * R.W
+      );
+   end "*";
 
    function "*" (L : Tuple; R : Value) return Tuple is
    begin
@@ -82,43 +82,35 @@ package body Radatracer is
       );
    end "/";
 
-   function Is_Point (T : Tuple) return Boolean is
-   begin
-      return T.W = 1.0;
-   end Is_Point;
-
-   function Make_Point (X, Y, Z : Value) return Tuple is
-   begin
-      return (X, Y, Z, 1.0);
-   end Make_Point;
-
-   function Make_Point (X, Y, Z : Integer) return Tuple is
+   function Make_Point (X, Y, Z : Integer) return Point is
    begin
       return Make_Point (Value (X), Value (Y), Value (Z));
    end Make_Point;
 
-   function Is_Vector (T : Tuple) return Boolean is
+   function Make_Point (X, Y, Z : Value) return Point is
    begin
-      return T.W = 0.0;
-   end Is_Vector;
+      return (X, Y, Z, 1.0);
+   end Make_Point;
 
-   function Make_Vector (X, Y, Z : Value) return Tuple is
-   begin
-      return (X, Y, Z, 0.0);
-   end Make_Vector;
-
-   function Make_Vector (X, Y, Z : Integer) return Tuple is
+   function Make_Vector (X, Y, Z : Integer) return Vector is
    begin
       return Make_Vector (Value (X), Value (Y), Value (Z));
    end Make_Vector;
 
-   function Magnitude (T : Tuple) return Value is
+   function Make_Vector (X, Y, Z : Value) return Vector is
+   begin
+      return (X, Y, Z, 0.0);
+   end Make_Vector;
+
+   function Make_Color (Red, Green, Blue : Value) return Color renames Make_Vector;
+
+   function Magnitude (V : Vector) return Value is
       package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
    begin
-      return Math.Sqrt ((T.X * T.X) + (T.Y * T.Y) + (T.Z * T.Z) + (T.W * T.W));
+      return Math.Sqrt ((V.X * V.X) + (V.Y * V.Y) + (V.Z * V.Z));
    end Magnitude;
 
-   function Normalize (V : Tuple) return Tuple is
+   function Normalize (V : Vector) return Vector is
       V_Magnitude : constant Value := Magnitude (V);
    begin
       return (
@@ -129,12 +121,12 @@ package body Radatracer is
       );
    end Normalize;
 
-   function Dot_Product (L, R : Tuple) return Value is
+   function Dot_Product (L, R : Vector) return Value is
    begin
       return L.X * R.X + L.Y * R.Y + L.Z * R.Z;
    end Dot_Product;
 
-   function Cross_Product (L, R : Tuple) return Tuple is
+   function Cross_Product (L, R : Vector) return Vector is
    begin
       return (
          X => L.Y * R.Z - L.Z * R.Y,
@@ -144,7 +136,7 @@ package body Radatracer is
       );
    end Cross_Product;
 
-   function Position (R : Ray; T : Value) return Tuple is
+   function Position (R : Ray; T : Value) return Point is
    begin
       return R.Origin + R.Direction * T;
    end Position;

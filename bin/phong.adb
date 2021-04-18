@@ -9,9 +9,9 @@ use type Radatracer.Matrices.Matrix4;
 use type Radatracer.Objects.Intersection_Vectors.Cursor;
 
 procedure Phong is
-   Ray_Origin : constant Radatracer.Tuple := Radatracer.Make_Point (0, 0, -5);
+   Ray_Origin : constant Radatracer.Point := Radatracer.Make_Point (0, 0, -5);
 
-   Canvas_Pixels : constant := 2048;
+   Canvas_Pixels : constant := 1024;
 
    Wall_Z : constant Radatracer.Value := 10.0;
    Wall_Size : constant Radatracer.Value := 7.0;
@@ -21,19 +21,20 @@ procedure Phong is
 
    Light : constant Radatracer.Objects.Point_Light := (
       Position => Radatracer.Make_Point (-10, 10, -10),
-      Intensity => Radatracer.Canvas.Make_Color (1.0, 1.0, 1.0)
+      Intensity => Radatracer.Make_Color (1.0, 1.0, 1.0)
    );
 
    Sphere : constant Radatracer.Objects.Sphere := (
       Inverted_Transformation => <>,
-      M => (Color => Radatracer.Canvas.Make_Color (1.0, 0.0, 0.0), others => <>)
+      M => (C => Radatracer.Make_Color (1.0, 0.0, 0.0), others => <>)
    );
 
    Hit : Radatracer.Objects.Intersection_Vectors.Cursor;
    Intersections : Radatracer.Objects.Intersection_Vectors.Vector;
    Ray : Radatracer.Ray;
    World_X, World_Y : Radatracer.Value;
-   Point, Normal_Vector, Eye_Vector : Radatracer.Tuple;
+   Point : Radatracer.Point := Radatracer.Make_Point (0, 0, 0);
+   Normal_Vector, Eye_Vector : Radatracer.Vector := Radatracer.Make_Vector (0, 0, 0);
 
    subtype Scene_Canvas is Radatracer.Canvas.Canvas (1 .. Canvas_Pixels, 1 .. Canvas_Pixels);
    type Scene_Canvas_Access is access Scene_Canvas;

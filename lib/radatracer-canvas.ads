@@ -16,7 +16,5 @@ package Radatracer.Canvas is
 
    type Canvas is array (Natural range <>, Natural range <>) of Pixel;
 
-   function Make_Color (Red, Green, Blue : Value) return Tuple;
-
-   function To_Pixel (T : Tuple) return Pixel;
+   function To_Pixel (C : Color) return Pixel;
 end Radatracer.Canvas;

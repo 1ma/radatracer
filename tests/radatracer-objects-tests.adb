@@ -97,50 +97,50 @@ package body Radatracer.Objects.Tests is
    procedure Test_Lightning (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Lightning (T : in out AUnit.Test_Cases.Test_Case'Class) is
       M : constant Material := (others => <>);
-      Position : constant Tuple := Make_Point (0, 0, 0);
+      Position : constant Point := Make_Point (0, 0, 0);
 
-      Eye_Vector_1 : constant Tuple := Make_Vector (0, 0, -1);
-      Normal_Vector_1 : constant Tuple := Make_Vector (0, 0, -1);
-      Light_1 : constant Point_Light := (Intensity => Radatracer.Canvas.Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, -10));
+      Eye_Vector_1 : constant Vector := Make_Vector (0, 0, -1);
+      Normal_Vector_1 : constant Vector := Make_Vector (0, 0, -1);
+      Light_1 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, -10));
 
-      Eye_Vector_2 : constant Tuple := Make_Vector (0.0, 0.70711, -0.70711);
-      Normal_Vector_2 : constant Tuple := Make_Vector (0, 0, -1);
-      Light_2 : constant Point_Light := (Intensity => Radatracer.Canvas.Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, -10));
+      Eye_Vector_2 : constant Vector := Make_Vector (0.0, 0.70711, -0.70711);
+      Normal_Vector_2 : constant Vector := Make_Vector (0, 0, -1);
+      Light_2 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, -10));
 
-      Eye_Vector_3 : constant Tuple := Make_Vector (0, 0, -1);
-      Normal_Vector_3 : constant Tuple := Make_Vector (0, 0, -1);
-      Light_3 : constant Point_Light := (Intensity => Radatracer.Canvas.Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 10, -10));
+      Eye_Vector_3 : constant Vector := Make_Vector (0, 0, -1);
+      Normal_Vector_3 : constant Vector := Make_Vector (0, 0, -1);
+      Light_3 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 10, -10));
 
-      Eye_Vector_4 : constant Tuple := Make_Vector (0.0, -0.70711, -0.70711);
-      Normal_Vector_4 : constant Tuple := Make_Vector (0, 0, -1);
-      Light_4 : constant Point_Light := (Intensity => Radatracer.Canvas.Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 10, -10));
+      Eye_Vector_4 : constant Vector := Make_Vector (0.0, -0.70711, -0.70711);
+      Normal_Vector_4 : constant Vector := Make_Vector (0, 0, -1);
+      Light_4 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 10, -10));
 
-      Eye_Vector_5 : constant Tuple := Make_Vector (0, 0, -1);
-      Normal_Vector_5 : constant Tuple := Make_Vector (0, 0, -1);
-      Light_5 : constant Point_Light := (Intensity => Radatracer.Canvas.Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, 10));
+      Eye_Vector_5 : constant Vector := Make_Vector (0, 0, -1);
+      Normal_Vector_5 : constant Vector := Make_Vector (0, 0, -1);
+      Light_5 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, 10));
    begin
       AUnit.Assertions.Assert (
-         Lightning (M, Light_1, Position, Eye_Vector_1, Normal_Vector_1) = Radatracer.Canvas.Make_Color (1.9, 1.9, 1.9),
+         Lightning (M, Light_1, Position, Eye_Vector_1, Normal_Vector_1) = Make_Color (1.9, 1.9, 1.9),
          "Lightning with the eye between the light and the surface"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (M, Light_2, Position, Eye_Vector_2, Normal_Vector_2) = Radatracer.Canvas.Make_Color (1.0, 1.0, 1.0),
+         Lightning (M, Light_2, Position, Eye_Vector_2, Normal_Vector_2) = Make_Color (1.0, 1.0, 1.0),
          "Lightning with the eye between light and surface, eye offset 45º"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (M, Light_3, Position, Eye_Vector_3, Normal_Vector_3) = Radatracer.Canvas.Make_Color (0.7364, 0.7364, 0.7364),
+         Lightning (M, Light_3, Position, Eye_Vector_3, Normal_Vector_3) = Make_Color (0.7364, 0.7364, 0.7364),
          "Lightning with the eye opposite surface, light offset 45º"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (M, Light_4, Position, Eye_Vector_4, Normal_Vector_4) = Radatracer.Canvas.Make_Color (1.63721, 1.63721, 1.63721),
+         Lightning (M, Light_4, Position, Eye_Vector_4, Normal_Vector_4) = Make_Color (1.63721, 1.63721, 1.63721),
          "Lightning with the eye in the path of the reflection vector"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (M, Light_5, Position, Eye_Vector_5, Normal_Vector_5) = Radatracer.Canvas.Make_Color (0.1, 0.1, 0.1),
+         Lightning (M, Light_5, Position, Eye_Vector_5, Normal_Vector_5) = Make_Color (0.1, 0.1, 0.1),
          "Lightning with the eye in the path of the reflection vector"
       );
    end Test_Lightning;

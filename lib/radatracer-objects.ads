@@ -3,13 +3,12 @@ with Radatracer.Matrices;
 
 package Radatracer.Objects is
    type Point_Light is record
-      Intensity : Tuple;
-      Position : Tuple;
-   end record
-      with Dynamic_Predicate => Is_Point (Position);
+      Intensity : Color;
+      Position : Point;
+   end record;
 
    type Material is record
-      Color : Tuple := (1.0, 1.0, 1.0, 0.0);
+      C : Color := Make_Color (1.0, 1.0, 1.0);
       Ambient : Value := 0.1;
       Diffuse : Value := 0.9;
       Specular : Value := 0.9;
@@ -42,13 +41,10 @@ package Radatracer.Objects is
 
    function Intersect (S : Sphere; R : Ray) return Intersection_Vectors.Vector;
 
-   function Normal_At (S : Sphere; World_Point : Tuple) return Tuple
-      with Pre => Is_Point (World_Point),
-           Post => Is_Vector (Normal_At'Result) and Magnitude (Normal_At'Result) = 1.0;
+   function Normal_At (S : Sphere; World_Point : Point) return Vector
+      with Post => Magnitude (Normal_At'Result) = 1.0;
 
-   function Reflect (V, Normal : Tuple) return Tuple
-      with Pre =>  Is_Vector (V) and Is_Vector (Normal),
-           Post => Is_Vector (Reflect'Result);
+   function Reflect (V, Normal : Vector) return Vector;
 
-   function Lightning (M : Material; PL : Point_Light; Position : Tuple; Eye_Vector : Tuple; Normal_Vector : Tuple) return Tuple;
+   function Lightning (M : Material; PL : Point_Light; Position : Point; Eye_Vector : Vector; Normal_Vector : Vector) return Color;
 end Radatracer.Objects;
