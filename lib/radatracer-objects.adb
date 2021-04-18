@@ -70,7 +70,7 @@ package body Radatracer.Objects is
       Light_Vector : constant Vector := Normalize (PL.Position - Position);
       Light_Dot_Normal : constant Value := Dot_Product (Light_Vector, Normal_Vector);
 
-      Effective_Color : constant Color := M.C * PL.Intensity;
+      Effective_Color : constant Color := M.Color * PL.Intensity;
       Ambient : constant Color := Effective_Color * M.Ambient;
    begin
       if Light_Dot_Normal < 0.0 then

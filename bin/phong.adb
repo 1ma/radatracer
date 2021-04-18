@@ -26,7 +26,7 @@ procedure Phong is
 
    Sphere : constant Radatracer.Objects.Sphere := (
       Inverted_Transformation => <>,
-      M => (C => Radatracer.Make_Color (1.0, 0.0, 0.0), others => <>)
+      M => (Color => Radatracer.Make_Color (1.0, 0.0, 0.0), others => <>)
    );
 
    Hit : Radatracer.Objects.Intersection_Vectors.Cursor;

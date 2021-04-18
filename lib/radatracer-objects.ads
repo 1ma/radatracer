@@ -8,7 +8,7 @@ package Radatracer.Objects is
    end record;
 
    type Material is record
-      C : Color := Make_Color (1.0, 1.0, 1.0);
+      Color : Radatracer.Color := Make_Color (1.0, 1.0, 1.0);
       Ambient : Value := 0.1;
       Diffuse : Value := 0.9;
       Specular : Value := 0.9;
