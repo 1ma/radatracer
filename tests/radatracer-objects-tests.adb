@@ -174,10 +174,10 @@ package body Radatracer.Objects.Tests is
    procedure Test_World_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class) is
       use type Ada.Containers.Count_Type;
 
-      World : constant Radatracer.Objects.World := Default_World;
-      Ray : constant Radatracer.Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
+      W : constant World := Default_World;
+      R : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
 
-      I : constant Intersection_Vectors.Vector := Intersect (World, Ray);
+      I : constant Intersection_Vectors.Vector := Intersect (W, R);
    begin
       AUnit.Assertions.Assert (I.Length = 4, "World intersection test 1 - part 1");
       AUnit.Assertions.Assert (I (0).T_Value = 4.0, "World intersection test 1 - part 2");
@@ -185,6 +185,66 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (I (2).T_Value = 5.5, "World intersection test 1 - part 4");
       AUnit.Assertions.Assert (I (3).T_Value = 6.0, "World intersection test 1 - part 5");
    end Test_World_Intersections;
+
+   procedure Test_Prepare_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Prepare_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
+      R2 : constant Ray := (Origin => Make_Point (0, 0, 0), Direction => Make_Vector (0, 0, 1));
+
+      I1 : constant Intersection := (T_Value => 4.0, Object => (others => <>));
+      I2 : constant Intersection := (T_Value => 1.0, Object => (others => <>));
+
+      PII1 : constant Precomputed_Intersection_Info := Prepare_Calculations (I1, R1);
+      PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (I2, R2);
+   begin
+      AUnit.Assertions.Assert (PII1.T_Value = I1.T_Value, "Prepare calculations test 1 - part 1");
+      AUnit.Assertions.Assert (PII1.Object = I1.Object, "Prepare calculations test 1 - part 2");
+      AUnit.Assertions.Assert (PII1.Point = Make_Point (0, 0, -1), "Prepare calculations test 1 - part 3");
+      AUnit.Assertions.Assert (PII1.Eye_Vector = Make_Vector (0, 0, -1), "Prepare calculations test 1 - part 4");
+      AUnit.Assertions.Assert (PII1.Normal_Vector = Make_Vector (0, 0, -1), "Prepare calculations test 1 - part 5");
+      AUnit.Assertions.Assert (PII1.Inside_Hit = False, "Prepare calculations test 1 - part 6");
+
+      AUnit.Assertions.Assert (PII2.T_Value = I2.T_Value, "Prepare calculations test 2 - part 1");
+      AUnit.Assertions.Assert (PII2.Object = I2.Object, "Prepare calculations test 2 - part 2");
+      AUnit.Assertions.Assert (PII2.Point = Make_Point (0, 0, 1), "Prepare calculations test 2 - part 3");
+      AUnit.Assertions.Assert (PII2.Eye_Vector = Make_Vector (0, 0, -1), "Prepare calculations test 2 - part 4");
+      AUnit.Assertions.Assert (PII2.Normal_Vector = Make_Vector (0, 0, -1), "Prepare calculations test 2 - part 5");
+      AUnit.Assertions.Assert (PII2.Inside_Hit = True, "Prepare calculations test 2 - part 6");
+   end Test_Prepare_Calculations;
+
+   procedure Test_Shade_Hit (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Shade_Hit (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      W : World := Default_World;
+      R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
+      I1 : constant Intersection := (T_Value => 4.0, Object => W.Objects (0));
+      PII1 : constant Precomputed_Intersection_Info := Prepare_Calculations (I1, R1);
+
+      R2 : constant Ray := (Origin => Make_Point (0, 0, 0), Direction => Make_Vector (0, 0, 1));
+      I2 : constant Intersection := (T_Value => 0.5, Object => W.Objects (1));
+      PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (I2, R2);
+   begin
+      AUnit.Assertions.Assert (Shade_Hit (W, PII1) = Make_Color (0.38066, 0.47583, 0.2855), "Shading an intersection");
+
+      W.Light := (Position => Make_Point (0.0, 0.25, 0.0), Intensity => Make_Color (1.0, 1.0, 1.0));
+
+      AUnit.Assertions.Assert (Shade_Hit (W, PII2) = Make_Color (0.90498, 0.90498, 0.90498), "Shading an intersection from the inside");
+   end Test_Shade_Hit;
+
+   procedure Test_Color_At (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Color_At (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      W : World := Default_World;
+      R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 1, 0));
+      R2 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
+      R3 : constant Ray := (Origin => Make_Point (0.0, 0.0, 0.75), Direction => Make_Vector (0, 0, -1));
+   begin
+      AUnit.Assertions.Assert (Color_At (W, R1) = Make_Color (0.0, 0.0, 0.0), "The color when a ray misses");
+      AUnit.Assertions.Assert (Color_At (W, R2) = Make_Color (0.38066, 0.47583, 0.2855), "The color when a ray hits");
+
+      W.Objects (0).Material.Ambient := 1.0;
+      W.Objects (1).Material.Ambient := 1.0;
+
+      AUnit.Assertions.Assert (Color_At (W, R3) = W.Objects (1).Material.Color, "The with an intersection behind the ray");
+   end Test_Color_At;
 
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
@@ -195,6 +255,9 @@ package body Radatracer.Objects.Tests is
       Register_Routine (T, Test_Reflections'Access, "Reflection tests");
       Register_Routine (T, Test_Lightning'Access, "Lightning tests");
       Register_Routine (T, Test_World_Intersections'Access, "World intersection tests");
+      Register_Routine (T, Test_Prepare_Calculations'Access, "Prepare Calculations tests");
+      Register_Routine (T, Test_Shade_Hit'Access, "Shade hit tests");
+      Register_Routine (T, Test_Color_At'Access, "Color at tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

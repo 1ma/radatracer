@@ -108,4 +108,48 @@ package body Radatracer.Objects is
       return Intersections;
    end Intersect;
 
+   function Prepare_Calculations (I : Intersection; R : Ray) return Precomputed_Intersection_Info is
+      P : constant Point := Position (R, I.T_Value);
+      Eye_Vector : constant Vector := -R.Direction;
+      Normal_Vector : Vector := Normal_At (I.Object, P);
+
+      Inside_Hit : constant Boolean := Dot_Product (Normal_Vector, Eye_Vector) < 0.0;
+   begin
+      if Inside_Hit then
+         Normal_Vector := -Normal_Vector;
+      end if;
+
+      return (
+         T_Value => I.T_Value,
+         Object => I.Object,
+         Point => P,
+         Eye_Vector => Eye_Vector,
+         Normal_Vector => Normal_Vector,
+         Inside_Hit => Inside_Hit
+      );
+   end Prepare_Calculations;
+
+   function Shade_Hit (W : World; I : Precomputed_Intersection_Info) return Color is
+   begin
+      return Lightning (
+         M => I.Object.Material,
+         PL => W.Light,
+         Position => I.Point,
+         Eye_Vector => I.Eye_Vector,
+         Normal_Vector => I.Normal_Vector
+      );
+   end Shade_Hit;
+
+   function Color_At (W : World; R : Ray) return Color is
+      use type Intersection_Vectors.Cursor;
+
+      Intersections : constant Intersection_Vectors.Vector := Intersect (W, R);
+      Hit : constant Intersection_Vectors.Cursor := Radatracer.Objects.Hit (Intersections);
+   begin
+      if Hit = Intersection_Vectors.No_Element then
+         return Make_Color (0.0, 0.0, 0.0);
+      end if;
+
+      return Shade_Hit (W, Prepare_Calculations (Intersections (Hit), R));
+   end Color_At;
 end Radatracer.Objects;

@@ -59,4 +59,22 @@ package Radatracer.Objects is
    end record;
 
    function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector;
+
+   type Precomputed_Intersection_Info is record
+      T_Value : Value;
+      Object : Radatracer.Objects.Sphere;
+      Point : Radatracer.Point;
+      Eye_Vector : Vector;
+      Normal_Vector : Vector;
+      Inside_Hit : Boolean;
+   end record;
+   --  This data structure reeks of implementation detail. I'll leave it in the
+   --  package specification for now, until I see how it is used.
+
+   function Prepare_Calculations (I : Intersection; R : Ray) return Precomputed_Intersection_Info;
+   --  Ditto.
+
+   function Shade_Hit (W : World; I : Precomputed_Intersection_Info) return Color;
+
+   function Color_At (W : World; R : Ray) return Color;
 end Radatracer.Objects;
