@@ -91,4 +91,21 @@ package body Radatracer.Objects is
          return Ambient + Diffuse + Specular;
       end;
    end Lightning;
+
+   function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector is
+      use type Intersection_Vectors.Vector;
+
+      package Intersection_Vector_Sorting is new Intersection_Vectors.Generic_Sorting;
+
+      Intersections : Intersection_Vectors.Vector;
+   begin
+      for Cursor in W.Objects.Iterate loop
+         Intersections := Intersections & Intersect (W.Objects (Cursor), R);
+      end loop;
+
+      Intersection_Vector_Sorting.Sort (Intersections);
+
+      return Intersections;
+   end Intersect;
+
 end Radatracer.Objects;

@@ -57,4 +57,6 @@ package Radatracer.Objects is
       Light : Point_Light;
       Objects : Sphere_Vectors.Vector;
    end record;
+
+   function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector;
 end Radatracer.Objects;

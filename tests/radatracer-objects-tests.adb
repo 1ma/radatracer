@@ -170,6 +170,22 @@ package body Radatracer.Objects.Tests is
       );
    end Test_Lightning;
 
+   procedure Test_World_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_World_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      use type Ada.Containers.Count_Type;
+
+      World : constant Radatracer.Objects.World := Default_World;
+      Ray : constant Radatracer.Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
+
+      I : constant Intersection_Vectors.Vector := Intersect (World, Ray);
+   begin
+      AUnit.Assertions.Assert (I.Length = 4, "World intersection test 1 - part 1");
+      AUnit.Assertions.Assert (I (0).T_Value = 4.0, "World intersection test 1 - part 2");
+      AUnit.Assertions.Assert (I (1).T_Value = 4.5, "World intersection test 1 - part 3");
+      AUnit.Assertions.Assert (I (2).T_Value = 5.5, "World intersection test 1 - part 4");
+      AUnit.Assertions.Assert (I (3).T_Value = 6.0, "World intersection test 1 - part 5");
+   end Test_World_Intersections;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -178,6 +194,7 @@ package body Radatracer.Objects.Tests is
       Register_Routine (T, Test_Sphere_Normals'Access, "Sphere normal vector tests");
       Register_Routine (T, Test_Reflections'Access, "Reflection tests");
       Register_Routine (T, Test_Lightning'Access, "Lightning tests");
+      Register_Routine (T, Test_World_Intersections'Access, "World intersection tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
