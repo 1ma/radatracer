@@ -221,7 +221,7 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (PII2.Point = Make_Point (0, 0, 1), "Prepare calculations test 2 - part 3");
       AUnit.Assertions.Assert (PII2.Eye_Vector = Make_Vector (0, 0, -1), "Prepare calculations test 2 - part 4");
       AUnit.Assertions.Assert (PII2.Normal_Vector = Make_Vector (0, 0, -1), "Prepare calculations test 2 - part 5");
-      AUnit.Assertions.Assert (PII2.Inside_Hit = True, "Prepare calculations test 2 - part 6");
+      AUnit.Assertions.Assert (PII2.Inside_Hit, "Prepare calculations test 2 - part 6");
    end Test_Prepare_Calculations;
 
    procedure Test_Shade_Hit (T : in out AUnit.Test_Cases.Test_Case'Class);
@@ -262,6 +262,43 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (Color_At (W, R3) = W.Objects (1).Material.Color, "The with an intersection behind the ray");
    end Test_Color_At;
 
+   procedure Test_Camera (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Camera (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      use type Radatracer.Matrices.Matrix4;
+
+      C1 : constant Camera := Make_Camera (160, 120, Ada.Numerics.Pi / 2.0);
+      C2 : constant Camera := Make_Camera (200, 125, Ada.Numerics.Pi / 2.0);
+      C3 : constant Camera := Make_Camera (125, 200, Ada.Numerics.Pi / 2.0);
+      C4 : Camera := Make_Camera (201, 101, Ada.Numerics.Pi / 2.0);
+   begin
+      AUnit.Assertions.Assert (
+         C1.H_Size = 160 and C1.V_Size = 120 and C1.FOV = Ada.Numerics.Pi / 2.0 and C1.Inverted_Transformation = Radatracer.Matrices.Identity_Matrix4,
+         "Constructing a camera"
+      );
+
+      AUnit.Assertions.Assert (C2.Pixel_Size = 0.01, "The pixel size for a horizontal camera");
+      AUnit.Assertions.Assert (C3.Pixel_Size = 0.01, "The pixel size for a vertical camera");
+
+      AUnit.Assertions.Assert (
+         Ray_For_Pixel (C4, 100, 50) = (Make_Point (0, 0, 0), Make_Vector (0, 0, -1)),
+         "Constructing a ray through the center of the canvas"
+      );
+
+      AUnit.Assertions.Assert (
+         Ray_For_Pixel (C4, 0, 0) = (Make_Point (0, 0, 0), Make_Vector (0.66519, 0.33259, -0.66851)),
+         "Constructing a ray through a corner of the canvas"
+      );
+
+      Set_Transformation (C4, Radatracer.Matrices.Rotation_Y (Ada.Numerics.Pi / 4.0) * Radatracer.Matrices.Translation (0.0, -2.0, 5.0));
+
+      AUnit.Assertions.Assert (
+         Ray_For_Pixel (C4, 100, 50) = (Make_Point (0, 2, -5), Make_Vector (0.70711, 0.0, -0.70711)),
+         "Constructing a ray when the camera is transformed"
+      );
+   end Test_Camera;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -274,6 +311,7 @@ package body Radatracer.Objects.Tests is
       Register_Routine (T, Test_Prepare_Calculations'Access, "Prepare Calculations tests");
       Register_Routine (T, Test_Shade_Hit'Access, "Shade hit tests");
       Register_Routine (T, Test_Color_At'Access, "Color at tests");
+      Register_Routine (T, Test_Camera'Access, "Camera tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

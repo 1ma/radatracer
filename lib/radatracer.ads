@@ -56,5 +56,7 @@ package Radatracer is
       Direction : Vector := Make_Vector (0, 0, 0);
    end record;
 
+   overriding function "=" (L, R : Ray) return Boolean;
+
    function Position (R : Ray; T : Value) return Point;
 end Radatracer;

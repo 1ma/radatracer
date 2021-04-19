@@ -152,4 +152,52 @@ package body Radatracer.Objects is
 
       return Shade_Hit (W, Prepare_Calculations (Intersections (Hit), R));
    end Color_At;
+
+   function Make_Camera (H_Size, V_Size : Positive; FOV : Value) return Camera is
+      package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
+
+      Half_View : constant Value := Math.Tan (FOV / 2.0);
+      Aspect : constant Value := Value (H_Size) / Value (V_Size);
+
+      Camera : Radatracer.Objects.Camera := (
+         H_Size => H_Size,
+         V_Size => V_Size,
+         FOV =>  FOV,
+         others => <>
+      );
+   begin
+      if Aspect < 1.0 then
+         Camera.Half_Height := Half_View;
+         Camera.Half_Width := Half_View * Aspect;
+      else
+         Camera.Half_Height := Half_View / Aspect;
+         Camera.Half_Width := Half_View;
+      end if;
+
+      Camera.Pixel_Size := (Camera.Half_Width * 2.0) / Value (Camera.H_Size);
+
+      return Camera;
+   end Make_Camera;
+
+   procedure Set_Transformation (C : in out Camera; T : Radatracer.Matrices.Matrix4) is
+   begin
+      C.Inverted_Transformation := Radatracer.Matrices.Invert (T);
+   end Set_Transformation;
+
+   function Ray_For_Pixel (C : Camera; X, Y : Natural) return Ray is
+      use type Radatracer.Matrices.Matrix4;
+
+      X_Offset : constant Value := (Value (X) + 0.5) * C.Pixel_Size;
+      Y_Offset : constant Value := (Value (Y) + 0.5) * C.Pixel_Size;
+
+      World_X : constant Value := C.Half_Width - X_Offset;
+      World_Y : constant Value := C.Half_Height - Y_Offset;
+
+      Pixel : constant Point := C.Inverted_Transformation * Make_Point (World_X, World_Y, -1.0);
+
+      Origin : constant Point := C.Inverted_Transformation * Make_Point (0, 0, 0);
+      Direction : constant Vector := Normalize (Pixel - Origin);
+   begin
+      return (Origin, Direction);
+   end Ray_For_Pixel;
 end Radatracer.Objects;

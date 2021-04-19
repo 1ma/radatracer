@@ -136,6 +136,11 @@ package body Radatracer is
       );
    end Cross_Product;
 
+   overriding function "=" (L, R : Ray) return Boolean is
+   begin
+      return L.Origin = R.Origin and L.Direction = L.Direction;
+   end "=";
+
    function Position (R : Ray; T : Value) return Point is
    begin
       return R.Origin + R.Direction * T;

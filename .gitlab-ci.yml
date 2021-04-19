@@ -1,5 +1,4 @@
 stages:
-  - build-check
   - testing
 
 test-on-gnat-9:
