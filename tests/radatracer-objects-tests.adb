@@ -1,6 +1,5 @@
 with Ada.Numerics;
 with AUnit.Assertions;
-with Radatracer.Canvas;
 with Radatracer.Matrices;
 
 package body Radatracer.Objects.Tests is
@@ -32,6 +31,8 @@ package body Radatracer.Objects.Tests is
 
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       use type Radatracer.Objects.Intersection_Vectors.Vector;
 
       S1 : constant Sphere := (Inverted_Transformation => <>, others => <>);
@@ -65,6 +66,8 @@ package body Radatracer.Objects.Tests is
 
    procedure Test_Intersection_Hits (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Intersection_Hits (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       use type Intersection_Vectors.Cursor;
       use type Intersection_Vectors.Vector;
 
@@ -96,6 +99,8 @@ package body Radatracer.Objects.Tests is
 
    procedure Test_Sphere_Normals (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Sphere_Normals (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       use type Radatracer.Matrices.Matrix4;
 
       S : Sphere := (Inverted_Transformation => Radatracer.Matrices.Identity_Matrix4, others => <>);
@@ -114,6 +119,7 @@ package body Radatracer.Objects.Tests is
 
    procedure Test_Reflections (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Reflections (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
    begin
       AUnit.Assertions.Assert (Reflect (Make_Vector (1, -1, 0), Make_Vector (0, 1, 0)) = Make_Vector (1, 1, 0), "Reflection test 1");
       AUnit.Assertions.Assert (Reflect (Make_Vector (0, -1, 0), Make_Vector (0.70711, 0.70711, 0.0)) = Make_Vector (1, 0, 0), "Reflection test 2");
@@ -121,6 +127,8 @@ package body Radatracer.Objects.Tests is
 
    procedure Test_Lightning (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Lightning (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       M : constant Material := (others => <>);
       Position : constant Point := Make_Point (0, 0, 0);
 
@@ -172,6 +180,8 @@ package body Radatracer.Objects.Tests is
 
    procedure Test_World_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_World_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       use type Ada.Containers.Count_Type;
 
       W : constant World := Default_World;
@@ -188,6 +198,8 @@ package body Radatracer.Objects.Tests is
 
    procedure Test_Prepare_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Prepare_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
       R2 : constant Ray := (Origin => Make_Point (0, 0, 0), Direction => Make_Vector (0, 0, 1));
 
@@ -214,6 +226,8 @@ package body Radatracer.Objects.Tests is
 
    procedure Test_Shade_Hit (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Shade_Hit (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       W : World := Default_World;
       R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
       I1 : constant Intersection := (T_Value => 4.0, Object => W.Objects (0));
@@ -232,6 +246,8 @@ package body Radatracer.Objects.Tests is
 
    procedure Test_Color_At (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Color_At (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       W : World := Default_World;
       R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 1, 0));
       R2 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));

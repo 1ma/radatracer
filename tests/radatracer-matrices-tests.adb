@@ -4,6 +4,8 @@ with AUnit.Assertions;
 package body Radatracer.Matrices.Tests is
    procedure Test_Matrix_Operations (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Matrix_Operations (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       M1 : constant Matrix4 := (
          (1.0, 2.0, 3.0, 4.0),
          (5.0, 6.0, 7.0, 8.0),
@@ -228,6 +230,8 @@ package body Radatracer.Matrices.Tests is
 
    procedure Test_Matrix_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Matrix_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       T1 : constant Matrix4 := Translation (5.0, -3.0, 2.0);
       P1 : constant Point := Make_Point (-3, 4, 5);
       V1 : constant Vector := Make_Vector (-3, 4, 5);
@@ -269,6 +273,8 @@ package body Radatracer.Matrices.Tests is
 
    procedure Test_Ray_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Ray_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       R : constant Ray := (Make_Point (1, 2, 3), Make_Vector (0, 1, 0));
 
       M1 : constant Matrix4 := Translation (3.0, 4.0, 5.0);

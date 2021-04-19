@@ -1,10 +1,11 @@
 with Ada.Text_IO;
-with Ada.Numerics.Elementary_Functions;
 with AUnit.Assertions;
 
 package body Radatracer.Canvas.IO.Tests is
    procedure Test_Color_Conversion (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Color_Conversion (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       P : constant Pixel := To_Pixel (Make_Color (-0.5, 0.4, 1.7));
    begin
       AUnit.Assertions.Assert (P.Red = 0 and P.Green = 102 and P.Blue = 255, "Expected conversion");
@@ -12,6 +13,8 @@ package body Radatracer.Canvas.IO.Tests is
 
    procedure Test_Canvas_Instantiation (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Canvas_Instantiation (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       Black_Pixel : constant Pixel := (Red => 0, Green => 0, Blue => 0);
       C : Canvas (1 .. 10, 1 .. 20);
    begin
@@ -27,6 +30,8 @@ package body Radatracer.Canvas.IO.Tests is
 
    procedure Test_Canvas_IO (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Canvas_IO (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       FT : Ada.Text_IO.File_Type;
       C1 : Canvas (0 .. 4, 0 .. 2);
       C2 : constant Canvas (0 .. 9, 0 .. 1) := (others => (others => To_Pixel (Make_Color (1.0, 0.8, 0.6))));

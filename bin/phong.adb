@@ -1,11 +1,9 @@
 with Ada.Text_IO;
 with Radatracer.Canvas.IO;
-with Radatracer.Matrices;
 with Radatracer.Objects;
 
 use type Radatracer.Tuple;
 use type Radatracer.Value;
-use type Radatracer.Matrices.Matrix4;
 use type Radatracer.Objects.Intersection_Vectors.Cursor;
 
 procedure Phong is

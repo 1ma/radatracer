@@ -1,4 +1,4 @@
-with "aunit.gpr";
+with "alire/cache/dependencies/aunit_21.0.0_d6561681/lib/gnat/aunit.gpr";
 with "radatracer.gpr";
 
 project Executables is

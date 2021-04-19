@@ -6,7 +6,8 @@ test-on-gnat-9:
   stage: testing
   image: 1maa/fsf-gnat:9
   before_script:
-    - alr build -XRADATRACER_BUILD_MODE=optimize -XEXECUTABLES_BUILD_MODE=optimize
+    - alr clean
+    - gprbuild -j$(nproc) -XRADATRACER_BUILD_MODE=optimize -XEXECUTABLES_BUILD_MODE=optimize -Pexecutables
   script:
     - ./out/aunit_harness
 
@@ -14,6 +15,7 @@ test-on-gnat-10:
   stage: testing
   image: 1maa/fsf-gnat:10
   before_script:
-    - alr build -XRADATRACER_BUILD_MODE=optimize -XEXECUTABLES_BUILD_MODE=optimize
+    - alr clean
+    - gprbuild -j$(nproc) -XRADATRACER_BUILD_MODE=optimize -XEXECUTABLES_BUILD_MODE=optimize -Pexecutables
   script:
     - ./out/aunit_harness

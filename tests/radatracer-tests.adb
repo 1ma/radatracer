@@ -4,6 +4,8 @@ with AUnit.Assertions;
 package body Radatracer.Tests is
    procedure Test_Simple_Tuples (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Simple_Tuples (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       A : constant Tuple := (4.3, -4.2, 3.1, 1.0);
       B : constant Tuple := (4.3, -4.2, 3.1, 0.0);
       P : constant Tuple := Make_Point (4, -4, 3);
@@ -17,6 +19,8 @@ package body Radatracer.Tests is
 
    procedure Test_Tuple_Operations (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Tuple_Operations (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       Comp1 : constant Tuple := (1.0, 2.0, 3.0, 0.0);
       Comp2 : constant Tuple := (1.0, 2.0, 3.0, 0.0);
       Comp3 : constant Tuple := (1.0, 2.0, 3.0, 1.0);
@@ -92,6 +96,8 @@ package body Radatracer.Tests is
 
    procedure Test_Ray_Position (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Ray_Position (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
       R : constant Ray := (Origin => Make_Point (2, 3, 4), Direction => Make_Vector (1, 0, 0));
    begin
       AUnit.Assertions.Assert (Position (R, 0.0) = Make_Point (2, 3, 4), "Ray position test 1");
