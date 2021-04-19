@@ -244,6 +244,13 @@ package body Radatracer.Matrices.Tests is
       Full_Quarter : constant Float := Ada.Numerics.Pi / 2.0;
       P3 : constant Point := Make_Point (0, 1, 0);
       P4 : constant Point := Make_Point (0, 0, 1);
+
+      VT : constant Matrix4 := (
+         (-0.50709, 0.50709, 0.67612, -2.36643),
+         (0.76772, 0.60609, 0.12122, -2.82843),
+         (-0.35857, 0.59761, -0.71714, 0.0),
+         (0.0, 0.0, 0.0, 1.0)
+      );
    begin
       AUnit.Assertions.Assert (T1 * P1 = Make_Point (2, 1, 7), "Translation test 1");
       AUnit.Assertions.Assert (Invert (T1) * P1 = Make_Point (-8, 7, 3), "Translation test 2");
@@ -269,6 +276,26 @@ package body Radatracer.Matrices.Tests is
       AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 1.0, 0.0, 0.0) * P2 = Make_Point (2, 7, 4), "Shearing test 3");
       AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 0.0, 1.0, 0.0) * P2 = Make_Point (2, 3, 6), "Shearing test 4");
       AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 0.0, 0.0, 1.0) * P2 = Make_Point (2, 3, 7), "Shearing test 5");
+
+      AUnit.Assertions.Assert (
+         View_Transform (Make_Point (0, 0, 0), Make_Point (0, 0, -1), Make_Vector (0, 1, 0)) = Identity_Matrix4,
+         "View_Transform test 1 - transformation matrix for the default orientation"
+      );
+
+      AUnit.Assertions.Assert (
+         View_Transform (Make_Point (0, 0, 0), Make_Point (0, 0, 1), Make_Vector (0, 1, 0)) = Scaling (-1.0, 1.0, -1.0),
+         "View_Transform test 2 - a view transformation matrix looking in the positive z direction"
+      );
+
+      AUnit.Assertions.Assert (
+         View_Transform (Make_Point (0, 0, 0), Make_Point (0, 0, 1), Make_Vector (0, 1, 0)) = Scaling (-1.0, 1.0, -1.0),
+         "View_Transform test 3 - the view transformation matrix moves the world"
+      );
+
+      AUnit.Assertions.Assert (
+         View_Transform (Make_Point (1, 3, 2), Make_Point (4, -2, 8), Make_Vector (1, 1, 0)) = VT,
+         "View_Transform test 4 - an arbitrary view transformation"
+      );
    end Test_Matrix_Transformations;
 
    procedure Test_Ray_Transformations (T : in out AUnit.Test_Cases.Test_Case'Class);

@@ -69,6 +69,20 @@ package body Radatracer.Matrices is
       );
    end Shearing;
 
+   function View_Transform (From, To : Point; Up : Vector) return Matrix4 is
+      Forward : constant Vector := Normalize (To - From);
+      Left : constant Vector := Cross_Product (Forward, Normalize (Up));
+      True_Up : constant Vector := Cross_Product (Left, Forward);
+      VT : constant Matrix4 := (
+         (Left.X, Left.Y, Left.Z, 0.0),
+         (True_Up.X, True_Up.Y, True_Up.Z, 0.0),
+         (-Forward.X, -Forward.Y, -Forward.Z, 0.0),
+         (0.0, 0.0, 0.0, 1.0)
+      );
+   begin
+      return VT * Translation (-From.X, -From.Y, -From.Z);
+   end View_Transform;
+
    overriding function "=" (L, R : Matrix2) return Boolean is
    begin
       return

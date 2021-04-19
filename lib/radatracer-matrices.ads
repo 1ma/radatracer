@@ -23,6 +23,8 @@ package Radatracer.Matrices is
 
    function Shearing (X_Y, X_Z, Y_X, Y_Z, Z_X, Z_Y : Value) return Matrix4;
 
+   function View_Transform (From, To : Point; Up : Vector) return Matrix4;
+
    overriding function "=" (L, R : Matrix2) return Boolean;
    overriding function "=" (L, R : Matrix3) return Boolean;
    overriding function "=" (L, R : Matrix4) return Boolean;
