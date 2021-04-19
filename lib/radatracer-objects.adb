@@ -200,4 +200,16 @@ package body Radatracer.Objects is
    begin
       return (Origin, Direction);
    end Ray_For_Pixel;
+
+   function Render (C : Camera; W : World) return Radatracer.Canvas.Canvas is
+      Canvas : Radatracer.Canvas.Canvas (0 .. C.H_Size - 1, 0 .. C.V_Size - 1);
+   begin
+      for Y in Canvas'Range (2) loop
+         for X in Canvas'Range (1) loop
+            Canvas (X, Y) := Radatracer.Canvas.To_Pixel (Color_At (W, Ray_For_Pixel (C, X, Y)));
+         end loop;
+      end loop;
+
+      return Canvas;
+   end Render;
 end Radatracer.Objects;

@@ -266,12 +266,17 @@ package body Radatracer.Objects.Tests is
    procedure Test_Camera (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
 
+      use type Radatracer.Canvas.Pixel;
       use type Radatracer.Matrices.Matrix4;
 
       C1 : constant Camera := Make_Camera (160, 120, Ada.Numerics.Pi / 2.0);
       C2 : constant Camera := Make_Camera (200, 125, Ada.Numerics.Pi / 2.0);
       C3 : constant Camera := Make_Camera (125, 200, Ada.Numerics.Pi / 2.0);
       C4 : Camera := Make_Camera (201, 101, Ada.Numerics.Pi / 2.0);
+
+      W : constant World := Default_World;
+      C5 : Camera := Make_Camera (11, 11, Ada.Numerics.Pi / 2.0);
+      VM : constant Radatracer.Matrices.Matrix4 := Radatracer.Matrices.View_Transform (Make_Point (0, 0, -5), Make_Point (0, 0, 0), Make_Vector (0, 1, 0));
    begin
       AUnit.Assertions.Assert (
          C1.H_Size = 160 and C1.V_Size = 120 and C1.FOV = Ada.Numerics.Pi / 2.0 and C1.Inverted_Transformation = Radatracer.Matrices.Identity_Matrix4,
@@ -296,6 +301,13 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (
          Ray_For_Pixel (C4, 100, 50) = (Make_Point (0, 2, -5), Make_Vector (0.70711, 0.0, -0.70711)),
          "Constructing a ray when the camera is transformed"
+      );
+
+      Set_Transformation (C5, VM);
+
+      AUnit.Assertions.Assert (
+         Render (C5, W) (5, 5) = Radatracer.Canvas.To_Pixel (Make_Color (0.38066, 0.47583, 0.2855)),
+         "Rendering a world with a camera"
       );
    end Test_Camera;
 

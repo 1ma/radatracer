@@ -1,5 +1,6 @@
 with Ada.Containers.Vectors;
 with Ada.Numerics;
+with Radatracer.Canvas;
 with Radatracer.Matrices;
 
 package Radatracer.Objects is
@@ -90,4 +91,6 @@ package Radatracer.Objects is
    procedure Set_Transformation (C : in out Camera; T : Radatracer.Matrices.Matrix4);
 
    function Ray_For_Pixel (C : Camera; X, Y : Natural) return Ray;
+
+   function Render (C : Camera; W : World) return Radatracer.Canvas.Canvas;
 end Radatracer.Objects;
