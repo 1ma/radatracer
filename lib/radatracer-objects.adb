@@ -66,14 +66,21 @@ package body Radatracer.Objects is
       return V - Normal * 2.0 * Dot_Product (V, Normal);
    end Reflect;
 
-   function Lightning (M : Material; PL : Point_Light; Position : Point; Eye_Vector : Vector; Normal_Vector : Vector) return Color is
-      Light_Vector : constant Vector := Normalize (PL.Position - Position);
+   function Lightning (
+      Material : Radatracer.Objects.Material;
+      Light : Point_Light;
+      Position : Point;
+      Eye_Vector : Vector;
+      Normal_Vector : Vector;
+      In_Shadow : Boolean := False
+   ) return Color is
+      Light_Vector : constant Vector := Normalize (Light.Position - Position);
       Light_Dot_Normal : constant Value := Dot_Product (Light_Vector, Normal_Vector);
 
-      Effective_Color : constant Color := M.Color * PL.Intensity;
-      Ambient : constant Color := Effective_Color * M.Ambient;
+      Effective_Color : constant Color := Material.Color * Light.Intensity;
+      Ambient : constant Color := Effective_Color * Material.Ambient;
    begin
-      if Light_Dot_Normal < 0.0 then
+      if Light_Dot_Normal < 0.0 or In_Shadow then
          return Ambient;
       end if;
 
@@ -81,11 +88,11 @@ package body Radatracer.Objects is
          Reflect_Vector : constant Vector := Reflect (-Light_Vector, Normal_Vector);
          Reflect_Dot_Eye : constant Value := Dot_Product (Reflect_Vector, Eye_Vector);
 
-         Diffuse : constant Color := Effective_Color * M.Diffuse * Light_Dot_Normal;
+         Diffuse : constant Color := Effective_Color * Material.Diffuse * Light_Dot_Normal;
          Specular : Color := Make_Color (0.0, 0.0, 0.0);
       begin
          if Reflect_Dot_Eye > 0.0 then
-            Specular := PL.Intensity * M.Specular * (Reflect_Dot_Eye ** Natural (M.Shininess));
+            Specular := Light.Intensity * Material.Specular * (Reflect_Dot_Eye ** Natural (Material.Shininess));
          end if;
 
          return Ambient + Diffuse + Specular;
@@ -132,8 +139,8 @@ package body Radatracer.Objects is
    function Shade_Hit (W : World; I : Precomputed_Intersection_Info) return Color is
    begin
       return Lightning (
-         M => I.Object.Material,
-         PL => W.Light,
+         Material => I.Object.Material,
+         Light => W.Light,
          Position => I.Point,
          Eye_Vector => I.Eye_Vector,
          Normal_Vector => I.Normal_Vector

@@ -48,7 +48,14 @@ package Radatracer.Objects is
 
    function Reflect (V, Normal : Vector) return Vector;
 
-   function Lightning (M : Material; PL : Point_Light; Position : Point; Eye_Vector : Vector; Normal_Vector : Vector) return Color;
+   function Lightning (
+      Material : Radatracer.Objects.Material;
+      Light : Point_Light;
+      Position : Point;
+      Eye_Vector : Vector;
+      Normal_Vector : Vector;
+      In_Shadow : Boolean := False
+   ) return Color;
 
    package Sphere_Vectors is new Ada.Containers.Vectors (
       Index_Type => Natural,
