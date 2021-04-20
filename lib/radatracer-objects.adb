@@ -153,7 +153,13 @@ package body Radatracer.Objects is
       return Shade_Hit (W, Prepare_Calculations (Intersections (Hit), R));
    end Color_At;
 
-   function Make_Camera (H_Size, V_Size : Positive; FOV : Value) return Camera is
+   function Make_Camera (
+      H_Size, V_Size : Positive;
+      FOV : Value;
+      From : Point := Make_Point (0, 0, 0);
+      To : Point := Make_Point (0, 0, -1);
+      Up : Vector := Make_Vector (0, 1, 0)
+   ) return Camera is
       package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
 
       Half_View : constant Value := Math.Tan (FOV / 2.0);
@@ -163,6 +169,9 @@ package body Radatracer.Objects is
          H_Size => H_Size,
          V_Size => V_Size,
          FOV =>  FOV,
+         Inverted_Transformation => Radatracer.Matrices.Invert (
+            Radatracer.Matrices.View_Transform (From, To, Up)
+         ),
          others => <>
       );
    begin
@@ -178,11 +187,6 @@ package body Radatracer.Objects is
 
       return Camera;
    end Make_Camera;
-
-   procedure Set_Transformation (C : in out Camera; T : Radatracer.Matrices.Matrix4) is
-   begin
-      C.Inverted_Transformation := Radatracer.Matrices.Invert (T);
-   end Set_Transformation;
 
    function Ray_For_Pixel (C : Camera; X, Y : Natural) return Ray is
       use type Radatracer.Matrices.Matrix4;

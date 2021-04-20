@@ -275,8 +275,7 @@ package body Radatracer.Objects.Tests is
       C4 : Camera := Make_Camera (201, 101, Ada.Numerics.Pi / 2.0);
 
       W : constant World := Default_World;
-      C5 : Camera := Make_Camera (11, 11, Ada.Numerics.Pi / 2.0);
-      VM : constant Radatracer.Matrices.Matrix4 := Radatracer.Matrices.View_Transform (Make_Point (0, 0, -5), Make_Point (0, 0, 0), Make_Vector (0, 1, 0));
+      C5 : constant Camera := Make_Camera (11, 11, Ada.Numerics.Pi / 2.0, Make_Point (0, 0, -5), Make_Point (0, 0, 0), Make_Vector (0, 1, 0));
    begin
       AUnit.Assertions.Assert (
          C1.H_Size = 160 and C1.V_Size = 120 and C1.FOV = Ada.Numerics.Pi / 2.0 and C1.Inverted_Transformation = Radatracer.Matrices.Identity_Matrix4,
@@ -296,14 +295,15 @@ package body Radatracer.Objects.Tests is
          "Constructing a ray through a corner of the canvas"
       );
 
-      Set_Transformation (C4, Radatracer.Matrices.Rotation_Y (Ada.Numerics.Pi / 4.0) * Radatracer.Matrices.Translation (0.0, -2.0, 5.0));
+      C4.Inverted_Transformation := Radatracer.Matrices.Invert (
+         Radatracer.Matrices.Rotation_Y (Ada.Numerics.Pi / 4.0) *
+         Radatracer.Matrices.Translation (0.0, -2.0, 5.0)
+      );
 
       AUnit.Assertions.Assert (
          Ray_For_Pixel (C4, 100, 50) = (Make_Point (0, 2, -5), Make_Vector (0.70711, 0.0, -0.70711)),
          "Constructing a ray when the camera is transformed"
       );
-
-      Set_Transformation (C5, VM);
 
       AUnit.Assertions.Assert (
          Render (C5, W) (5, 5) = Radatracer.Canvas.To_Pixel (Make_Color (0.38066, 0.47583, 0.2855)),

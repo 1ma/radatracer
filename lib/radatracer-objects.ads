@@ -87,8 +87,13 @@ package Radatracer.Objects is
       Half_Width, Half_Height, Pixel_Size : Value;
    end record;
 
-   function Make_Camera (H_Size, V_Size : Positive; FOV : Value) return Camera;
-   procedure Set_Transformation (C : in out Camera; T : Radatracer.Matrices.Matrix4);
+   function Make_Camera (
+      H_Size, V_Size : Positive;
+      FOV : Value;
+      From : Point := Make_Point (0, 0, 0);
+      To : Point := Make_Point (0, 0, -1);
+      Up : Vector := Make_Vector (0, 1, 0)
+   ) return Camera;
 
    function Ray_For_Pixel (C : Camera; X, Y : Natural) return Ray;
 

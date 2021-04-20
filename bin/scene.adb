@@ -10,7 +10,9 @@ use type Radatracer.Value;
 
 procedure Scene is
    Floor : constant Radatracer.Objects.Sphere := (
-      Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (10.0, 0.01, 10.0)),
+      Inverted_Transformation => Radatracer.Matrices.Invert (
+         Radatracer.Matrices.Scaling (10.0, 0.01, 10.0)
+      ),
       Material => (
          Color => Radatracer.Make_Color (1.0, 0.9, 0.9),
          Specular => 0.0,
@@ -39,7 +41,9 @@ procedure Scene is
    );
 
    Middle_Sphere : constant Radatracer.Objects.Sphere := (
-      Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Translation (-0.5, 1.0, 0.5)),
+      Inverted_Transformation => Radatracer.Matrices.Invert (
+         Radatracer.Matrices.Translation (-0.5, 1.0, 0.5)
+      ),
       Material => (
          Color => Radatracer.Make_Color (0.1, 1.0, 0.5),
          Diffuse => 0.7,
@@ -82,16 +86,16 @@ procedure Scene is
       Objects => Floor & Left_Wall & Right_Wall & Middle_Sphere & Right_Sphere & Left_Sphere
    );
 
-   Camera : Radatracer.Objects.Camera := Radatracer.Objects.Make_Camera (1000, 500, Ada.Numerics.Pi / 3.0);
-
-   Canvas : Radatracer.Canvas.Canvas (0 .. Camera.H_Size - 1, 0 .. Camera.V_Size - 1);
-begin
-   Radatracer.Objects.Set_Transformation (
-      Camera,
-      Radatracer.Matrices.View_Transform (Radatracer.Make_Point (0.0, 1.5, -5.0), Radatracer.Make_Point (0, 1, 0), Radatracer.Make_Vector (0, 1, 0))
+   Camera : constant Radatracer.Objects.Camera := Radatracer.Objects.Make_Camera (
+      2000, 1000,
+      Ada.Numerics.Pi / 3.0,
+      Radatracer.Make_Point (0.0, 1.5, -5.0),
+      Radatracer.Make_Point (0, 1, 0),
+      Radatracer.Make_Vector (0, 1, 0)
    );
-
-   Canvas := Radatracer.Objects.Render (Camera, World);
-
-   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas);
+begin
+   Radatracer.Canvas.IO.Write_PPM (
+      Ada.Text_IO.Standard_Output,
+      Radatracer.Objects.Render (Camera, World)
+   );
 end Scene;
