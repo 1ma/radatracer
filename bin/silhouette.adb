@@ -3,12 +3,14 @@ with Radatracer.Canvas.IO;
 with Radatracer.Matrices;
 with Radatracer.Objects;
 
-use type Radatracer.Tuple;
-use type Radatracer.Value;
-use type Radatracer.Matrices.Matrix4;
-use type Radatracer.Objects.Intersection_Vectors.Cursor;
+--  Capstone project for Chapter 5
 
 procedure Silhouette is
+   use type Radatracer.Tuple;
+   use type Radatracer.Value;
+   use type Radatracer.Matrices.Matrix4;
+   use type Radatracer.Objects.Intersection_Vectors.Cursor;
+
    Ray_Origin : constant Radatracer.Point := Radatracer.Make_Point (0, 0, -5);
 
    Canvas_Pixels : constant := 1024;

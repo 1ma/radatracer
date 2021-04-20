@@ -2,9 +2,11 @@ with Ada.Containers;
 with Ada.Text_IO;
 with Radatracer.Objects;
 
-use type Radatracer.Objects.Intersection_Vectors.Vector;
+--  Playground executable to try out parts of the library
 
 procedure Test_Drive is
+   use type Radatracer.Objects.Intersection_Vectors.Vector;
+
    I : constant Radatracer.Objects.Intersection := (
       T_Value => 1.0,
       Object => (Inverted_Transformation => <>, Material => <>)

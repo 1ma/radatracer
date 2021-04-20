@@ -4,11 +4,13 @@ with Radatracer.Canvas.IO;
 with Radatracer.Matrices;
 with Radatracer.Objects;
 
-use type Radatracer.Matrices.Matrix4;
-use type Radatracer.Objects.Sphere_Vectors.Vector;
-use type Radatracer.Value;
+--  Capstone project for Chapter 7
 
 procedure Scene is
+   use type Radatracer.Matrices.Matrix4;
+   use type Radatracer.Objects.Sphere_Vectors.Vector;
+   use type Radatracer.Value;
+
    Floor : constant Radatracer.Objects.Sphere := (
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Scaling (10.0, 0.01, 10.0)

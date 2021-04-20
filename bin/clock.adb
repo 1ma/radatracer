@@ -3,10 +3,12 @@ with Ada.Text_IO;
 with Radatracer.Canvas.IO;
 with Radatracer.Matrices;
 
-use type Radatracer.Matrices.Matrix4;
-use type Radatracer.Value;
+--  Capstone project for Chapter 4
 
 procedure Clock is
+   use type Radatracer.Matrices.Matrix4;
+   use type Radatracer.Value;
+
    Side_Length : constant := 100;
    Canvas : Radatracer.Canvas.Canvas (1 .. Side_Length, 1 .. Side_Length);
 

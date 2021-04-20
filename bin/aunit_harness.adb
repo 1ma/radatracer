@@ -12,16 +12,18 @@ with Radatracer.Tests;
 procedure AUnit_Harness is
    function Radatracer_Test_Suite return AUnit.Test_Suites.Access_Test_Suite;
    function Radatracer_Test_Suite return AUnit.Test_Suites.Access_Test_Suite is
-      Suite : constant AUnit.Test_Suites.Access_Test_Suite := new AUnit.Test_Suites.Test_Suite;
       Radatracer_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Tests.Test;
       Canvas_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Canvas.IO.Tests.Test;
       Matrices_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Matrices.Tests.Test;
       Objects_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Objects.Tests.Test;
+
+      Suite : constant AUnit.Test_Suites.Access_Test_Suite := new AUnit.Test_Suites.Test_Suite;
    begin
       Suite.Add_Test (Radatracer_Tests);
       Suite.Add_Test (Canvas_Tests);
       Suite.Add_Test (Matrices_Tests);
       Suite.Add_Test (Objects_Tests);
+
       return Suite;
    end Radatracer_Test_Suite;
 

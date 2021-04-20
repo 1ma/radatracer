@@ -2,11 +2,13 @@ with Ada.Text_IO;
 with Radatracer.Canvas.IO;
 with Radatracer.Objects;
 
-use type Radatracer.Tuple;
-use type Radatracer.Value;
-use type Radatracer.Objects.Intersection_Vectors.Cursor;
+--  Capstone project for Chapter 6
 
 procedure Phong is
+   use type Radatracer.Tuple;
+   use type Radatracer.Value;
+   use type Radatracer.Objects.Intersection_Vectors.Cursor;
+
    Ray_Origin : constant Radatracer.Point := Radatracer.Make_Point (0, 0, -5);
 
    Canvas_Pixels : constant := 1024;

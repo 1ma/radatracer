@@ -1,10 +1,12 @@
 with Ada.Text_IO;
 with Radatracer.Canvas.IO;
 
-use type Radatracer.Tuple;
-use type Radatracer.Value;
+--  Capstone project for Chapter 1 and 2
 
 procedure Simple_Ballistics is
+   use type Radatracer.Tuple;
+   use type Radatracer.Value;
+
    type Projectile is record
       Position : Radatracer.Point;
       Velocity : Radatracer.Vector;
