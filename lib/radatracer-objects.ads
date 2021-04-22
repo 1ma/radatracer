@@ -67,6 +67,8 @@ package Radatracer.Objects is
       Objects : Sphere_Vectors.Vector;
    end record;
 
+   function Is_Shadowed (W : World; P : Point) return Boolean;
+
    function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector;
 
    type Precomputed_Intersection_Info is record

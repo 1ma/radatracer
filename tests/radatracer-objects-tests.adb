@@ -24,7 +24,7 @@ package body Radatracer.Objects.Tests is
       );
    begin
       return (
-         Light => (Position => Make_Point (-10, -10, -10), Intensity => <>),
+         Light => (Position => Make_Point (-10, 10, -10), Intensity => <>),
          Objects => Sphere1 & Sphere2
       );
    end Default_World;
@@ -320,6 +320,22 @@ package body Radatracer.Objects.Tests is
       );
    end Test_Camera;
 
+   procedure Test_Shadows (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Shadows (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      W : constant World := Default_World;
+      P1 : constant Point := Make_Point (0, 10, 0);
+      P2 : constant Point := Make_Point (10, -10, 10);
+      P3 : constant Point := Make_Point (-20, 20, -20);
+      P4 : constant Point := Make_Point (-2, 2, -2);
+   begin
+      AUnit.Assertions.Assert (not Is_Shadowed (W, P1), "There is no shadow when nothing is collinear with point and light");
+      AUnit.Assertions.Assert (Is_Shadowed (W, P2), "The shadow when an object is between the point and the light");
+      AUnit.Assertions.Assert (not Is_Shadowed (W, P3), "There is no shadow when the object is behind the light");
+      AUnit.Assertions.Assert (not Is_Shadowed (W, P4), "There is no shadow when the object is behind the point");
+   end Test_Shadows;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -333,6 +349,7 @@ package body Radatracer.Objects.Tests is
       Register_Routine (T, Test_Shade_Hit'Access, "Shade hit tests");
       Register_Routine (T, Test_Color_At'Access, "Color at tests");
       Register_Routine (T, Test_Camera'Access, "Camera tests");
+      Register_Routine (T, Test_Shadows'Access, "Shadow tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

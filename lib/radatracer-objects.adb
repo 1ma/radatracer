@@ -99,15 +99,25 @@ package body Radatracer.Objects is
       end;
    end Lightning;
 
-   function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector is
-      use type Intersection_Vectors.Vector;
+   function Is_Shadowed (W : World; P : Point) return Boolean is
+      use type Intersection_Vectors.Cursor;
 
+      Shadow_Vector : constant Vector := W.Light.Position - P;
+      Shadow_Ray : constant Ray := (P, Normalize (Shadow_Vector));
+      Distance : constant Value := Magnitude (Shadow_Vector);
+      Intersections : constant Intersection_Vectors.Vector := Intersect (W, Shadow_Ray);
+      Hit : constant Intersection_Vectors.Cursor := Radatracer.Objects.Hit (Intersections);
+   begin
+      return Hit /= Intersection_Vectors.No_Element and then Intersections (Hit).T_Value < Distance;
+   end Is_Shadowed;
+
+   function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector is
       package Intersection_Vector_Sorting is new Intersection_Vectors.Generic_Sorting;
 
       Intersections : Intersection_Vectors.Vector;
    begin
       for Cursor in W.Objects.Iterate loop
-         Intersections := Intersections & Intersect (W.Objects (Cursor), R);
+         Intersections.Append (Intersect (W.Objects (Cursor), R));
       end loop;
 
       Intersection_Vector_Sorting.Sort (Intersections);
