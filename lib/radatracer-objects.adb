@@ -74,28 +74,37 @@ package body Radatracer.Objects is
       Normal_Vector : Vector;
       In_Shadow : Boolean := False
    ) return Color is
-      Light_Vector : constant Vector := Normalize (Light.Position - Position);
-      Light_Dot_Normal : constant Value := Dot_Product (Light_Vector, Normal_Vector);
-
       Effective_Color : constant Color := Material.Color * Light.Intensity;
       Ambient : constant Color := Effective_Color * Material.Ambient;
    begin
-      if Light_Dot_Normal < 0.0 or In_Shadow then
+      if In_Shadow then
          return Ambient;
       end if;
 
       declare
-         Reflect_Vector : constant Vector := Reflect (-Light_Vector, Normal_Vector);
-         Reflect_Dot_Eye : constant Value := Dot_Product (Reflect_Vector, Eye_Vector);
-
-         Diffuse : constant Color := Effective_Color * Material.Diffuse * Light_Dot_Normal;
-         Specular : Color := Make_Color (0.0, 0.0, 0.0);
+         Light_Vector : constant Vector := Normalize (Light.Position - Position);
+         Light_Dot_Normal : constant Value := Dot_Product (Light_Vector, Normal_Vector);
       begin
-         if Reflect_Dot_Eye > 0.0 then
-            Specular := Light.Intensity * Material.Specular * (Reflect_Dot_Eye ** Natural (Material.Shininess));
+         if Light_Dot_Normal < 0.0 then
+            return Ambient;
          end if;
 
-         return Ambient + Diffuse + Specular;
+         declare
+            Diffuse : constant Color := Effective_Color * Material.Diffuse * Light_Dot_Normal;
+
+            Reflect_Vector : constant Vector := Reflect (-Light_Vector, Normal_Vector);
+            Reflect_Dot_Eye : constant Value := Dot_Product (Reflect_Vector, Eye_Vector);
+         begin
+            if Reflect_Dot_Eye <= 0.0 then
+               return Ambient + Diffuse;
+            end if;
+
+            declare
+               Specular : constant Color := Light.Intensity * Material.Specular * (Reflect_Dot_Eye ** Natural (Material.Shininess));
+            begin
+               return Ambient + Diffuse + Specular;
+            end;
+         end;
       end;
    end Lightning;
 
