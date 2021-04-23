@@ -138,9 +138,9 @@ package body Radatracer.Objects is
    end Intersect;
 
    function Prepare_Calculations (I : Intersection; R : Ray) return Precomputed_Intersection_Info is
-      P : constant Point := Position (R, I.T_Value);
       Eye_Vector : constant Vector := -R.Direction;
-      Normal_Vector : Vector := Normal_At (I.Object, P);
+      Intersection_Point : constant Point := Position (R, I.T_Value);
+      Normal_Vector : Vector := Normal_At (I.Object, Intersection_Point);
 
       Inside_Hit : constant Boolean := Dot_Product (Normal_Vector, Eye_Vector) < 0.0;
    begin
@@ -151,7 +151,8 @@ package body Radatracer.Objects is
       return (
          T_Value => I.T_Value,
          Object => I.Object,
-         Point => P,
+         Point => Intersection_Point,
+         Over_Point => Intersection_Point + Normal_Vector * 0.00001,
          Eye_Vector => Eye_Vector,
          Normal_Vector => Normal_Vector,
          Inside_Hit => Inside_Hit
@@ -163,9 +164,10 @@ package body Radatracer.Objects is
       return Lightning (
          Material => I.Object.Material,
          Light => W.Light,
-         Position => I.Point,
+         Position => I.Over_Point,
          Eye_Vector => I.Eye_Vector,
-         Normal_Vector => I.Normal_Vector
+         Normal_Vector => I.Normal_Vector,
+         In_Shadow => Is_Shadowed (W, I.Over_Point)
       );
    end Shade_Hit;
 

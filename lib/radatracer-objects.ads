@@ -75,6 +75,7 @@ package Radatracer.Objects is
       T_Value : Value;
       Object : Radatracer.Objects.Sphere;
       Point : Radatracer.Point;
+      Over_Point : Radatracer.Point;
       Eye_Vector : Vector;
       Normal_Vector : Vector;
       Inside_Hit : Boolean;

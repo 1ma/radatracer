@@ -237,6 +237,8 @@ package body Radatracer.Objects.Tests is
    procedure Test_Shade_Hit (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
 
+      use type Sphere_Vectors.Vector;
+
       W : World := Default_World;
       R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
       I1 : constant Intersection := (T_Value => 4.0, Object => W.Objects (0));
@@ -245,12 +247,28 @@ package body Radatracer.Objects.Tests is
       R2 : constant Ray := (Origin => Make_Point (0, 0, 0), Direction => Make_Vector (0, 0, 1));
       I2 : constant Intersection := (T_Value => 0.5, Object => W.Objects (1));
       PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (I2, R2);
+
+      S1 : constant Sphere := (Inverted_Transformation => <>, Material => <>);
+      S2 : constant Sphere := (
+         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Translation (0.0, 0.0, 10.0)),
+         Material => <>
+      );
+
+      W2 : constant World := (
+         Light => (Position => Make_Point (0, 0, -10), Intensity => Make_Color (1.0, 1.0, 1.0)),
+         Objects => S1 & S2
+      );
+      R3 : constant Ray := (Origin => Make_Point (0, 0, 5), Direction => Make_Vector (0, 0, 1));
+      I3 : constant Intersection := (T_Value => 4.0, Object => W2.Objects (1));
+      Comps : constant Precomputed_Intersection_Info := Prepare_Calculations (I3, R3);
    begin
       AUnit.Assertions.Assert (Shade_Hit (W, PII1) = Make_Color (0.38066, 0.47583, 0.2855), "Shading an intersection");
 
       W.Light := (Position => Make_Point (0.0, 0.25, 0.0), Intensity => Make_Color (1.0, 1.0, 1.0));
 
       AUnit.Assertions.Assert (Shade_Hit (W, PII2) = Make_Color (0.90498, 0.90498, 0.90498), "Shading an intersection from the inside");
+
+      AUnit.Assertions.Assert (Shade_Hit (W2, Comps) = Make_Color (0.1, 0.1, 0.1), "Shade hit is given an intersection in a shadow");
    end Test_Shade_Hit;
 
    procedure Test_Color_At (T : in out AUnit.Test_Cases.Test_Case'Class);
