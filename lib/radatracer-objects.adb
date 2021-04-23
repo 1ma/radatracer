@@ -90,17 +90,20 @@ package body Radatracer.Objects is
          end if;
 
          declare
-            Diffuse : constant Color := Effective_Color * Material.Diffuse * Light_Dot_Normal;
-
             Reflect_Vector : constant Vector := Reflect (-Light_Vector, Normal_Vector);
             Reflect_Dot_Eye : constant Value := Dot_Product (Reflect_Vector, Eye_Vector);
+
+            Diffuse : constant Color := Effective_Color * Material.Diffuse * Light_Dot_Normal;
          begin
             if Reflect_Dot_Eye <= 0.0 then
                return Ambient + Diffuse;
             end if;
 
             declare
-               Specular : constant Color := Light.Intensity * Material.Specular * (Reflect_Dot_Eye ** Natural (Material.Shininess));
+               package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
+               use Math;
+
+               Specular : constant Color := Light.Intensity * Material.Specular * (Reflect_Dot_Eye ** Material.Shininess);
             begin
                return Ambient + Diffuse + Specular;
             end;
