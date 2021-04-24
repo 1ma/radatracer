@@ -3,6 +3,8 @@ package Radatracer is
 
    type Value is new Long_Float;
 
+   Epsilon : constant Value := 0.00001;
+
    overriding function "=" (L, R : Value) return Boolean;
 
    type Tuple is record

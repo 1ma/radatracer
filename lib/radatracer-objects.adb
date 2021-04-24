@@ -156,7 +156,7 @@ package body Radatracer.Objects is
          T_Value => I.T_Value,
          Object => I.Object,
          Point => Intersection_Point,
-         Over_Point => Intersection_Point + Normal_Vector * 0.00001,
+         Over_Point => Intersection_Point + Normal_Vector * Epsilon,
          Eye_Vector => Eye_Vector,
          Normal_Vector => Normal_Vector,
          Inside_Hit => Inside_Hit

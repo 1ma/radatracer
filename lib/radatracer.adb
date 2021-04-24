@@ -2,7 +2,6 @@ with Ada.Numerics.Generic_Elementary_Functions;
 
 package body Radatracer is
    overriding function "=" (L, R : Value) return Boolean is
-      Epsilon : constant Value := 0.00001;
    begin
       return abs (L - R) < Epsilon;
    end "=";
