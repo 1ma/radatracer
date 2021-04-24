@@ -4,7 +4,7 @@ with Radatracer.Canvas.IO;
 with Radatracer.Matrices;
 with Radatracer.Objects;
 
---  Capstone project for Chapter 7
+--  Capstone project for Chapter 7 and 8
 
 procedure Scene is
    use type Radatracer.Matrices.Matrix4;

@@ -217,6 +217,16 @@ package body Radatracer.Objects.Tests is
 
       PII1 : constant Precomputed_Intersection_Info := Prepare_Calculations (I1, R1);
       PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (I2, R2);
+
+      R3 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
+      S1 : constant Sphere := (
+         Inverted_Transformation => Radatracer.Matrices.Invert (
+            Radatracer.Matrices.Translation (0.0, 0.0, 1.0)
+         ),
+         Material => <>
+      );
+      I3 : constant Intersection := (T_Value => 5.0, Object => S1);
+      PII3 : constant Precomputed_Intersection_Info := Prepare_Calculations (I3, R3);
    begin
       AUnit.Assertions.Assert (PII1.T_Value = I1.T_Value, "Prepare calculations test 1 - part 1");
       AUnit.Assertions.Assert (PII1.Object = I1.Object, "Prepare calculations test 1 - part 2");
@@ -231,6 +241,9 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (PII2.Eye_Vector = Make_Vector (0, 0, -1), "Prepare calculations test 2 - part 4");
       AUnit.Assertions.Assert (PII2.Normal_Vector = Make_Vector (0, 0, -1), "Prepare calculations test 2 - part 5");
       AUnit.Assertions.Assert (PII2.Inside_Hit, "Prepare calculations test 2 - part 6");
+
+      AUnit.Assertions.Assert (PII3.Over_Point.Z < -Epsilon / 2.0, "The hit should offset the point - part 1");
+      AUnit.Assertions.Assert (PII3.Over_Point.Z < PII3.Point.Z, "The hit should offset the point - part 2");
    end Test_Prepare_Calculations;
 
    procedure Test_Shade_Hit (T : in out AUnit.Test_Cases.Test_Case'Class);
