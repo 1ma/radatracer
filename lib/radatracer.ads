@@ -1,7 +1,7 @@
 package Radatracer is
    pragma Pure;
 
-   type Value is new Float;
+   type Value is new Long_Float;
 
    overriding function "=" (L, R : Value) return Boolean;
 
