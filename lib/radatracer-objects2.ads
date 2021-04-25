@@ -17,12 +17,7 @@ package Radatracer.Objects2 is
       Material : Radatracer.Objects2.Material;
    end record;
 
-   procedure Set_Transformation (Self : in out Object; Transformation : Radatracer.Matrices.Matrix4);
-
-   function Normal_At (Self : Object; World_Point : Point) return Vector is abstract
-      with Post'Class => Magnitude (Normal_At'Result) = 1.0;
-
-   type Object_Access is access Object'Class;
+   type Object_Access is access all Object'Class;
 
    type Intersection is record
       T_Value : Value;
@@ -39,11 +34,22 @@ package Radatracer.Objects2 is
 
    function Hit (Intersections : Intersection_Vectors.Vector) return Intersection_Vectors.Cursor;
 
+   procedure Set_Transformation (Self : in out Object; Transformation : Radatracer.Matrices.Matrix4);
+
+   function Normal_At (Self : Object; World_Point : Point) return Vector is abstract
+      with Post'Class => Magnitude (Normal_At'Result) = 1.0;
+
+   function Intersect (Self : aliased in out Object; R : Ray) return Intersection_Vectors.Vector is abstract;
+
    type Sphere is new Object with null record;
 
    overriding function Normal_At (Self : Sphere; World_Point : Point) return Vector;
 
+   overriding function Intersect (Self : aliased in out Sphere; R : Ray) return Intersection_Vectors.Vector;
+
    type Plane is new Object with null record;
 
    overriding function Normal_At (Self : Plane; World_Point : Point) return Vector;
+
+   overriding function Intersect (Self : aliased in out Plane; R : Ray) return Intersection_Vectors.Vector;
 end Radatracer.Objects2;

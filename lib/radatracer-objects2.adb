@@ -1,3 +1,5 @@
+with Ada.Numerics.Generic_Elementary_Functions;
+
 package body Radatracer.Objects2 is
    procedure Set_Transformation (Self : in out Object; Transformation : Radatracer.Matrices.Matrix4) is
    begin
@@ -37,9 +39,41 @@ package body Radatracer.Objects2 is
       return Normalize (Vector (World_Normal));
    end Normal_At;
 
+   overriding function Intersect (Self : aliased in out Sphere; R : Ray) return Intersection_Vectors.Vector is
+      package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
+
+      Result : Intersection_Vectors.Vector;
+
+      Sphere_Origin : constant Point := Make_Point (0, 0, 0);
+
+      Transformed_Ray : constant Ray := Radatracer.Matrices.Transform (R, Self.Inverted_Transformation);
+
+      Sphere_Ray_Vector : constant Vector := Transformed_Ray.Origin - Sphere_Origin;
+      A : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Transformed_Ray.Direction);
+      B : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Sphere_Ray_Vector);
+      C : constant Value := Dot_Product (Sphere_Ray_Vector, Sphere_Ray_Vector) - 1.0;
+      Discriminant : constant Value := (B * B) - (2.0 * A * C);
+   begin
+      if Discriminant >= 0.0 then
+         Result.Append ((T_Value => (-B - Math.Sqrt (Discriminant)) / A, Object => Self'Access));
+         Result.Append ((T_Value => (-B + Math.Sqrt (Discriminant)) / A, Object => Self'Access));
+      end if;
+
+      return Result;
+   end Intersect;
+
    overriding function Normal_At (Self : Plane; World_Point : Point) return Vector is
       pragma Unreferenced (Self, World_Point);
    begin
       return Make_Vector (0, 1, 0);
    end Normal_At;
+
+   overriding function Intersect (Self : aliased in out Plane; R : Ray) return Intersection_Vectors.Vector is
+      pragma Unreferenced (Self, R);
+
+      Result : Intersection_Vectors.Vector;
+   begin
+      return Result;
+      --  Not implemented yet
+   end Intersect;
 end Radatracer.Objects2;
