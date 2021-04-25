@@ -2,7 +2,7 @@ with Radatracer.Matrices;
 
 --  OOP version of Radatracer.Objects to eventually replace it.
 
-package Radatracer.Obj2 is
+package Radatracer.Objects2 is
    type Material is record
       Color : Radatracer.Color := Make_Color (1.0, 1.0, 1.0);
       Ambient : Value := 0.1;
@@ -13,8 +13,10 @@ package Radatracer.Obj2 is
 
    type Object is abstract tagged record
       Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
-      Material : Radatracer.Obj2.Material;
+      Material : Radatracer.Objects2.Material;
    end record;
+
+   procedure Set_Transformation (Self : in out Object; Transformation : Radatracer.Matrices.Matrix4);
 
    function Normal_At (Self : Object; World_Point : Point) return Vector is abstract
       with Post'Class => Magnitude (Normal_At'Result) = 1.0;
@@ -22,4 +24,4 @@ package Radatracer.Obj2 is
    type Sphere is new Object with null record;
 
    overriding function Normal_At (Self : Sphere; World_Point : Point) return Vector;
-end Radatracer.Obj2;
+end Radatracer.Objects2;

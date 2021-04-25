@@ -1,22 +1,34 @@
-with Ada.Containers;
 with Ada.Text_IO;
-with Radatracer.Objects;
+with Radatracer.Matrices;
+with Radatracer.Objects2;
 
 --  Playground executable to try out parts of the library
 
 procedure Test_Drive is
-   use type Radatracer.Objects.Intersection_Vectors.Vector;
+   use Radatracer;
+   use Radatracer.Matrices;
+   use Radatracer.Objects2;
 
-   I : constant Radatracer.Objects.Intersection := (
-      T_Value => 1.0,
-      Object => (Inverted_Transformation => <>, Material => <>)
-   );
+   procedure Print_Tuple (T : Tuple);
+   procedure Print_Tuple (T : Tuple) is
+      use Ada.Text_IO;
+   begin
+      Put ("X =>");
+      Put (T.X'Image);
+      Put (", Y =>");
+      Put (T.Y'Image);
+      Put (", Z =>");
+      Put (T.Z'Image);
+      Put (", W =>");
+      Put (T.W'Image);
+      New_Line;
+   end Print_Tuple;
 
-   A : Radatracer.Objects.Intersection_Vectors.Vector := I & I;
-   A2 : constant Radatracer.Objects.Intersection_Vectors.Vector := A;
+   P : constant Point := Make_Point (0, 0, 1);
+   S : Sphere;
 begin
-   A.Append (I);
+   S.Set_Transformation (Scaling (10.0, 1.0, 10.0));
+   --  Check that Sphere inherits the Set_Transformation method
 
-   Ada.Text_IO.Put_Line ("Vector has" & Ada.Containers.Count_Type'Image (A.Length) & " elements");
-   Ada.Text_IO.Put_Line ("Vector has" & Ada.Containers.Count_Type'Image (A2.Length) & " elements");
+   Print_Tuple (S.Normal_At (P));
 end Test_Drive;
