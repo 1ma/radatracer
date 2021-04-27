@@ -1,9 +1,9 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 
 package body Radatracer.Objects is
-   procedure Set_Transformation (S : in out Sphere; Transformation : Radatracer.Matrices.Matrix4) is
+   procedure Set_Transformation (Self : in out Object; Transformation : Radatracer.Matrices.Matrix4) is
    begin
-      S.Inverted_Transformation := Radatracer.Matrices.Invert (Transformation);
+      Self.Inverted_Transformation := Radatracer.Matrices.Invert (Transformation);
    end Set_Transformation;
 
    function "<" (L, R : Intersection) return Boolean is
@@ -26,40 +26,6 @@ package body Radatracer.Objects is
 
       return Intersection_Vectors.No_Element;
    end Hit;
-
-   function Intersect (S : Sphere; R : Ray) return Intersection_Vectors.Vector is
-      package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
-      Result : Intersection_Vectors.Vector;
-
-      Sphere_Origin : constant Point := Make_Point (0, 0, 0);
-
-      Transformed_Ray : constant Ray := Radatracer.Matrices.Transform (R, S.Inverted_Transformation);
-
-      Sphere_Ray_Vector : constant Vector := Transformed_Ray.Origin - Sphere_Origin;
-      A : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Transformed_Ray.Direction);
-      B : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Sphere_Ray_Vector);
-      C : constant Value := Dot_Product (Sphere_Ray_Vector, Sphere_Ray_Vector) - 1.0;
-      Discriminant : constant Value := (B * B) - (2.0 * A * C);
-   begin
-      if Discriminant >= 0.0 then
-         Result.Append ((T_Value => (-B - Math.Sqrt (Discriminant)) / A, Object => S));
-         Result.Append ((T_Value => (-B + Math.Sqrt (Discriminant)) / A, Object => S));
-      end if;
-
-      return Result;
-   end Intersect;
-
-   function Normal_At (S : Sphere; World_Point : Point) return Vector is
-      use type Radatracer.Matrices.Matrix4;
-
-      Object_Origin : constant Point := Make_Point (0, 0, 0);
-      Object_Point : constant Point := S.Inverted_Transformation * World_Point;
-      Object_Normal : constant Vector := Object_Point - Object_Origin;
-      World_Normal : Tuple := Radatracer.Matrices.Transpose (S.Inverted_Transformation) * Object_Normal;
-   begin
-      World_Normal.W := 0.0;
-      return Normalize (Vector (World_Normal));
-   end Normal_At;
 
    function Reflect (V, Normal : Vector) return Vector is
    begin
@@ -111,6 +77,56 @@ package body Radatracer.Objects is
       end;
    end Lightning;
 
+   overriding function Normal_At (Self : Sphere; World_Point : Point) return Vector is
+      use type Radatracer.Matrices.Matrix4;
+
+      Sphere_Origin : constant Point := Make_Point (0, 0, 0);
+      Object_Point : constant Point := Self.Inverted_Transformation * World_Point;
+      Object_Normal : constant Vector := Object_Point - Sphere_Origin;
+      World_Normal : Tuple := Radatracer.Matrices.Transpose (Self.Inverted_Transformation) * Object_Normal;
+   begin
+      World_Normal.W := 0.0;
+      return Normalize (Vector (World_Normal));
+   end Normal_At;
+
+   overriding function Intersect (Self : aliased in out Sphere; R : Ray) return Intersection_Vectors.Vector is
+      package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
+
+      Result : Intersection_Vectors.Vector;
+
+      Sphere_Origin : constant Point := Make_Point (0, 0, 0);
+
+      Transformed_Ray : constant Ray := Radatracer.Matrices.Transform (R, Self.Inverted_Transformation);
+
+      Sphere_Ray_Vector : constant Vector := Transformed_Ray.Origin - Sphere_Origin;
+      A : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Transformed_Ray.Direction);
+      B : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Sphere_Ray_Vector);
+      C : constant Value := Dot_Product (Sphere_Ray_Vector, Sphere_Ray_Vector) - 1.0;
+      Discriminant : constant Value := (B * B) - (2.0 * A * C);
+   begin
+      if Discriminant >= 0.0 then
+         Result.Append ((T_Value => (-B - Math.Sqrt (Discriminant)) / A, Object => Self'Access));
+         Result.Append ((T_Value => (-B + Math.Sqrt (Discriminant)) / A, Object => Self'Access));
+      end if;
+
+      return Result;
+   end Intersect;
+
+   overriding function Normal_At (Self : Plane; World_Point : Point) return Vector is
+      pragma Unreferenced (Self, World_Point);
+   begin
+      return Make_Vector (0, 1, 0);
+   end Normal_At;
+
+   overriding function Intersect (Self : aliased in out Plane; R : Ray) return Intersection_Vectors.Vector is
+      pragma Unreferenced (Self, R);
+
+      Result : Intersection_Vectors.Vector;
+   begin
+      return Result;
+      --  Not implemented yet
+   end Intersect;
+
    function Is_Shadowed (W : World; P : Point) return Boolean is
       use type Intersection_Vectors.Cursor;
 
@@ -120,11 +136,7 @@ package body Radatracer.Objects is
       Intersections : constant Intersection_Vectors.Vector := Intersect (W, Shadow_Ray);
       Hit : constant Intersection_Vectors.Cursor := Radatracer.Objects.Hit (Intersections);
    begin
-      if Hit = Intersection_Vectors.No_Element then
-         return False;
-      end if;
-
-      return Intersections (Hit).T_Value < Distance;
+      return Hit /= Intersection_Vectors.No_Element and then Intersections (Hit).T_Value < Distance;
    end Is_Shadowed;
 
    function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector is
@@ -133,7 +145,7 @@ package body Radatracer.Objects is
       Intersections : Intersection_Vectors.Vector;
    begin
       for Cursor in W.Objects.Iterate loop
-         Intersections.Append (Intersect (W.Objects (Cursor), R));
+         Intersections.Append (W.Objects (Cursor).all.Intersect (R));
       end loop;
 
       Intersection_Vector_Sorting.Sort (Intersections);
@@ -144,7 +156,7 @@ package body Radatracer.Objects is
    function Prepare_Calculations (I : Intersection; R : Ray) return Precomputed_Intersection_Info is
       Eye_Vector : constant Vector := -R.Direction;
       Intersection_Point : constant Point := Position (R, I.T_Value);
-      Normal_Vector : Vector := Normal_At (I.Object, Intersection_Point);
+      Normal_Vector : Vector := I.Object.all.Normal_At (Intersection_Point);
 
       Inside_Hit : constant Boolean := Dot_Product (Normal_Vector, Eye_Vector) < 0.0;
    begin

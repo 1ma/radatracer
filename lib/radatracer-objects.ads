@@ -4,11 +4,6 @@ with Radatracer.Canvas;
 with Radatracer.Matrices;
 
 package Radatracer.Objects is
-   type Point_Light is record
-      Intensity : Color := Make_Color (1.0, 1.0, 1.0);
-      Position : Point := Make_Point (0, 0, 0);
-   end record;
-
    type Material is record
       Color : Radatracer.Color := Make_Color (1.0, 1.0, 1.0);
       Ambient : Value := 0.1;
@@ -17,16 +12,16 @@ package Radatracer.Objects is
       Shininess : Value := 200.0;
    end record;
 
-   type Sphere is record
+   type Object is abstract tagged record
       Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
       Material : Radatracer.Objects.Material;
    end record;
 
-   procedure Set_Transformation (S : in out Sphere; Transformation : Radatracer.Matrices.Matrix4);
+   type Object_Access is access all Object'Class;
 
    type Intersection is record
       T_Value : Value;
-      Object : Sphere;
+      Object : Object_Access;
    end record;
 
    function "<" (L, R : Intersection) return Boolean;
@@ -38,15 +33,20 @@ package Radatracer.Objects is
    );
 
    function Hit (Intersections : Intersection_Vectors.Vector) return Intersection_Vectors.Cursor;
-   --  A Cursor may be No_Element, meaning the function didn't find a hit.
-   --  This is how Vector.Find is designed in the Ada.Containers.Vector package.
 
-   function Intersect (S : Sphere; R : Ray) return Intersection_Vectors.Vector;
+   procedure Set_Transformation (Self : in out Object; Transformation : Radatracer.Matrices.Matrix4);
 
-   function Normal_At (S : Sphere; World_Point : Point) return Vector
-      with Post => Magnitude (Normal_At'Result) = 1.0;
+   function Normal_At (Self : Object; World_Point : Point) return Vector is abstract
+      with Post'Class => Magnitude (Normal_At'Result) = 1.0;
+
+   function Intersect (Self : aliased in out Object; R : Ray) return Intersection_Vectors.Vector is abstract;
 
    function Reflect (V, Normal : Vector) return Vector;
+
+   type Point_Light is record
+      Intensity : Color := Make_Color (1.0, 1.0, 1.0);
+      Position : Point := Make_Point (0, 0, 0);
+   end record;
 
    function Lightning (
       Material : Radatracer.Objects.Material;
@@ -57,14 +57,26 @@ package Radatracer.Objects is
       In_Shadow : Boolean := False
    ) return Color;
 
-   package Sphere_Vectors is new Ada.Containers.Vectors (
+   type Sphere is new Object with null record;
+
+   overriding function Normal_At (Self : Sphere; World_Point : Point) return Vector;
+
+   overriding function Intersect (Self : aliased in out Sphere; R : Ray) return Intersection_Vectors.Vector;
+
+   type Plane is new Object with null record;
+
+   overriding function Normal_At (Self : Plane; World_Point : Point) return Vector;
+
+   overriding function Intersect (Self : aliased in out Plane; R : Ray) return Intersection_Vectors.Vector;
+
+   package Object_Vectors is new Ada.Containers.Vectors (
       Index_Type => Natural,
-      Element_Type => Sphere
+      Element_Type => Object_Access
    );
 
    type World is record
       Light : Point_Light;
-      Objects : Sphere_Vectors.Vector;
+      Objects : Object_Vectors.Vector;
    end record;
 
    function Is_Shadowed (W : World; P : Point) return Boolean;
@@ -73,7 +85,7 @@ package Radatracer.Objects is
 
    type Precomputed_Intersection_Info is record
       T_Value : Value;
-      Object : Radatracer.Objects.Sphere;
+      Object : Object_Access;
       Point : Radatracer.Point;
       Over_Point : Radatracer.Point;
       Eye_Vector : Vector;

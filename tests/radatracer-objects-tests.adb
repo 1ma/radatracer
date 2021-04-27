@@ -5,9 +5,7 @@ with Radatracer.Matrices;
 package body Radatracer.Objects.Tests is
    function Default_World return World;
    function Default_World return World is
-      use type Sphere_Vectors.Vector;
-
-      Sphere1 : constant Sphere := (
+      Sphere1 : constant Object_Access := new Sphere'(
          Inverted_Transformation => <>,
          Material => (
             Color => Make_Color (0.8, 1.0, 0.6),
@@ -18,15 +16,20 @@ package body Radatracer.Objects.Tests is
          )
       );
 
-      Sphere2 : constant Sphere := (
+      Sphere2 : constant Object_Access := new Sphere'(
          Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (0.5, 0.5, 0.5)),
          Material => <>
       );
-   begin
-      return (
+
+      World : Radatracer.Objects.World := (
          Light => (Position => Make_Point (-10, 10, -10), Intensity => <>),
-         Objects => Sphere1 & Sphere2
+         Objects => <>
       );
+   begin
+      World.Objects.Append (Sphere1);
+      World.Objects.Append (Sphere2);
+
+      return World;
    end Default_World;
 
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class);
@@ -35,9 +38,15 @@ package body Radatracer.Objects.Tests is
 
       use type Radatracer.Objects.Intersection_Vectors.Vector;
 
-      S1 : constant Sphere := (Inverted_Transformation => <>, others => <>);
-      S2 : constant Sphere := (Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (2.0, 2.0, 2.0)), others => <>);
-      S3 : constant Sphere := (Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Translation (5.0, 0.0, 0.0)), others => <>);
+      S1 : constant Object_Access := new Sphere'(Inverted_Transformation => <>, others => <>);
+      S2 : constant Object_Access := new Sphere'(
+         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (2.0, 2.0, 2.0)),
+         others => <>
+      );
+      S3 : constant Object_Access := new Sphere'(
+         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Translation (5.0, 0.0, 0.0)),
+         others => <>
+      );
 
       R1 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
       R2 : constant Ray := (Make_Point (0, 1, -5), Make_Vector (0, 0, 1));
@@ -55,13 +64,13 @@ package body Radatracer.Objects.Tests is
       V6 : constant Intersection_Vectors.Vector := (3.0, S2) & (7.0, S2);
       V7 : Intersection_Vectors.Vector;
    begin
-      AUnit.Assertions.Assert (Intersect (S1, R1) = V1, "Ray-Sphere intersection test 1 - intersection at 2 points");
-      AUnit.Assertions.Assert (Intersect (S1, R2) = V2, "Ray-Sphere intersection test 2 - intersection at 1 point (tangent point)");
-      AUnit.Assertions.Assert (Intersect (S1, R3) = V3, "Ray-Sphere intersection test 3 - no intersection");
-      AUnit.Assertions.Assert (Intersect (S1, R4) = V4, "Ray-Sphere intersection test 4 - ray originates inside the sphere");
-      AUnit.Assertions.Assert (Intersect (S1, R5) = V5, "Ray-Sphere intersection test 5 - sphere is behind the ray");
-      AUnit.Assertions.Assert (Intersect (S2, R6) = V6, "Ray-Sphere intersection test 6 - sphere is scaled");
-      AUnit.Assertions.Assert (Intersect (S3, R7) = V7, "Ray-Sphere intersection test 7 - sphere is translated away from the ray");
+      AUnit.Assertions.Assert (S1.all.Intersect (R1) = V1, "Ray-Sphere intersection test 1 - intersection at 2 points");
+      AUnit.Assertions.Assert (S1.all.Intersect (R2) = V2, "Ray-Sphere intersection test 2 - intersection at 1 point (tangent point)");
+      AUnit.Assertions.Assert (S1.all.Intersect (R3) = V3, "Ray-Sphere intersection test 3 - no intersection");
+      AUnit.Assertions.Assert (S1.all.Intersect (R4) = V4, "Ray-Sphere intersection test 4 - ray originates inside the sphere");
+      AUnit.Assertions.Assert (S1.all.Intersect (R5) = V5, "Ray-Sphere intersection test 5 - sphere is behind the ray");
+      AUnit.Assertions.Assert (S2.all.Intersect (R6) = V6, "Ray-Sphere intersection test 6 - sphere is scaled");
+      AUnit.Assertions.Assert (S3.all.Intersect (R7) = V7, "Ray-Sphere intersection test 7 - sphere is translated away from the ray");
    end Test_Ray_Sphere_Intersections;
 
    procedure Test_Intersection_Hits (T : in out AUnit.Test_Cases.Test_Case'Class);
@@ -71,7 +80,7 @@ package body Radatracer.Objects.Tests is
       use type Intersection_Vectors.Cursor;
       use type Intersection_Vectors.Vector;
 
-      S : constant Sphere := (Inverted_Transformation => <>, others => <>);
+      S : constant Object_Access := new Sphere'(Inverted_Transformation => <>, others => <>);
 
       I1_1 : constant Intersection := (1.0, S);
       I1_2 : constant Intersection := (2.0, S);
@@ -105,16 +114,16 @@ package body Radatracer.Objects.Tests is
 
       S : Sphere := (Inverted_Transformation => Radatracer.Matrices.Identity_Matrix4, others => <>);
    begin
-      AUnit.Assertions.Assert (Normal_At (S, Make_Point (1, 0, 0)) = Make_Vector (1, 0, 0), "Sphere normal test 1");
-      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0, 1, 0)) = Make_Vector (0, 1, 0), "Sphere normal test 2");
-      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0, 0, 1)) = Make_Vector (0, 0, 1), "Sphere normal test 3");
-      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0.57735, 0.57735, 0.57735)) = Make_Vector (0.57735, 0.57735, 0.57735), "Sphere normal test 4");
+      AUnit.Assertions.Assert (S.Normal_At (Make_Point (1, 0, 0)) = Make_Vector (1, 0, 0), "Sphere normal test 1");
+      AUnit.Assertions.Assert (S.Normal_At (Make_Point (0, 1, 0)) = Make_Vector (0, 1, 0), "Sphere normal test 2");
+      AUnit.Assertions.Assert (S.Normal_At (Make_Point (0, 0, 1)) = Make_Vector (0, 0, 1), "Sphere normal test 3");
+      AUnit.Assertions.Assert (S.Normal_At (Make_Point (0.57735, 0.57735, 0.57735)) = Make_Vector (0.57735, 0.57735, 0.57735), "Sphere normal test 4");
 
       Set_Transformation (S, Radatracer.Matrices.Translation (0.0, 1.0, 0.0));
-      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0.0, 1.70711, -0.70711)) = Make_Vector (0.0, 0.70711, -0.70711), "Sphere normal test 5");
+      AUnit.Assertions.Assert (S.Normal_At (Make_Point (0.0, 1.70711, -0.70711)) = Make_Vector (0.0, 0.70711, -0.70711), "Sphere normal test 5");
 
       Set_Transformation (S, Radatracer.Matrices.Scaling (1.0, 0.5, 1.0) * Radatracer.Matrices.Rotation_Z (Ada.Numerics.Pi / 5.0));
-      AUnit.Assertions.Assert (Normal_At (S, Make_Point (0.0, 0.70711, -0.70711)) = Make_Vector (0.0, 0.97014, -0.24254), "Sphere normal test 6");
+      AUnit.Assertions.Assert (S.Normal_At (Make_Point (0.0, 0.70711, -0.70711)) = Make_Vector (0.0, 0.97014, -0.24254), "Sphere normal test 6");
    end Test_Sphere_Normals;
 
    procedure Test_Reflections (T : in out AUnit.Test_Cases.Test_Case'Class);
@@ -212,14 +221,14 @@ package body Radatracer.Objects.Tests is
       R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
       R2 : constant Ray := (Origin => Make_Point (0, 0, 0), Direction => Make_Vector (0, 0, 1));
 
-      I1 : constant Intersection := (T_Value => 4.0, Object => (others => <>));
-      I2 : constant Intersection := (T_Value => 1.0, Object => (others => <>));
+      I1 : constant Intersection := (T_Value => 4.0, Object => new Sphere);
+      I2 : constant Intersection := (T_Value => 1.0, Object => new Sphere);
 
       PII1 : constant Precomputed_Intersection_Info := Prepare_Calculations (I1, R1);
       PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (I2, R2);
 
       R3 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
-      S1 : constant Sphere := (
+      S1 : constant Object_Access := new Sphere'(
          Inverted_Transformation => Radatracer.Matrices.Invert (
             Radatracer.Matrices.Translation (0.0, 0.0, 1.0)
          ),
@@ -250,7 +259,7 @@ package body Radatracer.Objects.Tests is
    procedure Test_Shade_Hit (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
 
-      use type Sphere_Vectors.Vector;
+      use type Object_Vectors.Vector;
 
       W : World := Default_World;
       R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
@@ -261,8 +270,8 @@ package body Radatracer.Objects.Tests is
       I2 : constant Intersection := (T_Value => 0.5, Object => W.Objects (1));
       PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (I2, R2);
 
-      S1 : constant Sphere := (Inverted_Transformation => <>, Material => <>);
-      S2 : constant Sphere := (
+      S1 : constant Object_Access := new Sphere;
+      S2 : constant Object_Access := new Sphere'(
          Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Translation (0.0, 0.0, 10.0)),
          Material => <>
       );
