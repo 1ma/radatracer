@@ -1,4 +1,6 @@
 with Ada.Containers.Vectors;
+with Ada.Numerics;
+with Radatracer.Canvas;
 with Radatracer.Matrices;
 
 --  OOP version of Radatracer.Objects to eventually replace it.
@@ -101,4 +103,23 @@ package Radatracer.Objects2 is
    function Shade_Hit (W : World; I : Precomputed_Intersection_Info) return Color;
 
    function Color_At (W : World; R : Ray) return Color;
+
+   type Camera is record
+      H_Size, V_Size : Positive;
+      FOV : Value range 0.0 .. Ada.Numerics.Pi := Ada.Numerics.Pi / 2.0;
+      Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
+      Half_Width, Half_Height, Pixel_Size : Value;
+   end record;
+
+   function Make_Camera (
+      H_Size, V_Size : Positive;
+      FOV : Value;
+      From : Point := Make_Point (0, 0, 0);
+      To : Point := Make_Point (0, 0, -1);
+      Up : Vector := Make_Vector (0, 1, 0)
+   ) return Camera;
+
+   function Ray_For_Pixel (C : Camera; X, Y : Natural) return Ray;
+
+   function Render (C : Camera; W : World) return Radatracer.Canvas.Canvas;
 end Radatracer.Objects2;

@@ -199,4 +199,68 @@ package body Radatracer.Objects2 is
 
       return Shade_Hit (W, Prepare_Calculations (Intersections (Hit), R));
    end Color_At;
+
+   function Make_Camera (
+      H_Size, V_Size : Positive;
+      FOV : Value;
+      From : Point := Make_Point (0, 0, 0);
+      To : Point := Make_Point (0, 0, -1);
+      Up : Vector := Make_Vector (0, 1, 0)
+   ) return Camera is
+      package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
+
+      Half_View : constant Value := Math.Tan (FOV / 2.0);
+      Aspect : constant Value := Value (H_Size) / Value (V_Size);
+
+      Camera : Radatracer.Objects2.Camera := (
+         H_Size => H_Size,
+         V_Size => V_Size,
+         FOV =>  FOV,
+         Inverted_Transformation => Radatracer.Matrices.Invert (
+            Radatracer.Matrices.View_Transform (From, To, Up)
+         ),
+         others => <>
+      );
+   begin
+      if Aspect < 1.0 then
+         Camera.Half_Height := Half_View;
+         Camera.Half_Width := Half_View * Aspect;
+      else
+         Camera.Half_Height := Half_View / Aspect;
+         Camera.Half_Width := Half_View;
+      end if;
+
+      Camera.Pixel_Size := (Camera.Half_Width * 2.0) / Value (Camera.H_Size);
+
+      return Camera;
+   end Make_Camera;
+
+   function Ray_For_Pixel (C : Camera; X, Y : Natural) return Ray is
+      use type Radatracer.Matrices.Matrix4;
+
+      X_Offset : constant Value := (Value (X) + 0.5) * C.Pixel_Size;
+      Y_Offset : constant Value := (Value (Y) + 0.5) * C.Pixel_Size;
+
+      World_X : constant Value := C.Half_Width - X_Offset;
+      World_Y : constant Value := C.Half_Height - Y_Offset;
+
+      Pixel : constant Point := C.Inverted_Transformation * Make_Point (World_X, World_Y, -1.0);
+
+      Origin : constant Point := C.Inverted_Transformation * Make_Point (0, 0, 0);
+      Direction : constant Vector := Normalize (Pixel - Origin);
+   begin
+      return (Origin, Direction);
+   end Ray_For_Pixel;
+
+   function Render (C : Camera; W : World) return Radatracer.Canvas.Canvas is
+      Canvas : Radatracer.Canvas.Canvas (0 .. C.H_Size - 1, 0 .. C.V_Size - 1);
+   begin
+      for Y in Canvas'Range (2) loop
+         for X in Canvas'Range (1) loop
+            Canvas (X, Y) := Radatracer.Canvas.To_Pixel (Color_At (W, Ray_For_Pixel (C, X, Y)));
+         end loop;
+      end loop;
+
+      return Canvas;
+   end Render;
 end Radatracer.Objects2;
