@@ -1,13 +1,13 @@
 with Ada.Text_IO;
 with Radatracer.Canvas.IO;
-with Radatracer.Objects;
+with Radatracer.Objects2;
 
 --  Capstone project for Chapter 6
 
 procedure Phong is
    use type Radatracer.Tuple;
    use type Radatracer.Value;
-   use type Radatracer.Objects.Intersection_Vectors.Cursor;
+   use type Radatracer.Objects2.Intersection_Vectors.Cursor;
 
    Ray_Origin : constant Radatracer.Point := Radatracer.Make_Point (0, 0, -5);
 
@@ -19,18 +19,18 @@ procedure Phong is
 
    Pixel_Size : constant Radatracer.Value := Wall_Size / Radatracer.Value (Canvas_Pixels);
 
-   Light : constant Radatracer.Objects.Point_Light := (
+   Light : constant Radatracer.Objects2.Point_Light := (
       Position => Radatracer.Make_Point (-10, 10, -10),
       Intensity => Radatracer.Make_Color (1.0, 1.0, 1.0)
    );
 
-   Sphere : constant Radatracer.Objects.Sphere := (
+   Sphere : Radatracer.Objects2.Sphere := (
       Inverted_Transformation => <>,
       Material => (Color => Radatracer.Make_Color (1.0, 0.0, 0.0), others => <>)
    );
 
-   Hit : Radatracer.Objects.Intersection_Vectors.Cursor;
-   Intersections : Radatracer.Objects.Intersection_Vectors.Vector;
+   Hit : Radatracer.Objects2.Intersection_Vectors.Cursor;
+   Intersections : Radatracer.Objects2.Intersection_Vectors.Vector;
    Ray : Radatracer.Ray;
    World_X, World_Y : Radatracer.Value;
    Point : Radatracer.Point := Radatracer.Make_Point (0, 0, 0);
@@ -52,15 +52,15 @@ begin
             Direction => Radatracer.Normalize (Radatracer.Make_Point (World_X, World_Y, Wall_Z) - Ray_Origin)
          );
 
-         Intersections := Radatracer.Objects.Intersect (Sphere, Ray);
-         Hit := Radatracer.Objects.Hit (Intersections);
-         if Hit /= Radatracer.Objects.Intersection_Vectors.No_Element then
+         Intersections := Radatracer.Objects2.Intersect (Sphere, Ray);
+         Hit := Radatracer.Objects2.Hit (Intersections);
+         if Hit /= Radatracer.Objects2.Intersection_Vectors.No_Element then
             Point := Radatracer.Position (Ray, Intersections (Hit).T_Value);
-            Normal_Vector := Radatracer.Objects.Normal_At (Intersections (Hit).Object, Point);
+            Normal_Vector := Intersections (Hit).Object.all.Normal_At (Point);
             Eye_Vector := -Ray.Direction;
 
             Canvas (X, Y) := Radatracer.Canvas.To_Pixel (
-               Radatracer.Objects.Lightning (Intersections (Hit).Object.Material, Light, Point, Eye_Vector, Normal_Vector)
+               Radatracer.Objects2.Lightning (Intersections (Hit).Object.Material, Light, Point, Eye_Vector, Normal_Vector)
             );
          end if;
       end loop;

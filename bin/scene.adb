@@ -2,16 +2,16 @@ with Ada.Numerics;
 with Ada.Text_IO;
 with Radatracer.Canvas.IO;
 with Radatracer.Matrices;
-with Radatracer.Objects;
+with Radatracer.Objects2;
 
 --  Capstone project for Chapter 7 and 8
 
 procedure Scene is
    use type Radatracer.Matrices.Matrix4;
-   use type Radatracer.Objects.Sphere_Vectors.Vector;
+   use type Radatracer.Objects2.Object_Vectors.Vector;
    use type Radatracer.Value;
 
-   Floor : constant Radatracer.Objects.Sphere := (
+   Floor : constant Radatracer.Objects2.Object_Access := new Radatracer.Objects2.Sphere'(
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Scaling (10.0, 0.01, 10.0)
       ),
@@ -22,7 +22,7 @@ procedure Scene is
       )
    );
 
-   Left_Wall : constant Radatracer.Objects.Sphere := (
+   Left_Wall : constant Radatracer.Objects2.Object_Access := new Radatracer.Objects2.Sphere'(
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Translation (0.0, 0.0, 5.0) *
          Radatracer.Matrices.Rotation_Y (Ada.Numerics.Pi / 4.0) *
@@ -32,7 +32,7 @@ procedure Scene is
       Material => Floor.Material
    );
 
-   Right_Wall : constant Radatracer.Objects.Sphere := (
+   Right_Wall : constant Radatracer.Objects2.Object_Access := new Radatracer.Objects2.Sphere'(
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Translation (0.0, 0.0, 5.0) *
          Radatracer.Matrices.Rotation_Y (-Ada.Numerics.Pi / 4.0) *
@@ -42,7 +42,7 @@ procedure Scene is
       Material => Floor.Material
    );
 
-   Middle_Sphere : constant Radatracer.Objects.Sphere := (
+   Middle_Sphere : constant Radatracer.Objects2.Object_Access := new Radatracer.Objects2.Sphere'(
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Translation (-0.5, 1.0, 0.5)
       ),
@@ -54,7 +54,7 @@ procedure Scene is
       )
    );
 
-   Right_Sphere : constant Radatracer.Objects.Sphere := (
+   Right_Sphere : constant Radatracer.Objects2.Object_Access := new Radatracer.Objects2.Sphere'(
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Translation (1.5, 0.5, -0.5) *
          Radatracer.Matrices.Scaling (0.5, 0.5, 0.5)
@@ -67,7 +67,7 @@ procedure Scene is
       )
    );
 
-   Left_Sphere : constant Radatracer.Objects.Sphere := (
+   Left_Sphere : constant Radatracer.Objects2.Object_Access := new Radatracer.Objects2.Sphere'(
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Translation (-1.5, 0.33, -0.75) *
          Radatracer.Matrices.Scaling (0.33, 0.33, 0.33)
@@ -80,7 +80,7 @@ procedure Scene is
       )
    );
 
-   World : constant Radatracer.Objects.World := (
+   World : constant Radatracer.Objects2.World := (
       Light => (
          Intensity => Radatracer.Make_Color (1.0, 1.0, 1.0),
          Position => Radatracer.Make_Point (-10, 10, -10)
@@ -88,7 +88,7 @@ procedure Scene is
       Objects => Floor & Left_Wall & Right_Wall & Middle_Sphere & Right_Sphere & Left_Sphere
    );
 
-   Camera : constant Radatracer.Objects.Camera := Radatracer.Objects.Make_Camera (
+   Camera : constant Radatracer.Objects2.Camera := Radatracer.Objects2.Make_Camera (
       2000, 1000,
       Ada.Numerics.Pi / 3.0,
       Radatracer.Make_Point (0.0, 1.5, -5.0),
@@ -98,6 +98,6 @@ procedure Scene is
 begin
    Radatracer.Canvas.IO.Write_PPM (
       Ada.Text_IO.Standard_Output,
-      Radatracer.Objects.Render (Camera, World)
+      Radatracer.Objects2.Render (Camera, World)
    );
 end Scene;

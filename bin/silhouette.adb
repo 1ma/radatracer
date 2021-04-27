@@ -1,7 +1,7 @@
 with Ada.Text_IO;
 with Radatracer.Canvas.IO;
 with Radatracer.Matrices;
-with Radatracer.Objects;
+with Radatracer.Objects2;
 
 --  Capstone project for Chapter 5
 
@@ -9,7 +9,7 @@ procedure Silhouette is
    use type Radatracer.Tuple;
    use type Radatracer.Value;
    use type Radatracer.Matrices.Matrix4;
-   use type Radatracer.Objects.Intersection_Vectors.Cursor;
+   use type Radatracer.Objects2.Intersection_Vectors.Cursor;
 
    Ray_Origin : constant Radatracer.Point := Radatracer.Make_Point (0, 0, -5);
 
@@ -24,14 +24,14 @@ procedure Silhouette is
    World_X, World_Y : Radatracer.Value;
 
    Ray : Radatracer.Ray;
-   Sphere : constant Radatracer.Objects.Sphere := (
+   Sphere : Radatracer.Objects2.Sphere := (
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Shearing (1.0, 0.0, 0.0, 0.0, 0.0, 0.0) * Radatracer.Matrices.Scaling (0.5, 1.0, 1.0)
       ),
       Material => <>
    );
 
-   Hit : Radatracer.Objects.Intersection_Vectors.Cursor;
+   Hit : Radatracer.Objects2.Intersection_Vectors.Cursor;
 
    subtype Scene_Canvas is Radatracer.Canvas.Canvas (1 .. Canvas_Pixels, 1 .. Canvas_Pixels);
    type Scene_Canvas_Access is access Scene_Canvas;
@@ -49,8 +49,8 @@ begin
             Direction => Radatracer.Normalize (Radatracer.Make_Point (World_X, World_Y, Wall_Z) - Ray_Origin)
          );
 
-         Hit := Radatracer.Objects.Hit (Radatracer.Objects.Intersect (Sphere, Ray));
-         if Hit /= Radatracer.Objects.Intersection_Vectors.No_Element then
+         Hit := Radatracer.Objects2.Hit (Sphere.Intersect (Ray));
+         if Hit /= Radatracer.Objects2.Intersection_Vectors.No_Element then
             Canvas (X, Y) := Radatracer.Canvas.Red_Pixel;
          end if;
       end loop;
