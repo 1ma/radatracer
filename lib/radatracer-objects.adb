@@ -1,15 +1,33 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 
 package body Radatracer.Objects is
+   function "<" (L, R : Intersection) return Boolean is
+   begin
+      return L.T_Value < R.T_Value;
+   end "<";
+
    procedure Set_Transformation (Self : in out Object; Transformation : Radatracer.Matrices.Matrix4) is
    begin
       Self.Inverted_Transformation := Radatracer.Matrices.Invert (Transformation);
    end Set_Transformation;
 
-   function "<" (L, R : Intersection) return Boolean is
+   function Normal_At (Self : Object'Class; World_Point : Point) return Vector is
+      use type Radatracer.Matrices.Matrix4;
+
+      Local_Point : constant Point := Self.Inverted_Transformation * World_Point;
+      Local_Normal : constant Vector := Self.Local_Normal_At (Local_Point);
+      World_Normal : Tuple := Radatracer.Matrices.Transpose (Self.Inverted_Transformation) * Local_Normal;
    begin
-      return L.T_Value < R.T_Value;
-   end "<";
+      World_Normal.W := 0.0;
+
+      return Normalize (Vector (World_Normal));
+   end Normal_At;
+
+   function Intersect (Self : in out Object'Class; Ray : Radatracer.Ray) return Intersection_Vectors.Vector is
+      Local_Ray : constant Radatracer.Ray := Radatracer.Matrices.Transform (Ray, Self.Inverted_Transformation);
+   begin
+      return Self.Local_Intersect (Local_Ray);
+   end Intersect;
 
    function Hit (Intersections : Intersection_Vectors.Vector) return Intersection_Vectors.Cursor is
       package Intersection_Vector_Sorting is new Intersection_Vectors.Generic_Sorting;
@@ -77,32 +95,24 @@ package body Radatracer.Objects is
       end;
    end Lightning;
 
-   overriding function Normal_At (Self : Sphere; World_Point : Point) return Vector is
-      use type Radatracer.Matrices.Matrix4;
+   overriding function Local_Normal_At (Self : Sphere; Local_Point : Point) return Vector is
+      pragma Unreferenced (Self);
 
-      Sphere_Origin : constant Point := Make_Point (0, 0, 0);
-      Object_Point : constant Point := Self.Inverted_Transformation * World_Point;
-      Object_Normal : constant Vector := Object_Point - Sphere_Origin;
-      World_Normal : Tuple := Radatracer.Matrices.Transpose (Self.Inverted_Transformation) * Object_Normal;
+      Local_Sphere_Origin : constant Point := Make_Point (0, 0, 0);
    begin
-      World_Normal.W := 0.0;
-      return Normalize (Vector (World_Normal));
-   end Normal_At;
+      return Local_Point - Local_Sphere_Origin;
+   end Local_Normal_At;
 
-   overriding function Intersect (Self : aliased in out Sphere; R : Ray) return Intersection_Vectors.Vector is
+   overriding function Local_Intersect (Self : aliased in out Sphere; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector is
       package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
 
-      Result : Intersection_Vectors.Vector;
-
       Sphere_Origin : constant Point := Make_Point (0, 0, 0);
-
-      Transformed_Ray : constant Ray := Radatracer.Matrices.Transform (R, Self.Inverted_Transformation);
-
-      Sphere_Ray_Vector : constant Vector := Transformed_Ray.Origin - Sphere_Origin;
-      A : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Transformed_Ray.Direction);
-      B : constant Value := 2.0 * Dot_Product (Transformed_Ray.Direction, Sphere_Ray_Vector);
+      Sphere_Ray_Vector : constant Vector := Local_Ray.Origin - Sphere_Origin;
+      A : constant Value := 2.0 * Dot_Product (Local_Ray.Direction, Local_Ray.Direction);
+      B : constant Value := 2.0 * Dot_Product (Local_Ray.Direction, Sphere_Ray_Vector);
       C : constant Value := Dot_Product (Sphere_Ray_Vector, Sphere_Ray_Vector) - 1.0;
       Discriminant : constant Value := (B * B) - (2.0 * A * C);
+      Result : Intersection_Vectors.Vector;
    begin
       if Discriminant >= 0.0 then
          Result.Append ((T_Value => (-B - Math.Sqrt (Discriminant)) / A, Object => Self'Access));
@@ -110,22 +120,22 @@ package body Radatracer.Objects is
       end if;
 
       return Result;
-   end Intersect;
+   end Local_Intersect;
 
-   overriding function Normal_At (Self : Plane; World_Point : Point) return Vector is
-      pragma Unreferenced (Self, World_Point);
+   overriding function Local_Normal_At (Self : Plane; Local_Point : Point) return Vector is
+      pragma Unreferenced (Self, Local_Point);
    begin
       return Make_Vector (0, 1, 0);
-   end Normal_At;
+   end Local_Normal_At;
 
-   overriding function Intersect (Self : aliased in out Plane; R : Ray) return Intersection_Vectors.Vector is
-      pragma Unreferenced (Self, R);
+   overriding function Local_Intersect (Self : aliased in out Plane; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector is
+      pragma Unreferenced (Self, Local_Ray);
 
       Result : Intersection_Vectors.Vector;
    begin
       return Result;
       --  Not implemented yet
-   end Intersect;
+   end Local_Intersect;
 
    function Is_Shadowed (W : World; P : Point) return Boolean is
       use type Intersection_Vectors.Cursor;

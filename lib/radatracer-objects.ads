@@ -36,10 +36,14 @@ package Radatracer.Objects is
 
    procedure Set_Transformation (Self : in out Object; Transformation : Radatracer.Matrices.Matrix4);
 
-   function Normal_At (Self : Object; World_Point : Point) return Vector is abstract
-      with Post'Class => Magnitude (Normal_At'Result) = 1.0;
+   function Normal_At (Self : Object'Class; World_Point : Point) return Vector
+      with Post => Magnitude (Normal_At'Result) = 1.0;
 
-   function Intersect (Self : aliased in out Object; R : Ray) return Intersection_Vectors.Vector is abstract;
+   function Local_Normal_At (Self : Object; Local_Point : Point) return Vector is abstract;
+
+   function Intersect (Self : in out Object'Class; Ray : Radatracer.Ray) return Intersection_Vectors.Vector;
+
+   function Local_Intersect (Self : aliased in out Object; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector is abstract;
 
    function Reflect (V, Normal : Vector) return Vector;
 
@@ -59,15 +63,15 @@ package Radatracer.Objects is
 
    type Sphere is new Object with null record;
 
-   overriding function Normal_At (Self : Sphere; World_Point : Point) return Vector;
+   overriding function Local_Normal_At (Self : Sphere; Local_Point : Point) return Vector;
 
-   overriding function Intersect (Self : aliased in out Sphere; R : Ray) return Intersection_Vectors.Vector;
+   overriding function Local_Intersect (Self : aliased in out Sphere; Local_Ray : Ray) return Intersection_Vectors.Vector;
 
    type Plane is new Object with null record;
 
-   overriding function Normal_At (Self : Plane; World_Point : Point) return Vector;
+   overriding function Local_Normal_At (Self : Plane; Local_Point : Point) return Vector;
 
-   overriding function Intersect (Self : aliased in out Plane; R : Ray) return Intersection_Vectors.Vector;
+   overriding function Local_Intersect (Self : aliased in out Plane; Local_Ray : Ray) return Intersection_Vectors.Vector;
 
    package Object_Vectors is new Ada.Containers.Vectors (
       Index_Type => Natural,
