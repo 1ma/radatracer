@@ -7,6 +7,7 @@ with AUnit.Test_Suites;
 with Radatracer.Canvas.IO.Tests;
 with Radatracer.Matrices.Tests;
 with Radatracer.Objects.Tests;
+with Radatracer.Objects2.Tests;
 with Radatracer.Tests;
 
 procedure AUnit_Harness is
@@ -16,6 +17,7 @@ procedure AUnit_Harness is
       Canvas_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Canvas.IO.Tests.Test;
       Matrices_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Matrices.Tests.Test;
       Objects_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Objects.Tests.Test;
+      Objects2_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Objects2.Tests.Test;
 
       Suite : constant AUnit.Test_Suites.Access_Test_Suite := new AUnit.Test_Suites.Test_Suite;
    begin
@@ -23,6 +25,7 @@ procedure AUnit_Harness is
       Suite.Add_Test (Canvas_Tests);
       Suite.Add_Test (Matrices_Tests);
       Suite.Add_Test (Objects_Tests);
+      Suite.Add_Test (Objects2_Tests);
 
       return Suite;
    end Radatracer_Test_Suite;
