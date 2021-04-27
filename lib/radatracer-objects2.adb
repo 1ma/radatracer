@@ -136,7 +136,7 @@ package body Radatracer.Objects2 is
       Intersections : constant Intersection_Vectors.Vector := Intersect (W, Shadow_Ray);
       Hit : constant Intersection_Vectors.Cursor := Radatracer.Objects2.Hit (Intersections);
    begin
-      return Hit = Intersection_Vectors.No_Element and then Intersections (Hit).T_Value < Distance;
+      return Hit /= Intersection_Vectors.No_Element and then Intersections (Hit).T_Value < Distance;
    end Is_Shadowed;
 
    function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector is
