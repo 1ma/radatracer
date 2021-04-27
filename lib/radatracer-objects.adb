@@ -129,12 +129,15 @@ package body Radatracer.Objects is
    end Local_Normal_At;
 
    overriding function Local_Intersect (Self : aliased in out Plane; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector is
-      pragma Unreferenced (Self, Local_Ray);
-
       Result : Intersection_Vectors.Vector;
    begin
+      if Local_Ray.Direction.Y = 0.0 then
+         return Result;
+      end if;
+
+      Result.Append ((T_Value => -Local_Ray.Origin.Y / Local_Ray.Direction.Y, Object => Self'Access));
+
       return Result;
-      --  Not implemented yet
    end Local_Intersect;
 
    function Is_Shadowed (W : World; P : Point) return Boolean is

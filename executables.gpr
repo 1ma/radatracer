@@ -11,6 +11,7 @@ project Executables is
       "aunit_harness.adb",
       "clock.adb",
       "phong.adb",
+      "planar_scene.adb",
       "scene.adb",
       "silhouette.adb",
       "simple_ballistics.adb",
