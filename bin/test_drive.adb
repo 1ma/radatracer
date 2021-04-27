@@ -31,6 +31,8 @@ procedure Test_Drive is
    V, V2 : Intersection_Vectors.Vector;
    C : Intersection_Vectors.Cursor;
    R : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
+
+   VO : Object_Vectors.Vector;
 begin
    S.Set_Transformation (Scaling (10.0, 1.0, 10.0));
    --  Check that Sphere inherits the Set_Transformation method
@@ -53,6 +55,8 @@ begin
       --  Dispatching calls to Normal_At method
    end loop;
 
+   New_Line;
+
    V2 := S.Intersect (R);
    --  Call Intersect on a Sphere allocated on the heap
    for Cursor in V2.Iterate loop
@@ -60,10 +64,22 @@ begin
    end loop;
    --  Check Sphere.Intersect(R) with a scaled Sphere
 
+   New_Line;
+
    V2 := S2.Intersect (R);
    --  Call Intersect on a Sphere allocated on the stack
    for Cursor in V2.Iterate loop
       Put_Line (V2 (Cursor).T_Value'Image);
    end loop;
    --  Check Sphere.Intersect(R) with the default Sphere
+
+   VO.Append (new Sphere);
+   VO.Append (new Plane);
+   VO.Append (S);
+
+   New_Line;
+
+   for Cursor in VO.Iterate loop
+      Put_Line (VO (Cursor).all.Normal_At (P).Y'Image);
+   end loop;
 end Test_Drive;

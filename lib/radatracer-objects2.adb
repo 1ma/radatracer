@@ -27,6 +27,56 @@ package body Radatracer.Objects2 is
       return Intersection_Vectors.No_Element;
    end Hit;
 
+   function Reflect (V, Normal : Vector) return Vector is
+   begin
+      return V - Normal * 2.0 * Dot_Product (V, Normal);
+   end Reflect;
+
+   function Lightning (
+      Material : Radatracer.Objects2.Material;
+      Light : Point_Light;
+      Position : Point;
+      Eye_Vector : Vector;
+      Normal_Vector : Vector;
+      In_Shadow : Boolean := False
+   ) return Color is
+      Effective_Color : constant Color := Material.Color * Light.Intensity;
+      Ambient : constant Color := Effective_Color * Material.Ambient;
+   begin
+      if In_Shadow then
+         return Ambient;
+      end if;
+
+      declare
+         Light_Vector : constant Vector := Normalize (Light.Position - Position);
+         Light_Dot_Normal : constant Value := Dot_Product (Light_Vector, Normal_Vector);
+      begin
+         if Light_Dot_Normal < 0.0 then
+            return Ambient;
+         end if;
+
+         declare
+            Reflect_Vector : constant Vector := Reflect (-Light_Vector, Normal_Vector);
+            Reflect_Dot_Eye : constant Value := Dot_Product (Reflect_Vector, Eye_Vector);
+
+            Diffuse : constant Color := Effective_Color * Material.Diffuse * Light_Dot_Normal;
+         begin
+            if Reflect_Dot_Eye <= 0.0 then
+               return Ambient + Diffuse;
+            end if;
+
+            declare
+               package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
+               use Math;
+
+               Specular : constant Color := Light.Intensity * Material.Specular * (Reflect_Dot_Eye ** Material.Shininess);
+            begin
+               return Ambient + Diffuse + Specular;
+            end;
+         end;
+      end;
+   end Lightning;
+
    overriding function Normal_At (Self : Sphere; World_Point : Point) return Vector is
       use type Radatracer.Matrices.Matrix4;
 
