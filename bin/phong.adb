@@ -1,6 +1,6 @@
 with Ada.Text_IO;
 with Radatracer.Canvas.IO;
-with Radatracer.Objects;
+with Radatracer.Objects.Spheres;
 
 --  Capstone project for Chapter 6
 
@@ -24,7 +24,7 @@ procedure Phong is
       Intensity => Radatracer.Make_Color (1.0, 1.0, 1.0)
    );
 
-   Sphere : Radatracer.Objects.Sphere := (
+   Sphere : Radatracer.Objects.Spheres.Sphere := (
       Inverted_Transformation => <>,
       Material => (Color => Radatracer.Make_Color (1.0, 0.0, 0.0), others => <>)
    );

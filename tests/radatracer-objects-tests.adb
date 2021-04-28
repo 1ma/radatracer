@@ -1,8 +1,11 @@
 with Ada.Numerics;
 with AUnit.Assertions;
 with Radatracer.Matrices;
+with Radatracer.Objects.Spheres;
 
 package body Radatracer.Objects.Tests is
+   use Radatracer.Objects.Spheres;
+
    function Default_World return World;
    function Default_World return World is
       Sphere1 : constant Object_Access := new Sphere'(

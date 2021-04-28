@@ -1,6 +1,7 @@
 with Ada.Text_IO;
 with Radatracer.Matrices;
-with Radatracer.Objects;
+with Radatracer.Objects.Planes;
+with Radatracer.Objects.Spheres;
 
 --  Playground executable to try out parts of the library
 
@@ -9,6 +10,8 @@ procedure Test_Drive is
    use Radatracer;
    use Radatracer.Matrices;
    use Radatracer.Objects;
+   use Radatracer.Objects.Planes;
+   use Radatracer.Objects.Spheres;
 
    procedure Print_Tuple (T : Tuple);
    procedure Print_Tuple (T : Tuple) is

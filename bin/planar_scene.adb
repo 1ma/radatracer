@@ -2,7 +2,8 @@ with Ada.Numerics;
 with Ada.Text_IO;
 with Radatracer.Canvas.IO;
 with Radatracer.Matrices;
-with Radatracer.Objects;
+with Radatracer.Objects.Planes;
+with Radatracer.Objects.Spheres;
 
 --  Capstone project for Chapter 9
 
@@ -11,7 +12,7 @@ procedure Planar_Scene is
    use type Radatracer.Objects.Object_Vectors.Vector;
    use type Radatracer.Value;
 
-   Floor : constant Radatracer.Objects.Object_Access := new Radatracer.Objects.Plane'(
+   Floor : constant Radatracer.Objects.Object_Access := new Radatracer.Objects.Planes.Plane'(
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Rotation_Z (Ada.Numerics.Pi / 8.0)
       ),
@@ -22,7 +23,7 @@ procedure Planar_Scene is
       )
    );
 
-   Middle_Sphere : constant Radatracer.Objects.Object_Access := new Radatracer.Objects.Sphere'(
+   Middle_Sphere : constant Radatracer.Objects.Object_Access := new Radatracer.Objects.Spheres.Sphere'(
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Translation (-0.5, 1.0, 0.5)
       ),
@@ -34,7 +35,7 @@ procedure Planar_Scene is
       )
    );
 
-   Right_Sphere : constant Radatracer.Objects.Object_Access := new Radatracer.Objects.Sphere'(
+   Right_Sphere : constant Radatracer.Objects.Object_Access := new Radatracer.Objects.Spheres.Sphere'(
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Translation (1.5, 0.5, -0.5) *
          Radatracer.Matrices.Scaling (0.5, 0.5, 0.5)
@@ -47,7 +48,7 @@ procedure Planar_Scene is
       )
    );
 
-   Left_Sphere : constant Radatracer.Objects.Object_Access := new Radatracer.Objects.Sphere'(
+   Left_Sphere : constant Radatracer.Objects.Object_Access := new Radatracer.Objects.Spheres.Sphere'(
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Translation (-1.5, 0.33, -0.75) *
          Radatracer.Matrices.Scaling (0.33, 0.33, 0.33)

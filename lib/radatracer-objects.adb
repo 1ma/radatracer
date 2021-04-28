@@ -95,51 +95,6 @@ package body Radatracer.Objects is
       end;
    end Lightning;
 
-   overriding function Local_Normal_At (Self : Sphere; Local_Point : Point) return Vector is
-      pragma Unreferenced (Self);
-
-      Local_Sphere_Origin : constant Point := Make_Point (0, 0, 0);
-   begin
-      return Local_Point - Local_Sphere_Origin;
-   end Local_Normal_At;
-
-   overriding function Local_Intersect (Self : aliased in out Sphere; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector is
-      package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
-
-      Sphere_Origin : constant Point := Make_Point (0, 0, 0);
-      Sphere_Ray_Vector : constant Vector := Local_Ray.Origin - Sphere_Origin;
-      A : constant Value := 2.0 * Dot_Product (Local_Ray.Direction, Local_Ray.Direction);
-      B : constant Value := 2.0 * Dot_Product (Local_Ray.Direction, Sphere_Ray_Vector);
-      C : constant Value := Dot_Product (Sphere_Ray_Vector, Sphere_Ray_Vector) - 1.0;
-      Discriminant : constant Value := (B * B) - (2.0 * A * C);
-      Result : Intersection_Vectors.Vector;
-   begin
-      if Discriminant >= 0.0 then
-         Result.Append ((T_Value => (-B - Math.Sqrt (Discriminant)) / A, Object => Self'Access));
-         Result.Append ((T_Value => (-B + Math.Sqrt (Discriminant)) / A, Object => Self'Access));
-      end if;
-
-      return Result;
-   end Local_Intersect;
-
-   overriding function Local_Normal_At (Self : Plane; Local_Point : Point) return Vector is
-      pragma Unreferenced (Self, Local_Point);
-   begin
-      return Make_Vector (0, 1, 0);
-   end Local_Normal_At;
-
-   overriding function Local_Intersect (Self : aliased in out Plane; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector is
-      Result : Intersection_Vectors.Vector;
-   begin
-      if Local_Ray.Direction.Y = 0.0 then
-         return Result;
-      end if;
-
-      Result.Append ((T_Value => -Local_Ray.Origin.Y / Local_Ray.Direction.Y, Object => Self'Access));
-
-      return Result;
-   end Local_Intersect;
-
    function Is_Shadowed (W : World; P : Point) return Boolean is
       use type Intersection_Vectors.Cursor;
 

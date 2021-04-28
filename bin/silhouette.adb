@@ -1,7 +1,7 @@
 with Ada.Text_IO;
 with Radatracer.Canvas.IO;
 with Radatracer.Matrices;
-with Radatracer.Objects;
+with Radatracer.Objects.Spheres;
 
 --  Capstone project for Chapter 5
 
@@ -24,7 +24,7 @@ procedure Silhouette is
    World_X, World_Y : Radatracer.Value;
 
    Ray : Radatracer.Ray;
-   Sphere : Radatracer.Objects.Sphere := (
+   Sphere : Radatracer.Objects.Spheres.Sphere := (
       Inverted_Transformation => Radatracer.Matrices.Invert (
          Radatracer.Matrices.Shearing (1.0, 0.0, 0.0, 0.0, 0.0, 0.0) * Radatracer.Matrices.Scaling (0.5, 1.0, 1.0)
       ),

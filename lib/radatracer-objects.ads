@@ -61,18 +61,6 @@ package Radatracer.Objects is
       In_Shadow : Boolean := False
    ) return Color;
 
-   type Sphere is new Object with null record;
-
-   overriding function Local_Normal_At (Self : Sphere; Local_Point : Point) return Vector;
-
-   overriding function Local_Intersect (Self : aliased in out Sphere; Local_Ray : Ray) return Intersection_Vectors.Vector;
-
-   type Plane is new Object with null record;
-
-   overriding function Local_Normal_At (Self : Plane; Local_Point : Point) return Vector;
-
-   overriding function Local_Intersect (Self : aliased in out Plane; Local_Ray : Ray) return Intersection_Vectors.Vector;
-
    package Object_Vectors is new Ada.Containers.Vectors (
       Index_Type => Natural,
       Element_Type => Object_Access
