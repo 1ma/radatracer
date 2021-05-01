@@ -36,6 +36,12 @@ package Radatracer is
 
    subtype Color is Vector;
 
+   Black : constant Color := (0.0, 0.0, 0.0, 0.0);
+   Red   : constant Color := (1.0, 0.0, 0.0, 0.0);
+   Green : constant Color := (0.0, 1.0, 0.0, 0.0);
+   Blue  : constant Color := (0.0, 0.0, 1.0, 0.0);
+   White : constant Color := (1.0, 1.0, 1.0, 0.0);
+
    function Make_Point (X, Y, Z : Integer) return Point;
    function Make_Point (X, Y, Z : Value) return Point;
 

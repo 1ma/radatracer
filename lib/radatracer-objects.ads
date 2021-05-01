@@ -4,6 +4,13 @@ with Radatracer.Canvas;
 with Radatracer.Matrices;
 
 package Radatracer.Objects is
+   type Pattern is record
+      A, B : Color;
+   end record;
+
+   function Stripe_Pattern (A, B : Color) return Pattern;
+   function Stripe_At (Pattern : Radatracer.Objects.Pattern; Point : Radatracer.Point) return Color;
+
    type Material is record
       Color : Radatracer.Color := Make_Color (1.0, 1.0, 1.0);
       Ambient : Value := 0.1;

@@ -1,6 +1,20 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 
 package body Radatracer.Objects is
+   function Stripe_Pattern (A, B : Color) return Pattern is
+   begin
+      return (A, B);
+   end Stripe_Pattern;
+
+   function Stripe_At (Pattern : Radatracer.Objects.Pattern; Point : Radatracer.Point) return Color is
+   begin
+      if Integer (Value'Floor (Point.X)) mod 2 = 0 then
+         return Pattern.A;
+      end if;
+
+      return Pattern.B;
+   end Stripe_At;
+
    function "<" (L, R : Intersection) return Boolean is
    begin
       return L.T_Value < R.T_Value;
