@@ -391,7 +391,7 @@ package body Radatracer.Objects.Tests is
       Register_Routine (T, Test_Color_At'Access, "Color at tests");
       Register_Routine (T, Test_Camera'Access, "Camera tests");
       Register_Routine (T, Test_Shadows'Access, "Shadow tests");
-      Register_Routine (T, Test_Fake_Object'Access, "Fake Object that test Chapter 9 refactor");
+      Register_Routine (T, Test_Fake_Object'Access, "Fake Object that tests Chapter 9 refactor");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
