@@ -6,6 +6,27 @@ with Radatracer.Objects.Spheres;
 package body Radatracer.Objects.Tests is
    use Radatracer.Objects.Spheres;
 
+   type Test_Object is new Object with record
+      Saved_Ray : Ray;
+   end record;
+
+   overriding function Local_Normal_At (Self : Test_Object; Local_Point : Point) return Vector;
+   overriding function Local_Intersect (Self : aliased in out Test_Object; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector;
+
+   overriding function Local_Normal_At (Self : Test_Object; Local_Point : Point) return Vector is
+      pragma Unreferenced (Self);
+   begin
+      return Make_Vector (Local_Point.X, Local_Point.Y, Local_Point.Z);
+   end Local_Normal_At;
+
+   overriding function Local_Intersect (Self : aliased in out Test_Object; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector is
+      Result : Intersection_Vectors.Vector;
+   begin
+      Self.Saved_Ray := Local_Ray;
+
+      return Result;
+   end Local_Intersect;
+
    function Default_World return World;
    function Default_World return World is
       Sphere1 : constant Object_Access := new Sphere'(
@@ -379,6 +400,46 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (not Is_Shadowed (W, P4), "There is no shadow when the object is behind the point");
    end Test_Shadows;
 
+   procedure Test_Fake_Object (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Fake_Object (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+      use type Radatracer.Matrices.Matrix4;
+
+      S : Test_Object;
+      R : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
+      XS : Intersection_Vectors.Vector;
+   begin
+      AUnit.Assertions.Assert (XS.Is_Empty, "Useless test so that GNAT doesn't complain that XS is never read");
+
+      AUnit.Assertions.Assert (S.Inverted_Transformation = Radatracer.Matrices.Identity_Matrix4, "The default transformation of a derived Object");
+
+      S.Set_Transformation (Radatracer.Matrices.Scaling (2.0, 2.0, 2.0));
+      XS := S.Intersect (R);
+      AUnit.Assertions.Assert (
+         S.Saved_Ray = (Origin => Make_Point (0.0, 0.0, -2.5), Direction => Make_Vector (0.0, 0.0, 0.5)),
+         "Intersecting a scaled object with a ray"
+      );
+
+      S.Set_Transformation (Radatracer.Matrices.Translation (5.0, 0.0, 0.0));
+      XS := S.Intersect (R);
+      AUnit.Assertions.Assert (
+         S.Saved_Ray = (Origin => Make_Point (-5.0, 0.0, -5.0), Direction => R.Direction),
+         "Intersecting a translated object with a ray"
+      );
+
+      S.Set_Transformation (Radatracer.Matrices.Translation (0.0, 1.0, 0.0));
+      AUnit.Assertions.Assert (
+         S.Normal_At (Make_Point (0.0, 1.70711, -0.70711)) = Make_Vector (0.0, 0.70711, -0.70711),
+         "Computing the normal on a translated object"
+      );
+
+      S.Set_Transformation (Radatracer.Matrices.Scaling (1.0, 0.5, 1.0) * Radatracer.Matrices.Rotation_Z (Ada.Numerics.Pi / 5.0));
+      AUnit.Assertions.Assert (
+         S.Normal_At (Make_Point (0.0, 0.70711, -0.70711)) = Make_Vector (0.0, 0.97014, -0.24254),
+         "Computing the normal on a transformed object"
+      );
+   end Test_Fake_Object;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -393,6 +454,7 @@ package body Radatracer.Objects.Tests is
       Register_Routine (T, Test_Color_At'Access, "Color at tests");
       Register_Routine (T, Test_Camera'Access, "Camera tests");
       Register_Routine (T, Test_Shadows'Access, "Shadow tests");
+      Register_Routine (T, Test_Fake_Object'Access, "Fake Object that test Chapter 9 refactor");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
