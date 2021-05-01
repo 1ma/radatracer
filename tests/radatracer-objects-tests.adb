@@ -32,6 +32,7 @@ package body Radatracer.Objects.Tests is
       Sphere1 : constant Object_Access := new Sphere'(
          Inverted_Transformation => <>,
          Material => (
+            Has_Pattern => False,
             Color => Make_Color (0.8, 1.0, 0.6),
             Ambient => <>,
             Diffuse => 0.7,

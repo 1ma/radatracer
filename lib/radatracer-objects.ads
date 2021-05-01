@@ -11,12 +11,19 @@ package Radatracer.Objects is
    function Stripe_Pattern (A, B : Color) return Pattern;
    function Stripe_At (Pattern : Radatracer.Objects.Pattern; Point : Radatracer.Point) return Color;
 
-   type Material is record
+   type Material (Has_Pattern : Boolean := False) is record
       Color : Radatracer.Color := Make_Color (1.0, 1.0, 1.0);
       Ambient : Value := 0.1;
       Diffuse : Value := 0.9;
       Specular : Value := 0.9;
       Shininess : Value := 200.0;
+
+      case Has_Pattern is
+         when True =>
+            Pattern : Radatracer.Objects.Pattern;
+         when False =>
+            null;
+      end case;
    end record;
 
    type Object is abstract tagged record
