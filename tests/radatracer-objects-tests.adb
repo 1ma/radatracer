@@ -107,27 +107,36 @@ package body Radatracer.Objects.Tests is
 
       Eye_Vector_1 : constant Vector := Make_Vector (0, 0, -1);
       Normal_Vector_1 : constant Vector := Make_Vector (0, 0, -1);
-      Light_1 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, -10));
+      Light_1 : constant Point_Light := (Intensity => White, Position => Make_Point (0, 0, -10));
 
       Eye_Vector_2 : constant Vector := Make_Vector (0.0, 0.70711, -0.70711);
       Normal_Vector_2 : constant Vector := Make_Vector (0, 0, -1);
-      Light_2 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, -10));
+      Light_2 : constant Point_Light := (Intensity => White, Position => Make_Point (0, 0, -10));
 
       Eye_Vector_3 : constant Vector := Make_Vector (0, 0, -1);
       Normal_Vector_3 : constant Vector := Make_Vector (0, 0, -1);
-      Light_3 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 10, -10));
+      Light_3 : constant Point_Light := (Intensity => White, Position => Make_Point (0, 10, -10));
 
       Eye_Vector_4 : constant Vector := Make_Vector (0.0, -0.70711, -0.70711);
       Normal_Vector_4 : constant Vector := Make_Vector (0, 0, -1);
-      Light_4 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 10, -10));
+      Light_4 : constant Point_Light := (Intensity => White, Position => Make_Point (0, 10, -10));
 
       Eye_Vector_5 : constant Vector := Make_Vector (0, 0, -1);
       Normal_Vector_5 : constant Vector := Make_Vector (0, 0, -1);
-      Light_5 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, 10));
+      Light_5 : constant Point_Light := (Intensity => White, Position => Make_Point (0, 0, 10));
 
       Eye_Vector_6 : constant Vector := Make_Vector (0, 0, -1);
       Normal_Vector_6 : constant Vector := Make_Vector (0, 0, -1);
-      Light_6 : constant Point_Light := (Intensity => Make_Color (1.0, 1.0, 1.0), Position => Make_Point (0, 0, -10));
+      Light_6 : constant Point_Light := (Intensity => White, Position => Make_Point (0, 0, -10));
+
+      Material_2 : constant Radatracer.Objects.Material := (
+         Has_Pattern => True,
+         Pattern => Stripe_Pattern (White, Black),
+         Ambient => 1.0,
+         Diffuse => 0.0,
+         Specular => 0.0,
+         others => <>
+      );
    begin
       AUnit.Assertions.Assert (
          Lightning (Material, Light_1, Position, Eye_Vector_1, Normal_Vector_1) = Make_Color (1.9, 1.9, 1.9),
@@ -135,7 +144,7 @@ package body Radatracer.Objects.Tests is
       );
 
       AUnit.Assertions.Assert (
-         Lightning (Material, Light_2, Position, Eye_Vector_2, Normal_Vector_2) = Make_Color (1.0, 1.0, 1.0),
+         Lightning (Material, Light_2, Position, Eye_Vector_2, Normal_Vector_2) = White,
          "Lightning with the eye between light and surface, eye offset 45º"
       );
 
@@ -157,6 +166,16 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (
          Lightning (Material, Light_6, Position, Eye_Vector_6, Normal_Vector_6, True) = Make_Color (0.1, 0.1, 0.1),
          "Lightning with the surface in shadow"
+      );
+
+      AUnit.Assertions.Assert (
+         Lightning (Material_2, Light_6, Make_Point (0.9, 0.0, 0.0), Eye_Vector_6, Normal_Vector_6, True) = White,
+         "Lightning with a pattern applied - part 1"
+      );
+
+      AUnit.Assertions.Assert (
+         Lightning (Material_2, Light_6, Make_Point (1.1, 0.0, 0.0), Eye_Vector_6, Normal_Vector_6, True) = Black,
+         "Lightning with a pattern applied - part 2"
       );
    end Test_Lightning;
 
@@ -241,7 +260,7 @@ package body Radatracer.Objects.Tests is
       );
 
       W2 : constant World := (
-         Light => (Position => Make_Point (0, 0, -10), Intensity => Make_Color (1.0, 1.0, 1.0)),
+         Light => (Position => Make_Point (0, 0, -10), Intensity => White),
          Objects => S1 & S2
       );
       R3 : constant Ray := (Origin => Make_Point (0, 0, 5), Direction => Make_Vector (0, 0, 1));
@@ -250,7 +269,7 @@ package body Radatracer.Objects.Tests is
    begin
       AUnit.Assertions.Assert (Shade_Hit (W, PII1) = Make_Color (0.38066, 0.47583, 0.2855), "Shading an intersection");
 
-      W.Light := (Position => Make_Point (0.0, 0.25, 0.0), Intensity => Make_Color (1.0, 1.0, 1.0));
+      W.Light := (Position => Make_Point (0.0, 0.25, 0.0), Intensity => White);
 
       AUnit.Assertions.Assert (Shade_Hit (W, PII2) = Make_Color (0.90498, 0.90498, 0.90498), "Shading an intersection from the inside");
 

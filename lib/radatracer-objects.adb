@@ -72,7 +72,11 @@ package body Radatracer.Objects is
       Normal_Vector : Vector;
       In_Shadow : Boolean := False
    ) return Color is
-      Effective_Color : constant Color := Material.Color * Light.Intensity;
+      Base_Color : constant Color := (if Material.Has_Pattern
+         then Stripe_At (Material.Pattern, Position)
+         else Material.Color
+      );
+      Effective_Color : constant Color := Base_Color * Light.Intensity;
       Ambient : constant Color := Effective_Color * Material.Ambient;
    begin
       if In_Shadow then
