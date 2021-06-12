@@ -9,9 +9,9 @@
 </div>
 
 
-## Project Completion
+## Project Goals and Current Status
 
-### Core
+### Core Functionality (Book Chapters)
 
 - [X] Chapter 1: Tuples, Points and Vectors
 - [X] Chapter 2: Canvas and PPM serialization
@@ -36,6 +36,7 @@
 - [ ] Render the cover of the book
 - [ ] [Area Lights, aka Soft Shadows](http://www.raytracerchallenge.com/bonus/area-light.html)
 - [ ] [Texture Mapping](http://www.raytracerchallenge.com/bonus/texture-mapping.html)
+- [ ] Final Boss: Render [bust of Date Masamune](https://sketchfab.com/3d-models/date-masamune-73ae98ad60874ad49cb1e2decbab6393)
 
 ### Optimizations
 
@@ -44,9 +45,9 @@
 - [ ] [Bounding Boxes and Hierarchies](http://www.raytracerchallenge.com/bonus/bounding-boxes.html)
 - [ ] [Concurrent Rendering with Tasking](https://gitlab.com/1ma/radatracer/-/issues/16)
 
-### Ada Goals
+### Ada-specific Goals
 
-- [X] Reach a comfy development flow
+- [X] Reach a comfy development flow in Ada
 - [X] Debug with `gdb`
 - [ ] Profile with `gprof`
 - [X] TDD with [AUnit](https://www.adacore.com/documentation/aunit-cookbook)
