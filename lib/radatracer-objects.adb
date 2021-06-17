@@ -3,7 +3,7 @@ with Ada.Numerics.Generic_Elementary_Functions;
 package body Radatracer.Objects is
    function Stripe_Pattern (A, B : Color) return Pattern is
    begin
-      return (A, B);
+      return (A => A, B => B, others => <>);
    end Stripe_Pattern;
 
    function Stripe_At (Pattern : Radatracer.Objects.Pattern; Point : Radatracer.Point) return Color is
@@ -43,6 +43,19 @@ package body Radatracer.Objects is
       return Self.Local_Intersect (Local_Ray);
    end Intersect;
 
+   function Stripe_At_Object (
+      Pattern : Radatracer.Objects.Pattern;
+      Object : Radatracer.Objects.Object'Class;
+      World_Point : Point
+   ) return Color is
+      use type Radatracer.Matrices.Matrix4;
+
+      Object_Point : constant Point := Object.Inverted_Transformation * World_Point;
+      Pattern_Point : constant Point := Pattern.Inverted_Transformation * Object_Point;
+   begin
+      return Stripe_At (Pattern, Pattern_Point);
+   end Stripe_At_Object;
+
    function Hit (Intersections : Intersection_Vectors.Vector) return Intersection_Vectors.Cursor is
       package Intersection_Vector_Sorting is new Intersection_Vectors.Generic_Sorting;
 
@@ -66,6 +79,7 @@ package body Radatracer.Objects is
 
    function Lightning (
       Material : Radatracer.Objects.Material;
+      Object : Radatracer.Objects.Object'Class;
       Light : Point_Light;
       Position : Point;
       Eye_Vector : Vector;
@@ -73,7 +87,7 @@ package body Radatracer.Objects is
       In_Shadow : Boolean := False
    ) return Color is
       Base_Color : constant Color := (if Material.Has_Pattern
-         then Stripe_At (Material.Pattern, Position)
+         then Stripe_At_Object (Material.Pattern, Object, Position)
          else Material.Color
       );
       Effective_Color : constant Color := Base_Color * Light.Intensity;
@@ -165,6 +179,7 @@ package body Radatracer.Objects is
    begin
       return Lightning (
          Material => I.Object.Material,
+         Object => I.Object.all,
          Light => W.Light,
          Position => I.Over_Point,
          Eye_Vector => I.Eye_Vector,

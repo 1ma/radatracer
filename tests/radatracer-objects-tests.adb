@@ -102,6 +102,8 @@ package body Radatracer.Objects.Tests is
    procedure Test_Lightning (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
 
+      Object : Test_Object;
+
       Material : constant Radatracer.Objects.Material := (others => <>);
       Position : constant Point := Make_Point (0, 0, 0);
 
@@ -139,42 +141,42 @@ package body Radatracer.Objects.Tests is
       );
    begin
       AUnit.Assertions.Assert (
-         Lightning (Material, Light_1, Position, Eye_Vector_1, Normal_Vector_1) = Make_Color (1.9, 1.9, 1.9),
+         Lightning (Material, Object, Light_1, Position, Eye_Vector_1, Normal_Vector_1) = Make_Color (1.9, 1.9, 1.9),
          "Lightning with the eye between the light and the surface"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (Material, Light_2, Position, Eye_Vector_2, Normal_Vector_2) = White,
+         Lightning (Material, Object, Light_2, Position, Eye_Vector_2, Normal_Vector_2) = White,
          "Lightning with the eye between light and surface, eye offset 45º"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (Material, Light_3, Position, Eye_Vector_3, Normal_Vector_3) = Make_Color (0.7364, 0.7364, 0.7364),
+         Lightning (Material, Object, Light_3, Position, Eye_Vector_3, Normal_Vector_3) = Make_Color (0.7364, 0.7364, 0.7364),
          "Lightning with the eye opposite surface, light offset 45º"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (Material, Light_4, Position, Eye_Vector_4, Normal_Vector_4) = Make_Color (1.63721, 1.63721, 1.63721),
+         Lightning (Material, Object, Light_4, Position, Eye_Vector_4, Normal_Vector_4) = Make_Color (1.63721, 1.63721, 1.63721),
          "Lightning with the eye in the path of the reflection vector"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (Material, Light_5, Position, Eye_Vector_5, Normal_Vector_5) = Make_Color (0.1, 0.1, 0.1),
+         Lightning (Material, Object, Light_5, Position, Eye_Vector_5, Normal_Vector_5) = Make_Color (0.1, 0.1, 0.1),
          "Lightning with the eye in the path of the reflection vector"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (Material, Light_6, Position, Eye_Vector_6, Normal_Vector_6, True) = Make_Color (0.1, 0.1, 0.1),
+         Lightning (Material, Object, Light_6, Position, Eye_Vector_6, Normal_Vector_6, True) = Make_Color (0.1, 0.1, 0.1),
          "Lightning with the surface in shadow"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (Material_2, Light_6, Make_Point (0.9, 0.0, 0.0), Eye_Vector_6, Normal_Vector_6, True) = White,
+         Lightning (Material_2, Object, Light_6, Make_Point (0.9, 0.0, 0.0), Eye_Vector_6, Normal_Vector_6, True) = White,
          "Lightning with a pattern applied - part 1"
       );
 
       AUnit.Assertions.Assert (
-         Lightning (Material_2, Light_6, Make_Point (1.1, 0.0, 0.0), Eye_Vector_6, Normal_Vector_6, True) = Black,
+         Lightning (Material_2, Object, Light_6, Make_Point (1.1, 0.0, 0.0), Eye_Vector_6, Normal_Vector_6, True) = Black,
          "Lightning with a pattern applied - part 2"
       );
    end Test_Lightning;

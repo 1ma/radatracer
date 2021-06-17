@@ -60,7 +60,7 @@ begin
             Eye_Vector := -Ray.Direction;
 
             Canvas (X, Y) := Radatracer.Canvas.To_Pixel (
-               Radatracer.Objects.Lightning (Intersections (Hit).Object.Material, Light, Point, Eye_Vector, Normal_Vector)
+               Radatracer.Objects.Lightning (Intersections (Hit).Object.Material, Intersections (Hit).Object.all, Light, Point, Eye_Vector, Normal_Vector)
             );
          end if;
       end loop;

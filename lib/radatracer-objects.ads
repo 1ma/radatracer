@@ -5,6 +5,7 @@ with Radatracer.Matrices;
 
 package Radatracer.Objects is
    type Pattern is record
+      Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
       A, B : Color;
    end record;
 
@@ -31,6 +32,12 @@ package Radatracer.Objects is
    end record;
 
    type Object_Access is access all Object'Class;
+
+   function Stripe_At_Object (
+      Pattern : Radatracer.Objects.Pattern;
+      Object : Radatracer.Objects.Object'Class;
+      World_Point : Point
+   ) return Color;
 
    type Intersection is record
       T_Value : Value;
@@ -67,6 +74,7 @@ package Radatracer.Objects is
 
    function Lightning (
       Material : Radatracer.Objects.Material;
+      Object : Radatracer.Objects.Object'Class;
       Light : Point_Light;
       Position : Point;
       Eye_Vector : Vector;

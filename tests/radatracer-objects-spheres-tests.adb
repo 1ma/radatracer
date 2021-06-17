@@ -62,11 +62,50 @@ package body Radatracer.Objects.Spheres.Tests is
       AUnit.Assertions.Assert (S.Normal_At (Make_Point (0.0, 0.70711, -0.70711)) = Make_Vector (0.0, 0.97014, -0.24254), "Sphere normal test 6");
    end Test_Sphere_Normals;
 
+   procedure Test_Object_Patterns (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Object_Patterns (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      Plain_Sphere : constant Sphere := (others => <>);
+      Transformed_Sphere : constant Sphere := (
+         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (2.0, 2.0, 2.0)),
+         others => <>
+      );
+
+      Plain_Pattern : constant Pattern := (A => Radatracer.White, B => Radatracer.Black, others => <>);
+      Transformed_Pattern_1 : constant Pattern := (
+         A => Radatracer.White,
+         B => Radatracer.Black,
+         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (2.0, 2.0, 2.0))
+      );
+      Transformed_Pattern_2 : constant Pattern := (
+         A => Radatracer.White,
+         B => Radatracer.Black,
+         Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Translation (0.5, 0.0, 0.0))
+      );
+   begin
+      AUnit.Assertions.Assert (
+         Stripe_At_Object (Plain_Pattern, Transformed_Sphere, Make_Point (1.5, 0.0, 0.0)) = Radatracer.White,
+         "Stripes with an object transformation"
+      );
+
+      AUnit.Assertions.Assert (
+         Stripe_At_Object (Transformed_Pattern_1, Plain_Sphere, Make_Point (1.5, 0.0, 0.0)) = Radatracer.White,
+         "Stripes with a pattern transformation"
+      );
+
+      AUnit.Assertions.Assert (
+         Stripe_At_Object (Transformed_Pattern_2, Plain_Sphere, Make_Point (2.5, 0.0, 0.0)) = Radatracer.White,
+         "Stripes with both an object and pattern transformation"
+      );
+   end Test_Object_Patterns;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Test_Ray_Sphere_Intersections'Access, "Ray-Sphere intersection tests");
       Register_Routine (T, Test_Sphere_Normals'Access, "Sphere normal vector tests");
+      Register_Routine (T, Test_Object_Patterns'Access, "Patterns on an Objet tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
