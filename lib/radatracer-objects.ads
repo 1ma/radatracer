@@ -4,6 +4,12 @@ with Radatracer.Canvas;
 with Radatracer.Matrices;
 
 package Radatracer.Objects is
+   type Pattern2 is abstract tagged record
+      Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
+   end record;
+
+   function Pattern_At (Self : Pattern2; Point : Radatracer.Point) return Color is abstract;
+
    type Pattern is record
       Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
       A, B : Color;
@@ -32,6 +38,12 @@ package Radatracer.Objects is
    end record;
 
    type Object_Access is access all Object'Class;
+
+   function Pattern_At_Object (
+      Pattern : Radatracer.Objects.Pattern2'Class;
+      Object : Radatracer.Objects.Object'Class;
+      World_Point : Point
+   ) return Color;
 
    function Stripe_At_Object (
       Pattern : Radatracer.Objects.Pattern;

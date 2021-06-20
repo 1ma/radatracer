@@ -43,6 +43,19 @@ package body Radatracer.Objects is
       return Self.Local_Intersect (Local_Ray);
    end Intersect;
 
+   function Pattern_At_Object (
+      Pattern : Radatracer.Objects.Pattern2'Class;
+      Object : Radatracer.Objects.Object'Class;
+      World_Point : Point
+   ) return Color is
+      use type Radatracer.Matrices.Matrix4;
+
+      Object_Point : constant Point := Object.Inverted_Transformation * World_Point;
+      Pattern_Point : constant Point := Pattern.Inverted_Transformation * Object_Point;
+   begin
+      return Pattern_At (Pattern, Pattern_Point);
+   end Pattern_At_Object;
+
    function Stripe_At_Object (
       Pattern : Radatracer.Objects.Pattern;
       Object : Radatracer.Objects.Object'Class;
