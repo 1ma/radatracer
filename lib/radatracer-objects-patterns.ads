@@ -1,5 +1,5 @@
 package Radatracer.Objects.Patterns is
-   type Stripe is new Pattern2 with record
+   type Stripe is new Pattern with record
        A, B : Color;
    end record;
 

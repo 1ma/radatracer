@@ -1,4 +1,5 @@
 with AUnit.Assertions;
+with Radatracer.Objects.Patterns;
 
 package body Radatracer.Objects.Spheres.Tests is
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class);
@@ -72,30 +73,30 @@ package body Radatracer.Objects.Spheres.Tests is
          others => <>
       );
 
-      Plain_Pattern : constant Pattern := (A => Radatracer.White, B => Radatracer.Black, others => <>);
-      Transformed_Pattern_1 : constant Pattern := (
+      Plain_Pattern : constant Radatracer.Objects.Patterns.Stripe := (A => Radatracer.White, B => Radatracer.Black, others => <>);
+      Transformed_Pattern_1 : constant Radatracer.Objects.Patterns.Stripe := (
          A => Radatracer.White,
          B => Radatracer.Black,
          Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (2.0, 2.0, 2.0))
       );
-      Transformed_Pattern_2 : constant Pattern := (
+      Transformed_Pattern_2 : constant Radatracer.Objects.Patterns.Stripe := (
          A => Radatracer.White,
          B => Radatracer.Black,
          Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Translation (0.5, 0.0, 0.0))
       );
    begin
       AUnit.Assertions.Assert (
-         Stripe_At_Object (Plain_Pattern, Transformed_Sphere, Make_Point (1.5, 0.0, 0.0)) = Radatracer.White,
+         Pattern_At_Object (Plain_Pattern, Transformed_Sphere, Make_Point (1.5, 0.0, 0.0)) = Radatracer.White,
          "Stripes with an object transformation"
       );
 
       AUnit.Assertions.Assert (
-         Stripe_At_Object (Transformed_Pattern_1, Plain_Sphere, Make_Point (1.5, 0.0, 0.0)) = Radatracer.White,
+         Pattern_At_Object (Transformed_Pattern_1, Plain_Sphere, Make_Point (1.5, 0.0, 0.0)) = Radatracer.White,
          "Stripes with a pattern transformation"
       );
 
       AUnit.Assertions.Assert (
-         Stripe_At_Object (Transformed_Pattern_2, Plain_Sphere, Make_Point (2.5, 0.0, 0.0)) = Radatracer.White,
+         Pattern_At_Object (Transformed_Pattern_2, Plain_Sphere, Make_Point (2.5, 0.0, 0.0)) = Radatracer.White,
          "Stripes with both an object and pattern transformation"
       );
    end Test_Object_Patterns;

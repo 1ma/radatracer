@@ -4,19 +4,13 @@ with Radatracer.Canvas;
 with Radatracer.Matrices;
 
 package Radatracer.Objects is
-   type Pattern2 is abstract tagged record
+   type Pattern is abstract tagged record
       Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
    end record;
 
-   function Pattern_At (Self : Pattern2; Point : Radatracer.Point) return Color is abstract;
+   type Pattern_Access is access all Pattern'Class;
 
-   type Pattern is record
-      Inverted_Transformation : Radatracer.Matrices.Matrix4 := Radatracer.Matrices.Identity_Matrix4;
-      A, B : Color;
-   end record;
-
-   function Stripe_Pattern (A, B : Color) return Pattern;
-   function Stripe_At (Pattern : Radatracer.Objects.Pattern; Point : Radatracer.Point) return Color;
+   function Pattern_At (Self : Pattern; Point : Radatracer.Point) return Color is abstract;
 
    type Material (Has_Pattern : Boolean := False) is record
       Ambient : Value := 0.1;
@@ -26,7 +20,7 @@ package Radatracer.Objects is
 
       case Has_Pattern is
          when True =>
-            Pattern : Radatracer.Objects.Pattern;
+            Pattern : Pattern_Access;
          when False =>
             Color : Radatracer.Color := White;
       end case;
@@ -40,13 +34,7 @@ package Radatracer.Objects is
    type Object_Access is access all Object'Class;
 
    function Pattern_At_Object (
-      Pattern : Radatracer.Objects.Pattern2'Class;
-      Object : Radatracer.Objects.Object'Class;
-      World_Point : Point
-   ) return Color;
-
-   function Stripe_At_Object (
-      Pattern : Radatracer.Objects.Pattern;
+      Pattern : Radatracer.Objects.Pattern'Class;
       Object : Radatracer.Objects.Object'Class;
       World_Point : Point
    ) return Color;

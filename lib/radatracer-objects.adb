@@ -1,20 +1,6 @@
 with Ada.Numerics.Generic_Elementary_Functions;
 
 package body Radatracer.Objects is
-   function Stripe_Pattern (A, B : Color) return Pattern is
-   begin
-      return (A => A, B => B, others => <>);
-   end Stripe_Pattern;
-
-   function Stripe_At (Pattern : Radatracer.Objects.Pattern; Point : Radatracer.Point) return Color is
-   begin
-      if Integer (Value'Floor (Point.X)) mod 2 = 0 then
-         return Pattern.A;
-      end if;
-
-      return Pattern.B;
-   end Stripe_At;
-
    function "<" (L, R : Intersection) return Boolean is
    begin
       return L.T_Value < R.T_Value;
@@ -44,7 +30,7 @@ package body Radatracer.Objects is
    end Intersect;
 
    function Pattern_At_Object (
-      Pattern : Radatracer.Objects.Pattern2'Class;
+      Pattern : Radatracer.Objects.Pattern'Class;
       Object : Radatracer.Objects.Object'Class;
       World_Point : Point
    ) return Color is
@@ -55,19 +41,6 @@ package body Radatracer.Objects is
    begin
       return Pattern_At (Pattern, Pattern_Point);
    end Pattern_At_Object;
-
-   function Stripe_At_Object (
-      Pattern : Radatracer.Objects.Pattern;
-      Object : Radatracer.Objects.Object'Class;
-      World_Point : Point
-   ) return Color is
-      use type Radatracer.Matrices.Matrix4;
-
-      Object_Point : constant Point := Object.Inverted_Transformation * World_Point;
-      Pattern_Point : constant Point := Pattern.Inverted_Transformation * Object_Point;
-   begin
-      return Stripe_At (Pattern, Pattern_Point);
-   end Stripe_At_Object;
 
    function Hit (Intersections : Intersection_Vectors.Vector) return Intersection_Vectors.Cursor is
       package Intersection_Vector_Sorting is new Intersection_Vectors.Generic_Sorting;
@@ -100,7 +73,7 @@ package body Radatracer.Objects is
       In_Shadow : Boolean := False
    ) return Color is
       Base_Color : constant Color := (if Material.Has_Pattern
-         then Stripe_At_Object (Material.Pattern, Object, Position)
+         then Pattern_At_Object (Material.Pattern.all, Object, Position)
          else Material.Color
       );
       Effective_Color : constant Color := Base_Color * Light.Intensity;
