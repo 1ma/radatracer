@@ -7,4 +7,11 @@ package body Radatracer.Objects.Patterns is
 
       return Self.B;
    end Pattern_At;
+
+   overriding function Pattern_At (Self : Gradient; Point : Radatracer.Point) return Color is
+      Distance : constant Vector := Self.B - Self.A;
+      Fraction : constant Value := Point.X - Value'Floor (Point.X);
+   begin
+      return Self.A + (Distance * Fraction);
+   end Pattern_At;
 end Radatracer.Objects.Patterns;
