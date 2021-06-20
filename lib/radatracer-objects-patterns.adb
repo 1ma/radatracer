@@ -28,4 +28,14 @@ package body Radatracer.Objects.Patterns is
 
       return Self.B;
    end Pattern_At;
+
+   overriding function Pattern_At (Self : Checkers; Point : Radatracer.Point) return Color is
+      Criteria : constant Value := Value'Floor (Point.X) + Value'Floor (Point.Y) + Value'Floor (Point.Z);
+   begin
+      if Integer (Criteria) mod 2 = 0 then
+         return Self.A;
+      end if;
+
+      return Self.B;
+   end Pattern_At;
 end Radatracer.Objects.Patterns;
