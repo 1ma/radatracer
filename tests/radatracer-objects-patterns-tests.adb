@@ -69,11 +69,73 @@ package body Radatracer.Objects.Patterns.Tests is
       );
    end Test_Generalized_Patterns;
 
+   procedure Test_Gradient_Pattern (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Gradient_Pattern (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      Gradient : constant Radatracer.Objects.Patterns.Gradient := (A => White, B => Black, others => <>);
+   begin
+      AUnit.Assertions.Assert (
+         Pattern_At (Gradient, Make_Point (0, 0, 0)) = White,
+         "A gradient linearly interpolates between colors - part 1"
+      );
+
+      AUnit.Assertions.Assert (
+         Pattern_At (Gradient, Make_Point (0.25, 0.0, 0.0)) = Make_Color (0.75, 0.75, 0.75),
+         "A gradient linearly interpolates between colors - part 2"
+      );
+
+      AUnit.Assertions.Assert (
+         Pattern_At (Gradient, Make_Point (0.5, 0.0, 0.0)) = Make_Color (0.5, 0.5, 0.5),
+         "A gradient linearly interpolates between colors - part 3"
+      );
+
+      AUnit.Assertions.Assert (
+         Pattern_At (Gradient, Make_Point (0.75, 0.0, 0.0)) = Make_Color (0.25, 0.25, 0.25),
+         "A gradient linearly interpolates between colors - part 4"
+      );
+   end Test_Gradient_Pattern;
+
+   procedure Test_Ring_Pattern (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Ring_Pattern (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      Ring : constant Radatracer.Objects.Patterns.Ring := (A => White, B => Black, others => <>);
+   begin
+      AUnit.Assertions.Assert (Pattern_At (Ring, Make_Point (0, 0, 0)) = White, "A ring should extend in both X and Z - part 1");
+      AUnit.Assertions.Assert (Pattern_At (Ring, Make_Point (1, 0, 0)) = Black, "A ring should extend in both X and Z - part 2");
+      AUnit.Assertions.Assert (Pattern_At (Ring, Make_Point (0, 0, 1)) = Black, "A ring should extend in both X and Z - part 3");
+      AUnit.Assertions.Assert (Pattern_At (Ring, Make_Point (0.708, 0.0, 0.708)) = Black, "A ring should extend in both X and Z - part 4");
+   end Test_Ring_Pattern;
+
+   procedure Test_Checker_Pattern (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Checker_Pattern (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      Checker : constant Radatracer.Objects.Patterns.Checkers := (A => White, B => Black, others => <>);
+   begin
+      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0, 0, 0)) = White, "Checkers should repeat in X - part 1");
+      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0.99, 0.0, 0.0)) = White, "Checkers should repeat in X - part 2");
+      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (1.01, 0.0, 0.0)) = Black, "Checkers should repeat in X - part 3");
+
+      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0, 0, 0)) = White, "Checkers should repeat in Y - part 1");
+      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0.0, 0.99, 0.0)) = White, "Checkers should repeat in Y - part 2");
+      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0.0, 1.01, 0.0)) = Black, "Checkers should repeat in Y - part 3");
+
+      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0, 0, 0)) = White, "Checkers should repeat in Z - part 1");
+      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0.0, 0.0, 0.99)) = White, "Checkers should repeat in Z - part 2");
+      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0.0, 0.0, 1.01)) = Black, "Checkers should repeat in Z - part 3");
+
+   end Test_Checker_Pattern;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Test_Stripe_Patterns'Access, "Stripe pattern tests");
       Register_Routine (T, Test_Generalized_Patterns'Access, "Generalized patterns tests");
+      Register_Routine (T, Test_Gradient_Pattern'Access, "Gradient pattern tests");
+      Register_Routine (T, Test_Ring_Pattern'Access, "Ring pattern tests");
+      Register_Routine (T, Test_Checker_Pattern'Access, "Checker pattern tests");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
