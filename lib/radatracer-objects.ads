@@ -17,6 +17,7 @@ package Radatracer.Objects is
       Diffuse : Value := 0.9;
       Specular : Value := 0.9;
       Shininess : Value := 200.0;
+      Reflective : Value range 0.0 .. 1.0 := 0.0;
 
       case Has_Pattern is
          when True =>

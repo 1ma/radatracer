@@ -38,7 +38,8 @@ package body Radatracer.Objects.Tests is
             Ambient => <>,
             Diffuse => 0.7,
             Specular => 0.2,
-            Shininess => <>
+            Shininess => <>,
+            Reflective => <>
          )
       );
 
