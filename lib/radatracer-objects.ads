@@ -104,6 +104,7 @@ package Radatracer.Objects is
       Over_Point : Radatracer.Point;
       Eye_Vector : Vector;
       Normal_Vector : Vector;
+      Reflect_Vector : Vector;
       Inside_Hit : Boolean;
    end record;
    --  This data structure reeks of implementation detail. I'll leave it in the

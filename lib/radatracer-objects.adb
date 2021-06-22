@@ -157,6 +157,7 @@ package body Radatracer.Objects is
          Over_Point => Intersection_Point + Normal_Vector * Epsilon,
          Eye_Vector => Eye_Vector,
          Normal_Vector => Normal_Vector,
+         Reflect_Vector => Reflect (R.Direction, Normal_Vector),
          Inside_Hit => Inside_Hit
       );
    end Prepare_Calculations;

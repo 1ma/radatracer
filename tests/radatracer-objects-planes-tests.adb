@@ -42,11 +42,24 @@ package body Radatracer.Objects.Planes.Tests is
       AUnit.Assertions.Assert (XS (0).Object = P, "A Ray intersecting a Plane from below - part 3");
    end Test_Plane_Intersect;
 
+   procedure Test_Reflection_Vector_Computation (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Reflection_Vector_Computation (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      Plane : constant Object_Access := new Radatracer.Objects.Planes.Plane'(others => <>);
+      Ray : constant Radatracer.Ray := (Make_Point (0, 1, -1), Make_Vector (0.0, -0.70711, 0.70711));
+      Intersection : constant Radatracer.Objects.Intersection := (1.41421, Plane);
+      Computations : constant Precomputed_Intersection_Info := Prepare_Calculations (Intersection, Ray);
+   begin
+      AUnit.Assertions.Assert (Computations.Reflect_Vector = Make_Vector (0.0, 0.70711, 0.70711), "Precomputing the reflection vector");
+   end Test_Reflection_Vector_Computation;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Test_Plane_Normal_At'Access, "Plane Normal_At tests");
       Register_Routine (T, Test_Plane_Intersect'Access, "Plane Intersect tests");
+      Register_Routine (T, Test_Reflection_Vector_Computation'Access, "Reflection Vector test");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
