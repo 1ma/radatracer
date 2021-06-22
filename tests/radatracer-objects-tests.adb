@@ -2,9 +2,11 @@ with Ada.Numerics;
 with AUnit.Assertions;
 with Radatracer.Matrices;
 with Radatracer.Objects.Patterns;
+with Radatracer.Objects.Planes;
 with Radatracer.Objects.Spheres;
 
 package body Radatracer.Objects.Tests is
+   use Radatracer.Objects.Planes;
    use Radatracer.Objects.Spheres;
 
    type Test_Object is new Object with record
@@ -30,7 +32,7 @@ package body Radatracer.Objects.Tests is
 
    function Default_World return World;
    function Default_World return World is
-      Sphere1 : constant Object_Access := new Sphere'(
+      Outer_Sphere : constant Object_Access := new Sphere'(
          Inverted_Transformation => <>,
          Material => (
             Has_Pattern => False,
@@ -43,7 +45,7 @@ package body Radatracer.Objects.Tests is
          )
       );
 
-      Sphere2 : constant Object_Access := new Sphere'(
+      Inner_Sphere : constant Object_Access := new Sphere'(
          Inverted_Transformation => Radatracer.Matrices.Invert (Radatracer.Matrices.Scaling (0.5, 0.5, 0.5)),
          Material => <>
       );
@@ -53,8 +55,8 @@ package body Radatracer.Objects.Tests is
          Objects => <>
       );
    begin
-      World.Objects.Append (Sphere1);
-      World.Objects.Append (Sphere2);
+      World.Objects.Append (Outer_Sphere);
+      World.Objects.Append (Inner_Sphere);
 
       return World;
    end Default_World;
@@ -403,6 +405,37 @@ package body Radatracer.Objects.Tests is
       );
    end Test_Fake_Object;
 
+   procedure Test_Reflected_Color (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Reflected_Color (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      W : World := Default_World;
+      R : Ray := (Make_Point (0, 0, 0), Make_Vector (0, 0, 1));
+      I : Intersection := (1.0, W.Objects (1));
+      PII : Precomputed_Intersection_Info := Prepare_Calculations (I, R);
+      P : constant Object_Access := new Plane'(
+         Inverted_Transformation => Radatracer.Matrices.Invert (
+            Radatracer.Matrices.Translation (0.0, -1.0, 0.0)
+         ),
+         Material => (
+            Reflective => 0.5,
+            others => <>
+         )
+      );
+   begin
+      W.Objects (1).Material.Ambient := 1.0;
+
+      AUnit.Assertions.Assert (Reflected_Color (W, PII) = Black, "The reflected color for a nonreflective material");
+
+      W.Objects.Append (P);
+
+      R := (Make_Point (0, 0, -3), Make_Vector (0.0, -0.70711, 0.70711));
+      I := (1.41421, P);
+      PII := Prepare_Calculations (I, R);
+
+      AUnit.Assertions.Assert (Reflected_Color (W, PII) = Make_Color (0.19033, 0.23791, 0.14274), "The reflected color for a reflective material");
+   end Test_Reflected_Color;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -416,6 +449,7 @@ package body Radatracer.Objects.Tests is
       Register_Routine (T, Test_Camera'Access, "Camera tests");
       Register_Routine (T, Test_Shadows'Access, "Shadow tests");
       Register_Routine (T, Test_Fake_Object'Access, "Fake Object that tests Chapter 9 refactor");
+      Register_Routine (T, Test_Reflected_Color'Access, "Reflected_Color function test");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

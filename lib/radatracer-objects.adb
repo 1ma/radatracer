@@ -162,6 +162,20 @@ package body Radatracer.Objects is
       );
    end Prepare_Calculations;
 
+   function Reflected_Color (W : World; PII : Precomputed_Intersection_Info) return Color is
+   begin
+      if PII.Object.Material.Reflective = 0.0 then
+         return Black;
+      end if;
+
+      declare
+         Reflected_Ray : constant Ray := (PII.Over_Point, PII.Reflect_Vector);
+         Reflected_Color : constant Color := Color_At (W, Reflected_Ray) * PII.Object.Material.Reflective;
+      begin
+         return Reflected_Color;
+      end;
+   end Reflected_Color;
+
    function Shade_Hit (W : World; I : Precomputed_Intersection_Info) return Color is
    begin
       return Lightning (
@@ -182,7 +196,7 @@ package body Radatracer.Objects is
       Hit : constant Intersection_Vectors.Cursor := Radatracer.Objects.Hit (Intersections);
    begin
       if Hit = Intersection_Vectors.No_Element then
-         return Make_Color (0.0, 0.0, 0.0);
+         return Black;
       end if;
 
       return Shade_Hit (W, Prepare_Calculations (Intersections (Hit), R));
