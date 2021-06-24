@@ -177,8 +177,7 @@ package body Radatracer.Objects is
    end Reflected_Color;
 
    function Shade_Hit (W : World; I : Precomputed_Intersection_Info) return Color is
-   begin
-      return Lightning (
+      Surface_Color : constant Color := Lightning (
          Material => I.Object.Material,
          Object => I.Object.all,
          Light => W.Light,
@@ -187,6 +186,10 @@ package body Radatracer.Objects is
          Normal_Vector => I.Normal_Vector,
          In_Shadow => Is_Shadowed (W, I.Over_Point)
       );
+
+      Reflected_Color : constant Color := Radatracer.Objects.Reflected_Color (W, I);
+   begin
+      return Surface_Color + Reflected_Color;
    end Shade_Hit;
 
    function Color_At (W : World; R : Ray) return Color is

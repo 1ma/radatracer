@@ -434,6 +434,7 @@ package body Radatracer.Objects.Tests is
       PII := Prepare_Calculations (I, R);
 
       AUnit.Assertions.Assert (Reflected_Color (W, PII) = Make_Color (0.19033, 0.23791, 0.14274), "The reflected color for a reflective material");
+      AUnit.Assertions.Assert (Shade_Hit (W, PII) = Make_Color (0.87675, 0.92433, 0.82917), "Shade_Hit with a reflective material");
    end Test_Reflected_Color;
 
    overriding procedure Register_Tests (T : in out Test) is
