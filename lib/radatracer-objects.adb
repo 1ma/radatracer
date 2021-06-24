@@ -162,21 +162,25 @@ package body Radatracer.Objects is
       );
    end Prepare_Calculations;
 
-   function Reflected_Color (W : World; PII : Precomputed_Intersection_Info) return Color is
+   function Reflected_Color (W : World; PII : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color is
    begin
       if PII.Object.Material.Reflective = 0.0 then
          return Black;
       end if;
 
+      if Remaining = 0 then
+         return Black;
+      end if;
+
       declare
          Reflected_Ray : constant Ray := (PII.Over_Point, PII.Reflect_Vector);
-         Reflected_Color : constant Color := Color_At (W, Reflected_Ray) * PII.Object.Material.Reflective;
+         Reflected_Color : constant Color := Color_At (W, Reflected_Ray, Remaining - 1) * PII.Object.Material.Reflective;
       begin
          return Reflected_Color;
       end;
    end Reflected_Color;
 
-   function Shade_Hit (W : World; I : Precomputed_Intersection_Info) return Color is
+   function Shade_Hit (W : World; I : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color is
       Surface_Color : constant Color := Lightning (
          Material => I.Object.Material,
          Object => I.Object.all,
@@ -187,12 +191,14 @@ package body Radatracer.Objects is
          In_Shadow => Is_Shadowed (W, I.Over_Point)
       );
 
-      Reflected_Color : constant Color := Radatracer.Objects.Reflected_Color (W, I);
+      Reflected_Color : constant Color := Radatracer.Objects.Reflected_Color (W, I, Remaining);
+
+      Shaded_Color : constant Color := Surface_Color + Reflected_Color;
    begin
-      return Surface_Color + Reflected_Color;
+      return Shaded_Color;
    end Shade_Hit;
 
-   function Color_At (W : World; R : Ray) return Color is
+   function Color_At (W : World; R : Ray; Remaining : Natural := Default_Max_Recursion) return Color is
       use type Intersection_Vectors.Cursor;
 
       Intersections : constant Intersection_Vectors.Vector := Intersect (W, R);
@@ -202,7 +208,7 @@ package body Radatracer.Objects is
          return Black;
       end if;
 
-      return Shade_Hit (W, Prepare_Calculations (Intersections (Hit), R));
+      return Shade_Hit (W, Prepare_Calculations (Intersections (Hit), R), Remaining);
    end Color_At;
 
    function Make_Camera (

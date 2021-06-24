@@ -425,7 +425,7 @@ package body Radatracer.Objects.Tests is
    begin
       W.Objects (1).Material.Ambient := 1.0;
 
-      AUnit.Assertions.Assert (Reflected_Color (W, PII) = Black, "The reflected color for a nonreflective material");
+      AUnit.Assertions.Assert (Reflected_Color (W, PII, 1) = Black, "The reflected color for a nonreflective material");
 
       W.Objects.Append (P);
 
@@ -433,9 +433,48 @@ package body Radatracer.Objects.Tests is
       I := (1.41421, P);
       PII := Prepare_Calculations (I, R);
 
-      AUnit.Assertions.Assert (Reflected_Color (W, PII) = Make_Color (0.19033, 0.23791, 0.14274), "The reflected color for a reflective material");
+      AUnit.Assertions.Assert (Reflected_Color (W, PII, 1) = Make_Color (0.19033, 0.23791, 0.14274), "The reflected color for a reflective material");
       AUnit.Assertions.Assert (Shade_Hit (W, PII) = Make_Color (0.87675, 0.92433, 0.82917), "Shade_Hit with a reflective material");
    end Test_Reflected_Color;
+
+   procedure Test_Inifinite_Recursion_Protection (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Inifinite_Recursion_Protection (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      use type Object_Vectors.Vector;
+
+      Lower_Plane : constant Object_Access := new Plane'(
+         Inverted_Transformation => Radatracer.Matrices.Invert (
+            Radatracer.Matrices.Translation (0.0, -1.0, 0.0)
+         ),
+         Material => (
+            Reflective => 1.0,
+            others => <>
+         )
+      );
+
+      Upper_Plane : constant Object_Access := new Plane'(
+         Inverted_Transformation => Radatracer.Matrices.Invert (
+            Radatracer.Matrices.Translation (0.0, 1.0, 0.0)
+         ),
+         Material => (
+            Reflective => 1.0,
+            others => <>
+         )
+      );
+
+      World : constant Radatracer.Objects.World := (
+         Light => (Intensity => White, Position => Make_Point (0, 0, 0)),
+         Objects => Lower_Plane & Upper_Plane
+      );
+
+      Ray : constant Radatracer.Ray := (
+         Origin => Make_Point (0, 0, 0),
+         Direction => Make_Vector (0, 1, 0)
+      );
+   begin
+      AUnit.Assertions.Assert (Color_At (World, Ray).W = 0.0, "Color_At terminates successfully");
+   end Test_Inifinite_Recursion_Protection;
 
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
@@ -451,6 +490,7 @@ package body Radatracer.Objects.Tests is
       Register_Routine (T, Test_Shadows'Access, "Shadow tests");
       Register_Routine (T, Test_Fake_Object'Access, "Fake Object that tests Chapter 9 refactor");
       Register_Routine (T, Test_Reflected_Color'Access, "Reflected_Color function test");
+      Register_Routine (T, Test_Inifinite_Recursion_Protection'Access, "Inifinite recursion avoidance test");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
