@@ -110,13 +110,12 @@ package body Radatracer is
    end Magnitude;
 
    function Normalize (V : Vector) return Vector is
-      V_Magnitude : constant Value := Magnitude (V);
+      Magnitude : constant Value := Radatracer.Magnitude (V);
    begin
-      return (
-         X => V.X / V_Magnitude,
-         Y => V.Y / V_Magnitude,
-         Z => V.Z / V_Magnitude,
-         W => V.W / V_Magnitude
+      return Make_Vector (
+         X => V.X / Magnitude,
+         Y => V.Y / Magnitude,
+         Z => V.Z / Magnitude
       );
    end Normalize;
 
@@ -127,11 +126,10 @@ package body Radatracer is
 
    function Cross_Product (L, R : Vector) return Vector is
    begin
-      return (
+      return Make_Vector (
          X => L.Y * R.Z - L.Z * R.Y,
          Y => L.Z * R.X - L.X * R.Z,
-         Z => L.X * R.Y - L.Y * R.X,
-         W => 0.0
+         Z => L.X * R.Y - L.Y * R.X
       );
    end Cross_Product;
 

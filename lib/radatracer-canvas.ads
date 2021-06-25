@@ -1,7 +1,7 @@
 package Radatracer.Canvas is
    pragma Pure;
 
-   type Primary_Color is range 0 .. 16#FF#;
+   type Primary_Color is range 0 .. 255;
    for Primary_Color'Size use 8;
 
    type Pixel is record
