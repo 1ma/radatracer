@@ -1,6 +1,6 @@
 with Ada.Integer_Text_IO;
 
-package body Radatracer.Canvas.IO is
+package body Radatracer.Images.IO is
    procedure Print_PPM_Header (FT : Ada.Text_IO.File_Type; Width, Height : Positive);
    procedure Print_PPM_Color (FT : Ada.Text_IO.File_Type; PC : Primary_Color; Length : in out Natural);
    function Color_PPM_Length (PC : Primary_Color) return Positive;
@@ -61,4 +61,4 @@ package body Radatracer.Canvas.IO is
 
       return 3;
    end Color_PPM_Length;
-end Radatracer.Canvas.IO;
+end Radatracer.Images.IO;

@@ -1,4 +1,4 @@
-package body Radatracer.Canvas is
+package body Radatracer.Images is
    function Clamp (V, Min, Max : Value) return Value;
 
    Max_Pixel_Value : constant Value := Value (Primary_Color'Last);
@@ -27,4 +27,4 @@ package body Radatracer.Canvas is
 
       return V;
    end Clamp;
-end Radatracer.Canvas;
+end Radatracer.Images;

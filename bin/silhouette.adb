@@ -1,5 +1,5 @@
 with Ada.Text_IO;
-with Radatracer.Canvas.IO;
+with Radatracer.Images.IO;
 with Radatracer.Matrices;
 with Radatracer.Objects.Spheres;
 
@@ -33,7 +33,7 @@ procedure Silhouette is
 
    Hit : Radatracer.Objects.Intersection_Vectors.Cursor;
 
-   subtype Scene_Canvas is Radatracer.Canvas.Canvas (1 .. Canvas_Pixels, 1 .. Canvas_Pixels);
+   subtype Scene_Canvas is Radatracer.Images.Canvas (1 .. Canvas_Pixels, 1 .. Canvas_Pixels);
    type Scene_Canvas_Access is access Scene_Canvas;
 
    Canvas : constant Scene_Canvas_Access := new Scene_Canvas;
@@ -51,10 +51,10 @@ begin
 
          Hit := Radatracer.Objects.Hit (Sphere.Intersect (Ray));
          if Hit /= Radatracer.Objects.Intersection_Vectors.No_Element then
-            Canvas (X, Y) := Radatracer.Canvas.Red_Pixel;
+            Canvas (X, Y) := Radatracer.Images.Red_Pixel;
          end if;
       end loop;
    end loop;
 
-   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas.all);
+   Radatracer.Images.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas.all);
 end Silhouette;

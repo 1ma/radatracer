@@ -304,7 +304,7 @@ package body Radatracer.Objects.Tests is
    procedure Test_Camera (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
 
-      use type Radatracer.Canvas.Pixel;
+      use type Radatracer.Images.Pixel;
       use type Radatracer.Matrices.Matrix4;
 
       C1 : constant Camera := Make_Camera (160, 120, Ada.Numerics.Pi / 2.0);
@@ -344,7 +344,7 @@ package body Radatracer.Objects.Tests is
       );
 
       AUnit.Assertions.Assert (
-         Render (C5, W) (5, 5) = Radatracer.Canvas.To_Pixel (Make_Color (0.38066, 0.47583, 0.2855)),
+         Render (C5, W) (5, 5) = Radatracer.Images.To_Pixel (Make_Color (0.38066, 0.47583, 0.2855)),
          "Rendering a world with a camera"
       );
    end Test_Camera;

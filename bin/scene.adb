@@ -1,6 +1,6 @@
 with Ada.Numerics;
 with Ada.Text_IO;
-with Radatracer.Canvas.IO;
+with Radatracer.Images.IO;
 with Radatracer.Matrices;
 with Radatracer.Objects.Spheres;
 
@@ -96,7 +96,7 @@ procedure Scene is
       Radatracer.Make_Vector (0, 1, 0)
    );
 begin
-   Radatracer.Canvas.IO.Write_PPM (
+   Radatracer.Images.IO.Write_PPM (
       Ada.Text_IO.Standard_Output,
       Radatracer.Objects.Render (Camera, World)
    );

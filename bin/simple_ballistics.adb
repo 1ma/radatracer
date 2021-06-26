@@ -1,5 +1,5 @@
 with Ada.Text_IO;
-with Radatracer.Canvas.IO;
+with Radatracer.Images.IO;
 
 --  Capstone project for Chapter 1 and 2
 
@@ -36,7 +36,7 @@ procedure Simple_Ballistics is
 
    Width : constant := 900;
    Height : constant := 550;
-   Canvas : Radatracer.Canvas.Canvas (0 .. Width - 1, 0 .. Height - 1);
+   Canvas : Radatracer.Images.Canvas (0 .. Width - 1, 0 .. Height - 1);
 
    X, Y : Integer;
 begin
@@ -46,10 +46,10 @@ begin
 
       exit when (X not in Canvas'Range (1)) or (Y not in Canvas'Range (2));
 
-      Canvas (X, Y) := Radatracer.Canvas.Red_Pixel;
+      Canvas (X, Y) := Radatracer.Images.Red_Pixel;
 
       Tick (E, P);
    end loop;
 
-   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas);
+   Radatracer.Images.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas);
 end Simple_Ballistics;

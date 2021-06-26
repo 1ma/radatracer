@@ -4,7 +4,7 @@ with AUnit.Reporter.Text;
 with AUnit.Run;
 with AUnit.Test_Cases;
 with AUnit.Test_Suites;
-with Radatracer.Canvas.IO.Tests;
+with Radatracer.Images.IO.Tests;
 with Radatracer.Matrices.Tests;
 with Radatracer.Objects.Tests;
 with Radatracer.Objects.Patterns.Tests;
@@ -16,7 +16,7 @@ procedure AUnit_Harness is
    function Radatracer_Test_Suite return AUnit.Test_Suites.Access_Test_Suite;
    function Radatracer_Test_Suite return AUnit.Test_Suites.Access_Test_Suite is
       Radatracer_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Tests.Test;
-      Canvas_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Canvas.IO.Tests.Test;
+      Canvas_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Images.IO.Tests.Test;
       Matrices_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Matrices.Tests.Test;
       Objects_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Objects.Tests.Test;
       Spheres_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Radatracer.Objects.Spheres.Tests.Test;

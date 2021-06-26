@@ -1,6 +1,6 @@
 with Ada.Containers.Vectors;
 with Ada.Numerics;
-with Radatracer.Canvas;
+with Radatracer.Images;
 with Radatracer.Matrices;
 
 package Radatracer.Objects is
@@ -138,5 +138,5 @@ package Radatracer.Objects is
 
    function Ray_For_Pixel (C : Camera; X, Y : Natural) return Ray;
 
-   function Render (C : Camera; W : World) return Radatracer.Canvas.Canvas;
+   function Render (C : Camera; W : World) return Radatracer.Images.Canvas;
 end Radatracer.Objects;

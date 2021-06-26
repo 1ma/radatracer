@@ -1,5 +1,5 @@
 with Ada.Text_IO;
-with Radatracer.Canvas.IO;
+with Radatracer.Images.IO;
 with Radatracer.Objects.Spheres;
 
 --  Capstone project for Chapter 6
@@ -36,7 +36,7 @@ procedure Phong is
    Point : Radatracer.Point := Radatracer.Make_Point (0, 0, 0);
    Normal_Vector, Eye_Vector : Radatracer.Vector := Radatracer.Make_Vector (0, 0, 0);
 
-   subtype Scene_Canvas is Radatracer.Canvas.Canvas (1 .. Canvas_Pixels, 1 .. Canvas_Pixels);
+   subtype Scene_Canvas is Radatracer.Images.Canvas (1 .. Canvas_Pixels, 1 .. Canvas_Pixels);
    type Scene_Canvas_Access is access Scene_Canvas;
 
    Canvas : constant Scene_Canvas_Access := new Scene_Canvas;
@@ -59,12 +59,12 @@ begin
             Normal_Vector := Intersections (Hit).Object.all.Normal_At (Point);
             Eye_Vector := -Ray.Direction;
 
-            Canvas (X, Y) := Radatracer.Canvas.To_Pixel (
+            Canvas (X, Y) := Radatracer.Images.To_Pixel (
                Radatracer.Objects.Lightning (Intersections (Hit).Object.Material, Intersections (Hit).Object.all, Light, Point, Eye_Vector, Normal_Vector)
             );
          end if;
       end loop;
    end loop;
 
-   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas.all);
+   Radatracer.Images.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas.all);
 end Phong;

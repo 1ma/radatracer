@@ -1,4 +1,4 @@
-package Radatracer.Canvas is
+package Radatracer.Images is
    pragma Pure;
 
    type Primary_Color is range 0 .. 255;
@@ -17,4 +17,4 @@ package Radatracer.Canvas is
    type Canvas is array (Natural range <>, Natural range <>) of Pixel;
 
    function To_Pixel (C : Color) return Pixel;
-end Radatracer.Canvas;
+end Radatracer.Images;

@@ -1,6 +1,6 @@
 with Ada.Numerics;
 with Ada.Text_IO;
-with Radatracer.Canvas.IO;
+with Radatracer.Images.IO;
 with Radatracer.Matrices;
 
 --  Capstone project for Chapter 4
@@ -10,7 +10,7 @@ procedure Clock is
    use type Radatracer.Value;
 
    Side_Length : constant := 100;
-   Canvas : Radatracer.Canvas.Canvas (1 .. Side_Length, 1 .. Side_Length);
+   Canvas : Radatracer.Images.Canvas (1 .. Side_Length, 1 .. Side_Length);
 
    Hour : Radatracer.Point := Radatracer.Make_Point (0, 0, 0);
    Midnight : constant Radatracer.Point := Radatracer.Make_Point (0, 1, 0);
@@ -34,8 +34,8 @@ begin
 
       Hour := Translation * Scaling * Radatracer.Matrices.Rotation_Z (Radians) * Midnight;
 
-      Canvas (Positive (Hour.X), Positive (Hour.Y)) := Radatracer.Canvas.Red_Pixel;
+      Canvas (Positive (Hour.X), Positive (Hour.Y)) := Radatracer.Images.Red_Pixel;
    end loop;
 
-   Radatracer.Canvas.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas);
+   Radatracer.Images.IO.Write_PPM (Ada.Text_IO.Standard_Output, Canvas);
 end Clock;

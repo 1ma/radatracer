@@ -1,7 +1,7 @@
 with Ada.Text_IO;
 with AUnit.Assertions;
 
-package body Radatracer.Canvas.IO.Tests is
+package body Radatracer.Images.IO.Tests is
    procedure Test_Color_Conversion (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Color_Conversion (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
@@ -81,6 +81,6 @@ package body Radatracer.Canvas.IO.Tests is
    overriding function Name (T : Test) return AUnit.Message_String is
       pragma Unreferenced (T);
    begin
-      return AUnit.Format ("Radatracer.Canvas");
+      return AUnit.Format ("Radatracer.Images");
    end Name;
-end Radatracer.Canvas.IO.Tests;
+end Radatracer.Images.IO.Tests;
