@@ -139,11 +139,15 @@ package body Radatracer.Objects is
       return Intersections;
    end Intersect;
 
-   function Prepare_Calculations (I : Intersection; R : Ray) return Precomputed_Intersection_Info is
-      Eye_Vector : constant Vector := -R.Direction;
-      Intersection_Point : constant Point := Position (R, I.T_Value);
-      Normal_Vector : Vector := I.Object.all.Normal_At (Intersection_Point);
-
+   function Prepare_Calculations (
+      Ray : Radatracer.Ray;
+      Intersections : Intersection_Vectors.Vector;
+      Hit_Index : Intersection_Vectors.Cursor
+   ) return Precomputed_Intersection_Info is
+      Hit : constant Intersection := Intersections (Hit_Index);
+      Eye_Vector : constant Vector := -Ray.Direction;
+      Intersection_Point : constant Point := Position (Ray, Hit.T_Value);
+      Normal_Vector : Vector := Hit.Object.all.Normal_At (Intersection_Point);
       Inside_Hit : constant Boolean := Dot_Product (Normal_Vector, Eye_Vector) < 0.0;
    begin
       if Inside_Hit then
@@ -151,13 +155,13 @@ package body Radatracer.Objects is
       end if;
 
       return (
-         T_Value => I.T_Value,
-         Object => I.Object,
+         T_Value => Hit.T_Value,
+         Object => Hit.Object,
          Point => Intersection_Point,
          Over_Point => Intersection_Point + Normal_Vector * Epsilon,
          Eye_Vector => Eye_Vector,
          Normal_Vector => Normal_Vector,
-         Reflect_Vector => Reflect (R.Direction, Normal_Vector),
+         Reflect_Vector => Reflect (Ray.Direction, Normal_Vector),
          Inside_Hit => Inside_Hit
       );
    end Prepare_Calculations;
@@ -202,13 +206,13 @@ package body Radatracer.Objects is
       use type Intersection_Vectors.Cursor;
 
       Intersections : constant Intersection_Vectors.Vector := Intersect (W, R);
-      Hit : constant Intersection_Vectors.Cursor := Radatracer.Objects.Hit (Intersections);
+      Hit_Index : constant Intersection_Vectors.Cursor := Hit (Intersections);
    begin
-      if Hit = Intersection_Vectors.No_Element then
+      if Hit_Index = Intersection_Vectors.No_Element then
          return Black;
       end if;
 
-      return Shade_Hit (W, Prepare_Calculations (Intersections (Hit), R), Remaining);
+      return Shade_Hit (W, Prepare_Calculations (R, Intersections, Hit_Index), Remaining);
    end Color_At;
 
    function Make_Camera (

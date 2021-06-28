@@ -2,6 +2,19 @@ with AUnit.Assertions;
 with Radatracer.Objects.Patterns;
 
 package body Radatracer.Objects.Spheres.Tests is
+   function Transformed_Glass_Sphere (Refractive_Index : Value; Transformation : Radatracer.Matrices.Matrix4) return Object_Access;
+   function Transformed_Glass_Sphere (Refractive_Index : Value; Transformation : Radatracer.Matrices.Matrix4) return Object_Access is
+   begin
+      return new Sphere'(
+         Inverted_Transformation => Radatracer.Matrices.Invert (Transformation),
+         Material => (
+            Transparency => 1.0,
+            Refractive_Index => Refractive_Index,
+            others => <>
+         )
+      );
+   end Transformed_Glass_Sphere;
+
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
@@ -101,12 +114,38 @@ package body Radatracer.Objects.Spheres.Tests is
       );
    end Test_Object_Patterns;
 
+   procedure Test_Refractive_Indexes_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Refractive_Indexes_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      use type Intersection_Vectors.Vector;
+
+      A : constant Object_Access := Transformed_Glass_Sphere (1.5, Radatracer.Matrices.Scaling (2.0, 2.0, 2.0));
+      B : constant Object_Access := Transformed_Glass_Sphere (2.0, Radatracer.Matrices.Translation (0.0, 0.0, -0.25));
+      C : constant Object_Access := Transformed_Glass_Sphere (2.5, Radatracer.Matrices.Translation (0.0, 0.0, 0.25));
+
+      R : constant Ray := (Origin => Make_Point (0, 0, -4), Direction => Make_Vector (0, 0, 1));
+      XS : constant Intersection_Vectors.Vector :=
+         Intersection'(T_Value => 2.0, Object => A) &
+         Intersection'(T_Value => 2.75, Object => B) &
+         Intersection'(T_Value => 3.25, Object => C) &
+         Intersection'(T_Value => 4.75, Object => B) &
+         Intersection'(T_Value => 5.25, Object => C) &
+         Intersection'(T_Value => 6.0, Object => A);
+
+         pragma Unreferenced (R);
+         pragma Unreferenced (XS);
+   begin
+      null;
+   end Test_Refractive_Indexes_Calculations;
+
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
       Register_Routine (T, Test_Ray_Sphere_Intersections'Access, "Ray-Sphere intersection tests");
       Register_Routine (T, Test_Sphere_Normals'Access, "Sphere normal vector tests");
-      Register_Routine (T, Test_Object_Patterns'Access, "Patterns on an Objet tests");
+      Register_Routine (T, Test_Object_Patterns'Access, "Patterns on an Object tests");
+      Register_Routine (T, Test_Refractive_Indexes_Calculations'Access, "Test refractive indexes");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

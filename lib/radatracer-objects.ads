@@ -18,6 +18,8 @@ package Radatracer.Objects is
       Specular : Value := 0.9;
       Shininess : Value := 200.0;
       Reflective : Value range 0.0 .. 1.0 := 0.0;
+      Transparency : Value := 0.0;
+      Refractive_Index : Value := 1.0;
 
       case Has_Pattern is
          when True =>
@@ -110,7 +112,11 @@ package Radatracer.Objects is
    --  This data structure reeks of implementation detail. I'll leave it in the
    --  package specification for now, until I see how it is used.
 
-   function Prepare_Calculations (I : Intersection; R : Ray) return Precomputed_Intersection_Info;
+   function Prepare_Calculations (
+      Ray : Radatracer.Ray;
+      Intersections : Intersection_Vectors.Vector;
+      Hit_Index : Intersection_Vectors.Cursor
+   ) return Precomputed_Intersection_Info;
    --  Ditto.
 
    Default_Max_Recursion : constant Natural := 5;

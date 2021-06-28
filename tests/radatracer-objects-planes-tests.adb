@@ -48,8 +48,12 @@ package body Radatracer.Objects.Planes.Tests is
 
       Plane : constant Object_Access := new Radatracer.Objects.Planes.Plane'(others => <>);
       Ray : constant Radatracer.Ray := (Make_Point (0, 1, -1), Make_Vector (0.0, -0.70711, 0.70711));
-      Intersection : constant Radatracer.Objects.Intersection := (1.41421, Plane);
-      Computations : constant Precomputed_Intersection_Info := Prepare_Calculations (Intersection, Ray);
+      Intersections : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (Intersection'(1.41421, Plane), 1);
+      Computations : constant Precomputed_Intersection_Info := Prepare_Calculations (
+         Ray,
+         Intersections,
+         Intersection_Vectors.To_Cursor (Intersections, 0)
+      );
    begin
       AUnit.Assertions.Assert (Computations.Reflect_Vector = Make_Vector (0.0, 0.70711, 0.70711), "Precomputing the reflection vector");
    end Test_Reflection_Vector_Computation;
