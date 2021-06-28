@@ -144,21 +144,63 @@ package body Radatracer.Objects is
       Intersections : Intersection_Vectors.Vector;
       Hit_Index : Intersection_Vectors.Cursor
    ) return Precomputed_Intersection_Info is
+      use type Intersection_Vectors.Cursor;
+
+      package Object_Vectors is new Ada.Containers.Vectors (
+         Index_Type => Natural,
+         Element_Type => Object_Access
+      );
+
       Hit : constant Intersection := Intersections (Hit_Index);
       Eye_Vector : constant Vector := -Ray.Direction;
       Intersection_Point : constant Point := Position (Ray, Hit.T_Value);
       Normal_Vector : Vector := Hit.Object.all.Normal_At (Intersection_Point);
       Inside_Hit : constant Boolean := Dot_Product (Normal_Vector, Eye_Vector) < 0.0;
+
+      N_1, N_2 : Value;
+      Containers : Object_Vectors.Vector := Object_Vectors.Empty_Vector;
    begin
+      Containers.Reserve_Capacity (Intersections.Length);
+
+      for I in Intersections.Iterate loop
+         if I = Hit_Index then
+            N_1 := (if Containers.Is_Empty
+               then 1.0
+               else Containers (Containers.Last).all.Material.Refractive_Index);
+         end if;
+
+         declare
+            Seen_Object : Object_Vectors.Cursor := Containers.Find (Intersections (I).Object);
+         begin
+            if Object_Vectors.Has_Element (Seen_Object) then
+               Containers.Delete (Seen_Object);
+            else
+               Containers.Append (Intersections (I).Object);
+            end if;
+         end;
+
+         if I = Hit_Index then
+            N_2 := (if Containers.Is_Empty
+               then 1.0
+               else Containers (Containers.Last).all.Material.Refractive_Index
+            );
+
+            exit;
+         end if;
+      end loop;
+
       if Inside_Hit then
          Normal_Vector := -Normal_Vector;
       end if;
 
       return (
          T_Value => Hit.T_Value,
+         N_1 => N_1,
+         N_2 => N_2,
          Object => Hit.Object,
          Point => Intersection_Point,
          Over_Point => Intersection_Point + Normal_Vector * Epsilon,
+         Under_Point => Intersection_Point - Normal_Vector * Epsilon,
          Eye_Vector => Eye_Vector,
          Normal_Vector => Normal_Vector,
          Reflect_Vector => Reflect (Ray.Direction, Normal_Vector),

@@ -100,10 +100,11 @@ package Radatracer.Objects is
    function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector;
 
    type Precomputed_Intersection_Info is record
-      T_Value : Value;
+      T_Value, N_1, N_2 : Value;
       Object : Object_Access;
       Point : Radatracer.Point;
       Over_Point : Radatracer.Point;
+      Under_Point : Radatracer.Point;
       Eye_Vector : Vector;
       Normal_Vector : Vector;
       Reflect_Vector : Vector;

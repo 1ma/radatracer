@@ -132,12 +132,40 @@ package body Radatracer.Objects.Spheres.Tests is
          Intersection'(T_Value => 4.75, Object => B) &
          Intersection'(T_Value => 5.25, Object => C) &
          Intersection'(T_Value => 6.0, Object => A);
-
-         pragma Unreferenced (R);
-         pragma Unreferenced (XS);
+      PII : Precomputed_Intersection_Info;
    begin
-      null;
+      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (0));
+      AUnit.Assertions.Assert (PII.N_1 = 1.0 and PII.N_2 = 1.5, "Refractive indices for hit #0");
+
+      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (1));
+      AUnit.Assertions.Assert (PII.N_1 = 1.5 and PII.N_2 = 2.0, "Refractive indices for hit #1");
+
+      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (2));
+      AUnit.Assertions.Assert (PII.N_1 = 2.0 and PII.N_2 = 2.5, "Refractive indices for hit #2");
+
+      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (3));
+      AUnit.Assertions.Assert (PII.N_1 = 2.5 and PII.N_2 = 2.5, "Refractive indices for hit #3");
+
+      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (4));
+      AUnit.Assertions.Assert (PII.N_1 = 2.5 and PII.N_2 = 1.5, "Refractive indices for hit #4");
+
+      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (5));
+      AUnit.Assertions.Assert (PII.N_1 = 1.5 and PII.N_2 = 1.0, "Refractive indices for hit #5");
    end Test_Refractive_Indexes_Calculations;
+
+   procedure Test_Under_Point_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Under_Point_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+
+      R : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
+      S : constant Object_Access := Transformed_Glass_Sphere (1.5, Radatracer.Matrices.Translation (0.0, 0.0, 1.0));
+      I : constant Intersection := (T_Value => 5.0, Object => S);
+      XS : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (I, 1);
+      PII : constant Precomputed_Intersection_Info := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (0));
+   begin
+      AUnit.Assertions.Assert (PII.Under_Point.Z > Epsilon / 2.0, "Under_Point test #1");
+      AUnit.Assertions.Assert (PII.Point.Z < PII.Under_Point.Z, "Under_Point test #2");
+   end Test_Under_Point_Calculations;
 
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
@@ -146,6 +174,7 @@ package body Radatracer.Objects.Spheres.Tests is
       Register_Routine (T, Test_Sphere_Normals'Access, "Sphere normal vector tests");
       Register_Routine (T, Test_Object_Patterns'Access, "Patterns on an Object tests");
       Register_Routine (T, Test_Refractive_Indexes_Calculations'Access, "Test refractive indexes");
+      Register_Routine (T, Test_Under_Point_Calculations'Access, "Test Precomputed_Intersection_Info.Under_Point calculations");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
