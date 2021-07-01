@@ -14,7 +14,7 @@ package body Radatracer.Objects.Tests is
    end record;
 
    overriding function Local_Normal_At (Self : Test_Object; Local_Point : Point) return Vector;
-   overriding function Local_Intersect (Self : aliased in out Test_Object; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector;
+   overriding function Local_Intersect (Self : aliased in out Test_Object; Local_Ray : Radatracer.Ray) return Intersections.Set;
 
    overriding function Local_Normal_At (Self : Test_Object; Local_Point : Point) return Vector is
       pragma Unreferenced (Self);
@@ -22,8 +22,8 @@ package body Radatracer.Objects.Tests is
       return Make_Vector (Local_Point.X, Local_Point.Y, Local_Point.Z);
    end Local_Normal_At;
 
-   overriding function Local_Intersect (Self : aliased in out Test_Object; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector is
-      Result : Intersection_Vectors.Vector;
+   overriding function Local_Intersect (Self : aliased in out Test_Object; Local_Ray : Radatracer.Ray) return Intersections.Set is
+      Result : Intersections.Set;
    begin
       Self.Saved_Ray := Local_Ray;
 
@@ -62,32 +62,36 @@ package body Radatracer.Objects.Tests is
    procedure Test_Intersection_Hits (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
 
-      use type Intersection_Vectors.Cursor;
-      use type Intersection_Vectors.Vector;
+      use type Intersections.Cursor;
+      use type Intersections.Set;
 
       S : constant Object_Access := new Sphere'(Inverted_Transformation => <>, others => <>);
 
       I1_1 : constant Intersection := (1.0, S);
       I1_2 : constant Intersection := (2.0, S);
-      V1 : constant Intersection_Vectors.Vector := I1_1 & I1_2;
+      V1 : constant Intersections.Set := Intersections.To_Set (I1_1) or Intersections.To_Set (I1_2);
 
       I2_1 : constant Intersection := (-1.0, S);
       I2_2 : constant Intersection := (1.0, S);
-      V2 : constant Intersection_Vectors.Vector := I2_1 & I2_2;
+      V2 : constant Intersections.Set := Intersections.To_Set (I2_1) or Intersections.To_Set (I2_2);
 
       I3_1 : constant Intersection := (-2.0, S);
       I3_2 : constant Intersection := (-1.0, S);
-      V3 : constant Intersection_Vectors.Vector := I3_1 & I3_2;
+      V3 : constant Intersections.Set := Intersections.To_Set (I3_1) or Intersections.To_Set (I3_2);
 
       I4_1 : constant Intersection := (5.0, S);
       I4_2 : constant Intersection := (7.0, S);
       I4_3 : constant Intersection := (-3.0, S);
       I4_4 : constant Intersection := (2.0, S);
-      V4 : constant Intersection_Vectors.Vector := I4_1 & I4_2 & I4_3 & I4_4;
+      V4 : constant Intersections.Set :=
+         Intersections.To_Set (I4_1) or
+         Intersections.To_Set (I4_2) or
+         Intersections.To_Set (I4_3) or
+         Intersections.To_Set (I4_4);
    begin
       AUnit.Assertions.Assert (V1 (Hit (V1)) = I1_1, "Ray-Sphere hit test 1 - sorted positive T_Values");
       AUnit.Assertions.Assert (V2 (Hit (V2)) = I2_2, "Ray-Sphere hit test 2 - sorted positive and negative T_Values");
-      AUnit.Assertions.Assert (Hit (V3) = Intersection_Vectors.No_Element, "Ray-Sphere hit test 3 - only negative T_Values");
+      AUnit.Assertions.Assert (Hit (V3) = Intersections.No_Element, "Ray-Sphere hit test 3 - only negative T_Values");
       AUnit.Assertions.Assert (V4 (Hit (V4)) = I4_4, "Ray-Sphere hit test 3 - unsorted positive and negative T_Values");
    end Test_Intersection_Hits;
 
@@ -191,13 +195,17 @@ package body Radatracer.Objects.Tests is
       W : constant World := Default_World;
       R : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
 
-      I : constant Intersection_Vectors.Vector := Intersect (W, R);
+      XS : constant Intersections.Set := Intersect (W, R);
+      Cursor : Intersections.Cursor := XS.First;
    begin
-      AUnit.Assertions.Assert (I.Length = 4, "World intersection test 1 - part 1");
-      AUnit.Assertions.Assert (I (0).T_Value = 4.0, "World intersection test 1 - part 2");
-      AUnit.Assertions.Assert (I (1).T_Value = 4.5, "World intersection test 1 - part 3");
-      AUnit.Assertions.Assert (I (2).T_Value = 5.5, "World intersection test 1 - part 4");
-      AUnit.Assertions.Assert (I (3).T_Value = 6.0, "World intersection test 1 - part 5");
+      AUnit.Assertions.Assert (XS.Length = 4, "World intersection test 1 - part 1");
+      AUnit.Assertions.Assert (XS (Cursor).T_Value = 4.0, "World intersection test 1 - part 2");
+      Cursor := Intersections.Next (Cursor);
+      AUnit.Assertions.Assert (XS (Cursor).T_Value = 4.5, "World intersection test 1 - part 3");
+      Cursor := Intersections.Next (Cursor);
+      AUnit.Assertions.Assert (XS (Cursor).T_Value = 5.5, "World intersection test 1 - part 4");
+      Cursor := Intersections.Next (Cursor);
+      AUnit.Assertions.Assert (XS (Cursor).T_Value = 6.0, "World intersection test 1 - part 5");
    end Test_World_Intersections;
 
    procedure Test_Prepare_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class);
@@ -210,11 +218,11 @@ package body Radatracer.Objects.Tests is
       I1 : constant Intersection := (T_Value => 4.0, Object => new Sphere);
       I2 : constant Intersection := (T_Value => 1.0, Object => new Sphere);
 
-      VI1 : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (I1, 1);
-      VI2 : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (I2, 1);
+      VI1 : constant Intersections.Set := Intersections.To_Set (I1);
+      VI2 : constant Intersections.Set := Intersections.To_Set (I2);
 
-      PII1 : constant Precomputed_Intersection_Info := Prepare_Calculations (R1, VI1, Intersection_Vectors.To_Cursor (VI1, 0));
-      PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (R2, VI2, Intersection_Vectors.To_Cursor (VI2, 0));
+      PII1 : constant Precomputed_Intersection_Info := Prepare_Calculations (R1, VI1, VI1.First);
+      PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (R2, VI2, VI2.First);
 
       R3 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
       S1 : constant Object_Access := new Sphere'(
@@ -224,8 +232,8 @@ package body Radatracer.Objects.Tests is
          Material => <>
       );
       I3 : constant Intersection := (T_Value => 5.0, Object => S1);
-      VI3 : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (I3, 1);
-      PII3 : constant Precomputed_Intersection_Info := Prepare_Calculations (R3, VI3, Intersection_Vectors.To_Cursor (VI3, 0));
+      VI3 : constant Intersections.Set := Intersections.To_Set (I3);
+      PII3 : constant Precomputed_Intersection_Info := Prepare_Calculations (R3, VI3, VI3.First);
    begin
       AUnit.Assertions.Assert (PII1.T_Value = I1.T_Value, "Prepare calculations test 1 - part 1");
       AUnit.Assertions.Assert (PII1.Object = I1.Object, "Prepare calculations test 1 - part 2");
@@ -254,13 +262,13 @@ package body Radatracer.Objects.Tests is
       W : World := Default_World;
       R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
       I1 : constant Intersection := (T_Value => 4.0, Object => W.Objects (0));
-      VI1 : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (I1, 1);
-      PII1 : constant Precomputed_Intersection_Info := Prepare_Calculations (R1, VI1, Intersection_Vectors.To_Cursor (VI1, 0));
+      VI1 : constant Intersections.Set := Intersections.To_Set (I1);
+      PII1 : constant Precomputed_Intersection_Info := Prepare_Calculations (R1, VI1, VI1.First);
 
       R2 : constant Ray := (Origin => Make_Point (0, 0, 0), Direction => Make_Vector (0, 0, 1));
       I2 : constant Intersection := (T_Value => 0.5, Object => W.Objects (1));
-      VI2 : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (I2, 1);
-      PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (R2, VI2, Intersection_Vectors.To_Cursor (VI2, 0));
+      VI2 : constant Intersections.Set := Intersections.To_Set (I2);
+      PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (R2, VI2, VI2.First);
 
       S1 : constant Object_Access := new Sphere;
       S2 : constant Object_Access := new Sphere'(
@@ -274,8 +282,8 @@ package body Radatracer.Objects.Tests is
       );
       R3 : constant Ray := (Origin => Make_Point (0, 0, 5), Direction => Make_Vector (0, 0, 1));
       I3 : constant Intersection := (T_Value => 4.0, Object => W2.Objects (1));
-      VI3 : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (I3, 1);
-      Comps : constant Precomputed_Intersection_Info := Prepare_Calculations (R3, VI3, Intersection_Vectors.To_Cursor (VI3, 0));
+      VI3 : constant Intersections.Set := Intersections.To_Set (I3);
+      Comps : constant Precomputed_Intersection_Info := Prepare_Calculations (R3, VI3, VI3.First);
    begin
       AUnit.Assertions.Assert (Shade_Hit (W, PII1) = Make_Color (0.38066, 0.47583, 0.2855), "Shading an intersection");
 
@@ -376,7 +384,7 @@ package body Radatracer.Objects.Tests is
 
       S : Test_Object;
       R : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
-      XS : Intersection_Vectors.Vector;
+      XS : Intersections.Set;
    begin
       AUnit.Assertions.Assert (XS.Is_Empty, "Useless test so that GNAT doesn't complain that XS is never read");
 
@@ -416,8 +424,8 @@ package body Radatracer.Objects.Tests is
       W : World := Default_World;
       R : Ray := (Make_Point (0, 0, 0), Make_Vector (0, 0, 1));
       I : constant Intersection := (1.0, W.Objects (1));
-      VI : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (I, 1);
-      PII : Precomputed_Intersection_Info := Prepare_Calculations (R, VI, Intersection_Vectors.To_Cursor (VI, 0));
+      VI : constant Intersections.Set := Intersections.To_Set (I);
+      PII : Precomputed_Intersection_Info := Prepare_Calculations (R, VI, VI.First);
       P : constant Object_Access := new Plane'(
          Inverted_Transformation => Radatracer.Matrices.Invert (
             Radatracer.Matrices.Translation (0.0, -1.0, 0.0)
@@ -428,7 +436,7 @@ package body Radatracer.Objects.Tests is
          )
       );
       I2 : constant Intersection := (1.41421, P);
-      VI2 : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (I2, 1);
+      VI2 : constant Intersections.Set := Intersections.To_Set (I2);
    begin
       W.Objects (1).Material.Ambient := 1.0;
 
@@ -437,7 +445,7 @@ package body Radatracer.Objects.Tests is
       W.Objects.Append (P);
 
       R := (Make_Point (0, 0, -3), Make_Vector (0.0, -0.70711, 0.70711));
-      PII := Prepare_Calculations (R, VI2, Intersection_Vectors.To_Cursor (VI2, 0));
+      PII := Prepare_Calculations (R, VI2, VI2.First);
 
       AUnit.Assertions.Assert (Reflected_Color (W, PII, 1) = Make_Color (0.19033, 0.23791, 0.14274), "The reflected color for a reflective material");
       AUnit.Assertions.Assert (Shade_Hit (W, PII) = Make_Color (0.87675, 0.92433, 0.82917), "Shade_Hit with a reflective material");

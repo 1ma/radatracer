@@ -23,7 +23,7 @@ package body Radatracer.Objects is
       return Normalize (Vector (World_Normal));
    end Normal_At;
 
-   function Intersect (Self : in out Object'Class; Ray : Radatracer.Ray) return Intersection_Vectors.Vector is
+   function Intersect (Self : in out Object'Class; Ray : Radatracer.Ray) return Intersections.Set is
       Local_Ray : constant Radatracer.Ray := Radatracer.Matrices.Transform (Ray, Self.Inverted_Transformation);
    begin
       return Self.Local_Intersect (Local_Ray);
@@ -42,20 +42,15 @@ package body Radatracer.Objects is
       return Pattern_At (Pattern, Pattern_Point);
    end Pattern_At_Object;
 
-   function Hit (Intersections : Intersection_Vectors.Vector) return Intersection_Vectors.Cursor is
-      package Intersection_Vector_Sorting is new Intersection_Vectors.Generic_Sorting;
-
-      Sorted_Intersections : Intersection_Vectors.Vector := Intersections;
+   function Hit (XS : Intersections.Set) return Intersections.Cursor is
    begin
-      Intersection_Vector_Sorting.Sort (Sorted_Intersections);
-
-      for Cursor in Sorted_Intersections.Iterate loop
-         if Sorted_Intersections (Cursor).T_Value >= 0.0 then
-            return Intersections.Find (Sorted_Intersections (Cursor));
+      for Cursor in XS.Iterate loop
+         if XS (Cursor).T_Value >= 0.0 then
+            return Cursor;
          end if;
       end loop;
 
-      return Intersection_Vectors.No_Element;
+      return Intersections.No_Element;
    end Hit;
 
    function Reflect (V, Normal : Vector) return Vector is
@@ -114,44 +109,35 @@ package body Radatracer.Objects is
    end Lightning;
 
    function Is_Shadowed (W : World; P : Point) return Boolean is
-      use type Intersection_Vectors.Cursor;
+      use type Intersections.Cursor;
 
       Shadow_Vector : constant Vector := W.Light.Position - P;
       Shadow_Ray : constant Ray := (P, Normalize (Shadow_Vector));
       Distance : constant Value := Magnitude (Shadow_Vector);
-      Intersections : constant Intersection_Vectors.Vector := Intersect (W, Shadow_Ray);
-      Hit : constant Intersection_Vectors.Cursor := Radatracer.Objects.Hit (Intersections);
+      XS : constant Intersections.Set := Intersect (W, Shadow_Ray);
+      Hit : constant Intersections.Cursor := Radatracer.Objects.Hit (XS);
    begin
-      return Hit /= Intersection_Vectors.No_Element and then Intersections (Hit).T_Value < Distance;
+      return Hit /= Intersections.No_Element and then XS (Hit).T_Value < Distance;
    end Is_Shadowed;
 
-   function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector is
-      package Intersection_Vector_Sorting is new Intersection_Vectors.Generic_Sorting;
-
-      Intersections : Intersection_Vectors.Vector;
+   function Intersect (W : World; R : Ray) return Intersections.Set is
+      XS : Intersections.Set;
    begin
       for Cursor in W.Objects.Iterate loop
-         Intersections.Append (W.Objects (Cursor).all.Intersect (R));
+         XS.Union (W.Objects (Cursor).all.Intersect (R));
       end loop;
 
-      Intersection_Vector_Sorting.Sort (Intersections);
-
-      return Intersections;
+      return XS;
    end Intersect;
 
    function Prepare_Calculations (
       Ray : Radatracer.Ray;
-      Intersections : Intersection_Vectors.Vector;
-      Hit_Index : Intersection_Vectors.Cursor
+      XS : Intersections.Set;
+      Hit_Index : Intersections.Cursor
    ) return Precomputed_Intersection_Info is
-      use type Intersection_Vectors.Cursor;
+      use type Intersections.Cursor;
 
-      package Object_Vectors is new Ada.Containers.Vectors (
-         Index_Type => Natural,
-         Element_Type => Object_Access
-      );
-
-      Hit : constant Intersection := Intersections (Hit_Index);
+      Hit : constant Intersection := XS (Hit_Index);
       Eye_Vector : constant Vector := -Ray.Direction;
       Intersection_Point : constant Point := Position (Ray, Hit.T_Value);
       Normal_Vector : Vector := Hit.Object.all.Normal_At (Intersection_Point);
@@ -160,9 +146,7 @@ package body Radatracer.Objects is
       N_1, N_2 : Value;
       Containers : Object_Vectors.Vector := Object_Vectors.Empty_Vector;
    begin
-      Containers.Reserve_Capacity (Intersections.Length);
-
-      for I in Intersections.Iterate loop
+      for I in XS.Iterate loop
          if I = Hit_Index then
             N_1 := (if Containers.Is_Empty
                then 1.0
@@ -170,12 +154,12 @@ package body Radatracer.Objects is
          end if;
 
          declare
-            Seen_Object : Object_Vectors.Cursor := Containers.Find (Intersections (I).Object);
+            Seen_Object : Object_Vectors.Cursor := Containers.Find (XS (I).Object);
          begin
             if Object_Vectors.Has_Element (Seen_Object) then
                Containers.Delete (Seen_Object);
             else
-               Containers.Append (Intersections (I).Object);
+               Containers.Append (XS (I).Object);
             end if;
          end;
 
@@ -245,16 +229,16 @@ package body Radatracer.Objects is
    end Shade_Hit;
 
    function Color_At (W : World; R : Ray; Remaining : Natural := Default_Max_Recursion) return Color is
-      use type Intersection_Vectors.Cursor;
+      use type Intersections.Cursor;
 
-      Intersections : constant Intersection_Vectors.Vector := Intersect (W, R);
-      Hit_Index : constant Intersection_Vectors.Cursor := Hit (Intersections);
+      XS : constant Intersections.Set := Intersect (W, R);
+      Hit_Index : constant Intersections.Cursor := Hit (XS);
    begin
-      if Hit_Index = Intersection_Vectors.No_Element then
+      if Hit_Index = Intersections.No_Element then
          return Black;
       end if;
 
-      return Shade_Hit (W, Prepare_Calculations (R, Intersections, Hit_Index), Remaining);
+      return Shade_Hit (W, Prepare_Calculations (R, XS, Hit_Index), Remaining);
    end Color_At;
 
    function Make_Camera (

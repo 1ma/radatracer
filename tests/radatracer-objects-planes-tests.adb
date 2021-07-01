@@ -25,7 +25,7 @@ package body Radatracer.Objects.Planes.Tests is
       R3 : constant Ray := (Origin => Make_Point (0, 1, 0), Direction => Make_Vector (0, -1, 0));
       R4 : constant Ray := (Origin => Make_Point (0, -1, 0), Direction => Make_Vector (0, 1, 0));
 
-      XS : Intersection_Vectors.Vector;
+      XS : Intersections.Set;
    begin
       AUnit.Assertions.Assert (P.all.Local_Intersect (R1).Is_Empty, "Intersect with a Ray parallel to the Plane");
 
@@ -33,13 +33,13 @@ package body Radatracer.Objects.Planes.Tests is
 
       XS := P.all.Local_Intersect (R3);
       AUnit.Assertions.Assert (XS.Length = 1, "A Ray intersecting a Plane from above - part 1");
-      AUnit.Assertions.Assert (XS (0).T_Value = 1.0, "A Ray intersecting a Plane from above - part 2");
-      AUnit.Assertions.Assert (XS (0).Object = P, "A Ray intersecting a Plane from above - part 3");
+      AUnit.Assertions.Assert (XS (XS.First).T_Value = 1.0, "A Ray intersecting a Plane from above - part 2");
+      AUnit.Assertions.Assert (XS (XS.First).Object = P, "A Ray intersecting a Plane from above - part 3");
 
       XS := P.all.Local_Intersect (R4);
       AUnit.Assertions.Assert (XS.Length = 1, "A Ray intersecting a Plane from below - part 1");
-      AUnit.Assertions.Assert (XS (0).T_Value = 1.0, "A Ray intersecting a Plane from below - part 2");
-      AUnit.Assertions.Assert (XS (0).Object = P, "A Ray intersecting a Plane from below - part 3");
+      AUnit.Assertions.Assert (XS (XS.First).T_Value = 1.0, "A Ray intersecting a Plane from below - part 2");
+      AUnit.Assertions.Assert (XS (XS.First).Object = P, "A Ray intersecting a Plane from below - part 3");
    end Test_Plane_Intersect;
 
    procedure Test_Reflection_Vector_Computation (T : in out AUnit.Test_Cases.Test_Case'Class);
@@ -48,12 +48,8 @@ package body Radatracer.Objects.Planes.Tests is
 
       Plane : constant Object_Access := new Radatracer.Objects.Planes.Plane'(others => <>);
       Ray : constant Radatracer.Ray := (Make_Point (0, 1, -1), Make_Vector (0.0, -0.70711, 0.70711));
-      Intersections : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (Intersection'(1.41421, Plane), 1);
-      Computations : constant Precomputed_Intersection_Info := Prepare_Calculations (
-         Ray,
-         Intersections,
-         Intersection_Vectors.To_Cursor (Intersections, 0)
-      );
+      XS : constant Intersections.Set := Intersections.To_Set (Intersection'(1.41421, Plane));
+      Computations : constant Precomputed_Intersection_Info := Prepare_Calculations (Ray, XS, XS.First);
    begin
       AUnit.Assertions.Assert (Computations.Reflect_Vector = Make_Vector (0.0, 0.70711, 0.70711), "Precomputing the reflection vector");
    end Test_Reflection_Vector_Computation;

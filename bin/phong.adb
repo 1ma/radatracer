@@ -7,7 +7,7 @@ with Radatracer.Objects.Spheres;
 procedure Phong is
    use type Radatracer.Tuple;
    use type Radatracer.Value;
-   use type Radatracer.Objects.Intersection_Vectors.Cursor;
+   use type Radatracer.Objects.Intersections.Cursor;
 
    Ray_Origin : constant Radatracer.Point := Radatracer.Make_Point (0, 0, -5);
 
@@ -29,8 +29,8 @@ procedure Phong is
       Material => (Color => Radatracer.Make_Color (1.0, 0.0, 0.0), others => <>)
    );
 
-   Hit : Radatracer.Objects.Intersection_Vectors.Cursor;
-   Intersections : Radatracer.Objects.Intersection_Vectors.Vector;
+   Hit : Radatracer.Objects.Intersections.Cursor;
+   Intersections : Radatracer.Objects.Intersections.Set;
    Ray : Radatracer.Ray;
    World_X, World_Y : Radatracer.Value;
    Point : Radatracer.Point := Radatracer.Make_Point (0, 0, 0);
@@ -54,7 +54,7 @@ begin
 
          Intersections := Radatracer.Objects.Intersect (Sphere, Ray);
          Hit := Radatracer.Objects.Hit (Intersections);
-         if Hit /= Radatracer.Objects.Intersection_Vectors.No_Element then
+         if Hit /= Radatracer.Objects.Intersections.No_Element then
             Point := Radatracer.Position (Ray, Intersections (Hit).T_Value);
             Normal_Vector := Intersections (Hit).Object.all.Normal_At (Point);
             Eye_Vector := -Ray.Direction;

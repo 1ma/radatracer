@@ -1,3 +1,4 @@
+with Ada.Containers.Ordered_Sets;
 with Ada.Containers.Vectors;
 with Ada.Numerics;
 with Radatracer.Images;
@@ -48,14 +49,13 @@ package Radatracer.Objects is
    end record;
 
    function "<" (L, R : Intersection) return Boolean;
-   --  Only < is defined because its needed for sorting Intersection_Vectors
+   --  Only < is defined because its needed for sorting Ordered Intersection Sets
 
-   package Intersection_Vectors is new Ada.Containers.Vectors (
-      Index_Type => Natural,
+   package Intersections is new Ada.Containers.Ordered_Sets (
       Element_Type => Intersection
    );
 
-   function Hit (Intersections : Intersection_Vectors.Vector) return Intersection_Vectors.Cursor;
+   function Hit (XS : Intersections.Set) return Intersections.Cursor;
 
    procedure Set_Transformation (Self : in out Object; Transformation : Radatracer.Matrices.Matrix4);
 
@@ -64,9 +64,9 @@ package Radatracer.Objects is
 
    function Local_Normal_At (Self : Object; Local_Point : Point) return Vector is abstract;
 
-   function Intersect (Self : in out Object'Class; Ray : Radatracer.Ray) return Intersection_Vectors.Vector;
+   function Intersect (Self : in out Object'Class; Ray : Radatracer.Ray) return Intersections.Set;
 
-   function Local_Intersect (Self : aliased in out Object; Local_Ray : Radatracer.Ray) return Intersection_Vectors.Vector is abstract;
+   function Local_Intersect (Self : aliased in out Object; Local_Ray : Radatracer.Ray) return Intersections.Set is abstract;
 
    function Reflect (V, Normal : Vector) return Vector;
 
@@ -97,7 +97,7 @@ package Radatracer.Objects is
 
    function Is_Shadowed (W : World; P : Point) return Boolean;
 
-   function Intersect (W : World; R : Ray) return Intersection_Vectors.Vector;
+   function Intersect (W : World; R : Ray) return Intersections.Set;
 
    type Precomputed_Intersection_Info is record
       T_Value, N_1, N_2 : Value;
@@ -115,8 +115,8 @@ package Radatracer.Objects is
 
    function Prepare_Calculations (
       Ray : Radatracer.Ray;
-      Intersections : Intersection_Vectors.Vector;
-      Hit_Index : Intersection_Vectors.Cursor
+      XS : Intersections.Set;
+      Hit_Index : Intersections.Cursor
    ) return Precomputed_Intersection_Info;
    --  Ditto.
 

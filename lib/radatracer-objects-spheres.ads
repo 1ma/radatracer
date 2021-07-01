@@ -3,5 +3,5 @@ package Radatracer.Objects.Spheres is
 
    overriding function Local_Normal_At (Self : Sphere; Local_Point : Point) return Vector;
 
-   overriding function Local_Intersect (Self : aliased in out Sphere; Local_Ray : Ray) return Intersection_Vectors.Vector;
+   overriding function Local_Intersect (Self : aliased in out Sphere; Local_Ray : Ray) return Intersections.Set;
 end Radatracer.Objects.Spheres;

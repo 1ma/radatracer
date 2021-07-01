@@ -19,7 +19,7 @@ package body Radatracer.Objects.Spheres.Tests is
    procedure Test_Ray_Sphere_Intersections (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
 
-      use type Radatracer.Objects.Intersection_Vectors.Vector;
+      use type Radatracer.Objects.Intersections.Set;
 
       S1 : constant Object_Access := new Sphere'(Inverted_Transformation => <>, others => <>);
       S2 : constant Object_Access := new Sphere'(
@@ -39,13 +39,13 @@ package body Radatracer.Objects.Spheres.Tests is
       R6 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
       R7 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
 
-      V1 : constant Intersection_Vectors.Vector := (4.0, S1) & (6.0, S1);
-      V2 : constant Intersection_Vectors.Vector := (5.0, S1) & (5.0, S1);
-      V3 : Intersection_Vectors.Vector;
-      V4 : constant Intersection_Vectors.Vector := (-1.0, S1) & (1.0, S1);
-      V5 : constant Intersection_Vectors.Vector := (-6.0, S1) & (-4.0, S1);
-      V6 : constant Intersection_Vectors.Vector := (3.0, S2) & (7.0, S2);
-      V7 : Intersection_Vectors.Vector;
+      V1 : constant Intersections.Set := Intersections.To_Set (Intersection'(4.0, S1)) or Intersections.To_Set (Intersection'(6.0, S1));
+      V2 : constant Intersections.Set := Intersections.To_Set (Intersection'(5.0, S1)) or Intersections.To_Set (Intersection'(5.0, S1));
+      V3 : Intersections.Set;
+      V4 : constant Intersections.Set := Intersections.To_Set (Intersection'(-1.0, S1)) or Intersections.To_Set (Intersection'(1.0, S1));
+      V5 : constant Intersections.Set := Intersections.To_Set (Intersection'(-6.0, S1)) or Intersections.To_Set (Intersection'(-4.0, S1));
+      V6 : constant Intersections.Set := Intersections.To_Set (Intersection'(3.0, S2)) or Intersections.To_Set (Intersection'(7.0, S2));
+      V7 : Intersections.Set;
    begin
       AUnit.Assertions.Assert (S1.all.Local_Intersect (R1) = V1, "Ray-Sphere intersection test 1 - intersection at 2 points");
       AUnit.Assertions.Assert (S1.all.Local_Intersect (R2) = V2, "Ray-Sphere intersection test 2 - intersection at 1 point (tangent point)");
@@ -118,38 +118,44 @@ package body Radatracer.Objects.Spheres.Tests is
    procedure Test_Refractive_Indexes_Calculations (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
 
-      use type Intersection_Vectors.Vector;
+      use type Intersections.Set;
 
       A : constant Object_Access := Transformed_Glass_Sphere (1.5, Radatracer.Matrices.Scaling (2.0, 2.0, 2.0));
       B : constant Object_Access := Transformed_Glass_Sphere (2.0, Radatracer.Matrices.Translation (0.0, 0.0, -0.25));
       C : constant Object_Access := Transformed_Glass_Sphere (2.5, Radatracer.Matrices.Translation (0.0, 0.0, 0.25));
 
       R : constant Ray := (Origin => Make_Point (0, 0, -4), Direction => Make_Vector (0, 0, 1));
-      XS : constant Intersection_Vectors.Vector :=
-         Intersection'(T_Value => 2.0, Object => A) &
-         Intersection'(T_Value => 2.75, Object => B) &
-         Intersection'(T_Value => 3.25, Object => C) &
-         Intersection'(T_Value => 4.75, Object => B) &
-         Intersection'(T_Value => 5.25, Object => C) &
-         Intersection'(T_Value => 6.0, Object => A);
+      XS : constant Intersections.Set :=
+         Intersections.To_Set (Intersection'(T_Value => 2.0, Object => A)) or
+         Intersections.To_Set (Intersection'(T_Value => 2.75, Object => B)) or
+         Intersections.To_Set (Intersection'(T_Value => 3.25, Object => C)) or
+         Intersections.To_Set (Intersection'(T_Value => 4.75, Object => B)) or
+         Intersections.To_Set (Intersection'(T_Value => 5.25, Object => C)) or
+         Intersections.To_Set (Intersection'(T_Value => 6.0, Object => A));
       PII : Precomputed_Intersection_Info;
+      Cursor : Intersections.Cursor := XS.First;
    begin
-      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (0));
+      PII := Prepare_Calculations (Ray => R, XS => XS, Hit_Index => Cursor);
       AUnit.Assertions.Assert (PII.N_1 = 1.0 and PII.N_2 = 1.5, "Refractive indices for hit #0");
+      Cursor := Intersections.Next (Cursor);
 
-      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (1));
+      PII := Prepare_Calculations (Ray => R, XS => XS, Hit_Index => Cursor);
       AUnit.Assertions.Assert (PII.N_1 = 1.5 and PII.N_2 = 2.0, "Refractive indices for hit #1");
+      Cursor := Intersections.Next (Cursor);
 
-      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (2));
+      PII := Prepare_Calculations (Ray => R, XS => XS, Hit_Index => Cursor);
       AUnit.Assertions.Assert (PII.N_1 = 2.0 and PII.N_2 = 2.5, "Refractive indices for hit #2");
+      Cursor := Intersections.Next (Cursor);
 
-      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (3));
+      PII := Prepare_Calculations (Ray => R, XS => XS, Hit_Index => Cursor);
       AUnit.Assertions.Assert (PII.N_1 = 2.5 and PII.N_2 = 2.5, "Refractive indices for hit #3");
+      Cursor := Intersections.Next (Cursor);
 
-      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (4));
+      PII := Prepare_Calculations (Ray => R, XS => XS, Hit_Index => Cursor);
       AUnit.Assertions.Assert (PII.N_1 = 2.5 and PII.N_2 = 1.5, "Refractive indices for hit #4");
+      Cursor := Intersections.Next (Cursor);
 
-      PII := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (5));
+      PII := Prepare_Calculations (Ray => R, XS => XS, Hit_Index => Cursor);
       AUnit.Assertions.Assert (PII.N_1 = 1.5 and PII.N_2 = 1.0, "Refractive indices for hit #5");
    end Test_Refractive_Indexes_Calculations;
 
@@ -160,8 +166,8 @@ package body Radatracer.Objects.Spheres.Tests is
       R : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
       S : constant Object_Access := Transformed_Glass_Sphere (1.5, Radatracer.Matrices.Translation (0.0, 0.0, 1.0));
       I : constant Intersection := (T_Value => 5.0, Object => S);
-      XS : constant Intersection_Vectors.Vector := Intersection_Vectors.To_Vector (I, 1);
-      PII : constant Precomputed_Intersection_Info := Prepare_Calculations (Ray => R, Intersections => XS, Hit_Index => XS.To_Cursor (0));
+      XS : constant Intersections.Set := Intersections.To_Set (I);
+      PII : constant Precomputed_Intersection_Info := Prepare_Calculations (Ray => R, XS => XS, Hit_Index => XS.First);
    begin
       AUnit.Assertions.Assert (PII.Under_Point.Z > Epsilon / 2.0, "Under_Point test #1");
       AUnit.Assertions.Assert (PII.Point.Z < PII.Under_Point.Z, "Under_Point test #2");
