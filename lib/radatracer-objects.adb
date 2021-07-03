@@ -214,6 +214,16 @@ package body Radatracer.Objects is
          return Black;
       end if;
 
+      declare
+         N_Ratio : constant Value := PII.N_1 / PII.N_2;
+         Cos_I : constant Value := Dot_Product (PII.Eye_Vector, PII.Normal_Vector);
+         Sin2_T : constant Value := (N_Ratio * N_Ratio) * (1.0 - (Cos_I * Cos_I));
+      begin
+         if Sin2_T > 1.0 then
+            return Black;
+         end if;
+      end;
+
       return White;
    end Refracted_Color;
 
