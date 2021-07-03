@@ -136,6 +136,7 @@ package body Radatracer.Objects is
       Hit_Index : Intersections.Cursor
    ) return Precomputed_Intersection_Info is
       use type Intersections.Cursor;
+      use type Object_Vectors.Cursor;
 
       Hit : constant Intersection := XS (Hit_Index);
       Eye_Vector : constant Vector := -Ray.Direction;
@@ -156,7 +157,7 @@ package body Radatracer.Objects is
          declare
             Seen_Object : Object_Vectors.Cursor := Containers.Find (XS (I).Object);
          begin
-            if Object_Vectors.Has_Element (Seen_Object) then
+            if Seen_Object /= Object_Vectors.No_Element then
                Containers.Delete (Seen_Object);
             else
                Containers.Append (XS (I).Object);
