@@ -195,11 +195,7 @@ package body Radatracer.Objects is
 
    function Reflected_Color (W : World; PII : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color is
    begin
-      if PII.Object.Material.Reflective = 0.0 then
-         return Black;
-      end if;
-
-      if Remaining = 0 then
+      if PII.Object.Material.Reflective = 0.0 or Remaining = 0 then
          return Black;
       end if;
 
@@ -212,9 +208,9 @@ package body Radatracer.Objects is
    end Reflected_Color;
 
    function Refracted_Color (W : World; PII : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color is
-      pragma Unreferenced (W, Remaining);
+      pragma Unreferenced (W);
    begin
-      if PII.Object.Material.Transparency = 0.0 then
+      if PII.Object.Material.Transparency = 0.0 or Remaining = 0 then
          return Black;
       end if;
 

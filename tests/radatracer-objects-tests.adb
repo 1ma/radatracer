@@ -461,8 +461,12 @@ package body Radatracer.Objects.Tests is
       XS : constant Intersections.Set := Intersections.To_Set (Intersection'(4.0, W.Objects (0))) or Intersections.To_Set (Intersection'(6.0, W.Objects (0)));
       PII : constant Precomputed_Intersection_Info := Prepare_Calculations (Ray => R, XS => XS, Hit_Index => XS.First);
    begin
-      AUnit.Assertions.Assert (Refracted_Color (W, PII) = Black, "The refracted color with an opaque surface");
-      null;
+      AUnit.Assertions.Assert (Refracted_Color (W, PII, Default_Max_Recursion) = Black, "The refracted color with an opaque surface");
+
+      W.Objects (0).Material.Transparency := 1.0;
+      W.Objects (0).Material.Refractive_Index := 1.5;
+
+      AUnit.Assertions.Assert (Refracted_Color (W, PII, 0) = Black, "The refracted color at the maximum recursive depth");
    end Test_Refracted_Color;
 
    procedure Test_Inifinite_Recursion_Protection (T : in out AUnit.Test_Cases.Test_Case'Class);
