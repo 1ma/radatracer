@@ -124,6 +124,8 @@ package Radatracer.Objects is
 
    function Reflected_Color (W : World; PII : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color;
 
+   function Refracted_Color (W : World; PII : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color;
+
    function Shade_Hit (W : World; I : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color;
 
    function Color_At (W : World; R : Ray; Remaining : Natural := Default_Max_Recursion) return Color;

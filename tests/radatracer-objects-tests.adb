@@ -451,6 +451,20 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (Shade_Hit (W, PII) = Make_Color (0.87675, 0.92433, 0.82917), "Shade_Hit with a reflective material");
    end Test_Reflected_Color;
 
+   procedure Test_Refracted_Color (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Refracted_Color (T : in out AUnit.Test_Cases.Test_Case'Class) is
+      pragma Unreferenced (T);
+      use type Intersections.Set;
+
+      W : constant World := Default_World;
+      R : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
+      XS : constant Intersections.Set := Intersections.To_Set (Intersection'(4.0, W.Objects (0))) or Intersections.To_Set (Intersection'(6.0, W.Objects (0)));
+      PII : constant Precomputed_Intersection_Info := Prepare_Calculations (Ray => R, XS => XS, Hit_Index => XS.First);
+   begin
+      AUnit.Assertions.Assert (Refracted_Color (W, PII) = Black, "The refracted color with an opaque surface");
+      null;
+   end Test_Refracted_Color;
+
    procedure Test_Inifinite_Recursion_Protection (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Inifinite_Recursion_Protection (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
@@ -503,7 +517,8 @@ package body Radatracer.Objects.Tests is
       Register_Routine (T, Test_Camera'Access, "Camera tests");
       Register_Routine (T, Test_Shadows'Access, "Shadow tests");
       Register_Routine (T, Test_Fake_Object'Access, "Fake Object that tests Chapter 9 refactor");
-      Register_Routine (T, Test_Reflected_Color'Access, "Reflected_Color function test");
+      Register_Routine (T, Test_Reflected_Color'Access, "Reflected_Color function tests");
+      Register_Routine (T, Test_Refracted_Color'Access, "Refracted_Color function tests");
       Register_Routine (T, Test_Inifinite_Recursion_Protection'Access, "Inifinite recursion avoidance test");
    end Register_Tests;
 

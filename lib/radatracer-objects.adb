@@ -211,6 +211,16 @@ package body Radatracer.Objects is
       end;
    end Reflected_Color;
 
+   function Refracted_Color (W : World; PII : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color is
+      pragma Unreferenced (W, Remaining);
+   begin
+      if PII.Object.Material.Transparency = 0.0 then
+         return Black;
+      end if;
+
+      return White;
+   end Refracted_Color;
+
    function Shade_Hit (W : World; I : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color is
       Surface_Color : constant Color := Lightning (
          Material => I.Object.Material,
