@@ -23,25 +23,9 @@ procedure Planar_Scene is
             others => <>
          ),
          Specular => 0.0,
-         others => <>
-      )
-   );
-
-   Wall : constant Radatracer.Objects.Object_Access := new Radatracer.Objects.Planes.Plane'(
-      Inverted_Transformation => Radatracer.Matrices.Invert (
-         Radatracer.Matrices.Translation (0.0, 0.0, 5.0) *
-         Radatracer.Matrices.Rotation_X (Ada.Numerics.Pi / 2.0)
-      ),
-      Material => (
-         Has_Pattern => True,
-         Pattern => new Radatracer.Objects.Patterns.Stripe'(
-            A => Radatracer.White,
-            B => Radatracer.Make_Color (0.5, 0.5, 0.5),
-            Inverted_Transformation => Radatracer.Matrices.Invert (
-               Radatracer.Matrices.Rotation_Y (Ada.Numerics.Pi / 4.0)
-            )
-         ),
-         Specular => 0.0,
+         Reflective => 0.8,
+         Refractive_Index => 1.2,
+         Transparency => 0.4,
          others => <>
       )
    );
@@ -62,6 +46,9 @@ procedure Planar_Scene is
          ),
          Diffuse => 0.7,
          Specular => 0.3,
+         Reflective => 0.8,
+         Refractive_Index => 1.2,
+         Transparency => 0.4,
          others => <>
       )
    );
@@ -114,7 +101,7 @@ procedure Planar_Scene is
          Intensity => Radatracer.Make_Color (1.0, 1.0, 1.0),
          Position => Radatracer.Make_Point (-10, 10, -10)
       ),
-      Objects => Floor & Wall & Middle_Sphere & Right_Sphere & Left_Sphere
+      Objects => Floor & Middle_Sphere & Right_Sphere & Left_Sphere
    );
 
    Camera : constant Radatracer.Objects.Camera := Radatracer.Objects.Make_Camera (

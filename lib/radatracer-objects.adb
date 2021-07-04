@@ -201,14 +201,12 @@ package body Radatracer.Objects is
 
       declare
          Reflected_Ray : constant Ray := (PII.Over_Point, PII.Reflect_Vector);
-         Reflected_Color : constant Color := Color_At (W, Reflected_Ray, Remaining - 1) * PII.Object.Material.Reflective;
       begin
-         return Reflected_Color;
+         return Color_At (W, Reflected_Ray, Remaining - 1) * PII.Object.Material.Reflective;
       end;
    end Reflected_Color;
 
    function Refracted_Color (W : World; PII : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color is
-      pragma Unreferenced (W);
    begin
       if PII.Object.Material.Transparency = 0.0 or Remaining = 0 then
          return Black;
@@ -222,9 +220,17 @@ package body Radatracer.Objects is
          if Sin2_T > 1.0 then
             return Black;
          end if;
-      end;
 
-      return White;
+         declare
+            package Math is new Ada.Numerics.Generic_Elementary_Functions (Value);
+
+            Cos_T : constant Value := Math.Sqrt (1.0 - Sin2_T);
+            Direction : constant Vector := (PII.Normal_Vector * (N_Ratio * Cos_I - Cos_T)) - (PII.Eye_Vector * N_Ratio);
+            Refract_Ray : constant Ray := (PII.Under_Point, Direction);
+         begin
+            return Color_At (W, Refract_Ray, Remaining - 1) * PII.Object.Material.Transparency;
+         end;
+      end;
    end Refracted_Color;
 
    function Shade_Hit (W : World; I : Precomputed_Intersection_Info; Remaining : Natural := Default_Max_Recursion) return Color is
@@ -239,10 +245,9 @@ package body Radatracer.Objects is
       );
 
       Reflected_Color : constant Color := Radatracer.Objects.Reflected_Color (W, I, Remaining);
-
-      Shaded_Color : constant Color := Surface_Color + Reflected_Color;
+      Refracted_Color : constant Color := Radatracer.Objects.Refracted_Color (W, I, Remaining);
    begin
-      return Shaded_Color;
+      return Surface_Color + Reflected_Color + Refracted_Color;
    end Shade_Hit;
 
    function Color_At (W : World; R : Ray; Remaining : Natural := Default_Max_Recursion) return Color is
