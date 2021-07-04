@@ -34,7 +34,7 @@ package body Radatracer.Objects.Spheres.Tests is
       R1 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
       R2 : constant Ray := (Make_Point (0, 1, -5), Make_Vector (0, 0, 1));
       R3 : constant Ray := (Make_Point (0, 2, -5), Make_Vector (0, 0, 1));
-      R4 : constant Ray := (Make_Point (0, 0, 0), Make_Vector (0, 0, 1));
+      R4 : constant Ray := (Origin, Make_Vector (0, 0, 1));
       R5 : constant Ray := (Make_Point (0, 0, 5), Make_Vector (0, 0, 1));
       R6 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));
       R7 : constant Ray := (Make_Point (0, 0, -5), Make_Vector (0, 0, 1));

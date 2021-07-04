@@ -36,6 +36,8 @@ package Radatracer is
 
    subtype Color is Vector;
 
+   Origin : constant Point := (0.0, 0.0, 0.0, 1.0);
+
    Black : constant Color := (0.0, 0.0, 0.0, 0.0);
    Red   : constant Color := (1.0, 0.0, 0.0, 0.0);
    Green : constant Color := (0.0, 1.0, 0.0, 0.0);
@@ -60,7 +62,7 @@ package Radatracer is
    function Cross_Product (L, R : Vector) return Vector;
 
    type Ray is record
-      Origin : Point := Make_Point (0, 0, 0);
+      Origin : Point := Radatracer.Origin;
       Direction : Vector := Make_Vector (0, 0, 0);
    end record;
 

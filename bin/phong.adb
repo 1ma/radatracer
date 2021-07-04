@@ -33,7 +33,7 @@ procedure Phong is
    Intersections : Radatracer.Objects.Intersections.Set;
    Ray : Radatracer.Ray;
    World_X, World_Y : Radatracer.Value;
-   Point : Radatracer.Point := Radatracer.Make_Point (0, 0, 0);
+   Point : Radatracer.Point := Radatracer.Origin;
    Normal_Vector, Eye_Vector : Radatracer.Vector := Radatracer.Make_Vector (0, 0, 0);
 
    subtype Scene_Canvas is Radatracer.Images.Canvas (1 .. Canvas_Pixels, 1 .. Canvas_Pixels);

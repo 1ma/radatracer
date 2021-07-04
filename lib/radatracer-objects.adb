@@ -266,7 +266,7 @@ package body Radatracer.Objects is
    function Make_Camera (
       H_Size, V_Size : Positive;
       FOV : Value;
-      From : Point := Make_Point (0, 0, 0);
+      From : Point := Origin;
       To : Point := Make_Point (0, 0, -1);
       Up : Vector := Make_Vector (0, 1, 0)
    ) return Camera is
@@ -309,7 +309,7 @@ package body Radatracer.Objects is
 
       Pixel : constant Point := C.Inverted_Transformation * Make_Point (World_X, World_Y, -1.0);
 
-      Origin : constant Point := C.Inverted_Transformation * Make_Point (0, 0, 0);
+      Origin : constant Point := C.Inverted_Transformation * Radatracer.Origin;
       Direction : constant Vector := Normalize (Pixel - Origin);
    begin
       return (Origin, Direction);

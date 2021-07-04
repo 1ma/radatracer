@@ -278,17 +278,17 @@ package body Radatracer.Matrices.Tests is
       AUnit.Assertions.Assert (Shearing (0.0, 0.0, 0.0, 0.0, 0.0, 1.0) * P2 = Make_Point (2, 3, 7), "Shearing test 5");
 
       AUnit.Assertions.Assert (
-         View_Transform (Make_Point (0, 0, 0), Make_Point (0, 0, -1), Make_Vector (0, 1, 0)) = Identity_Matrix4,
+         View_Transform (Origin, Make_Point (0, 0, -1), Make_Vector (0, 1, 0)) = Identity_Matrix4,
          "View_Transform test 1 - transformation matrix for the default orientation"
       );
 
       AUnit.Assertions.Assert (
-         View_Transform (Make_Point (0, 0, 0), Make_Point (0, 0, 1), Make_Vector (0, 1, 0)) = Scaling (-1.0, 1.0, -1.0),
+         View_Transform (Origin, Make_Point (0, 0, 1), Make_Vector (0, 1, 0)) = Scaling (-1.0, 1.0, -1.0),
          "View_Transform test 2 - a view transformation matrix looking in the positive z direction"
       );
 
       AUnit.Assertions.Assert (
-         View_Transform (Make_Point (0, 0, 0), Make_Point (0, 0, 1), Make_Vector (0, 1, 0)) = Scaling (-1.0, 1.0, -1.0),
+         View_Transform (Origin, Make_Point (0, 0, 1), Make_Vector (0, 1, 0)) = Scaling (-1.0, 1.0, -1.0),
          "View_Transform test 3 - the view transformation matrix moves the world"
       );
 

@@ -110,7 +110,7 @@ package body Radatracer.Objects.Tests is
       Object : Test_Object;
 
       Material : constant Radatracer.Objects.Material := (others => <>);
-      Position : constant Point := Make_Point (0, 0, 0);
+      Position : constant Point := Origin;
 
       Eye_Vector_1 : constant Vector := Make_Vector (0, 0, -1);
       Normal_Vector_1 : constant Vector := Make_Vector (0, 0, -1);
@@ -213,7 +213,7 @@ package body Radatracer.Objects.Tests is
       pragma Unreferenced (T);
 
       R1 : constant Ray := (Origin => Make_Point (0, 0, -5), Direction => Make_Vector (0, 0, 1));
-      R2 : constant Ray := (Origin => Make_Point (0, 0, 0), Direction => Make_Vector (0, 0, 1));
+      R2 : constant Ray := (Origin => Origin, Direction => Make_Vector (0, 0, 1));
 
       I1 : constant Intersection := (T_Value => 4.0, Object => new Sphere);
       I2 : constant Intersection := (T_Value => 1.0, Object => new Sphere);
@@ -265,7 +265,7 @@ package body Radatracer.Objects.Tests is
       VI1 : constant Intersections.Set := Intersections.To_Set (I1);
       PII1 : constant Precomputed_Intersection_Info := Prepare_Calculations (R1, VI1, VI1.First);
 
-      R2 : constant Ray := (Origin => Make_Point (0, 0, 0), Direction => Make_Vector (0, 0, 1));
+      R2 : constant Ray := (Origin => Radatracer.Origin, Direction => Make_Vector (0, 0, 1));
       I2 : constant Intersection := (T_Value => 0.5, Object => W.Objects (1));
       VI2 : constant Intersections.Set := Intersections.To_Set (I2);
       PII2 : constant Precomputed_Intersection_Info := Prepare_Calculations (R2, VI2, VI2.First);
@@ -325,7 +325,7 @@ package body Radatracer.Objects.Tests is
       C4 : Camera := Make_Camera (201, 101, Ada.Numerics.Pi / 2.0);
 
       W : constant World := Default_World;
-      C5 : constant Camera := Make_Camera (11, 11, Ada.Numerics.Pi / 2.0, Make_Point (0, 0, -5), Make_Point (0, 0, 0), Make_Vector (0, 1, 0));
+      C5 : constant Camera := Make_Camera (11, 11, Ada.Numerics.Pi / 2.0, Make_Point (0, 0, -5), Origin, Make_Vector (0, 1, 0));
    begin
       AUnit.Assertions.Assert (
          C1.H_Size = 160 and C1.V_Size = 120 and C1.FOV = Ada.Numerics.Pi / 2.0 and C1.Inverted_Transformation = Radatracer.Matrices.Identity_Matrix4,
@@ -336,12 +336,12 @@ package body Radatracer.Objects.Tests is
       AUnit.Assertions.Assert (C3.Pixel_Size = 0.01, "The pixel size for a vertical camera");
 
       AUnit.Assertions.Assert (
-         Ray_For_Pixel (C4, 100, 50) = (Make_Point (0, 0, 0), Make_Vector (0, 0, -1)),
+         Ray_For_Pixel (C4, 100, 50) = (Origin, Make_Vector (0, 0, -1)),
          "Constructing a ray through the center of the canvas"
       );
 
       AUnit.Assertions.Assert (
-         Ray_For_Pixel (C4, 0, 0) = (Make_Point (0, 0, 0), Make_Vector (0.66519, 0.33259, -0.66851)),
+         Ray_For_Pixel (C4, 0, 0) = (Origin, Make_Vector (0.66519, 0.33259, -0.66851)),
          "Constructing a ray through a corner of the canvas"
       );
 
@@ -422,7 +422,7 @@ package body Radatracer.Objects.Tests is
       pragma Unreferenced (T);
 
       W : World := Default_World;
-      R : Ray := (Make_Point (0, 0, 0), Make_Vector (0, 0, 1));
+      R : Ray := (Origin, Make_Vector (0, 0, 1));
       I : constant Intersection := (1.0, W.Objects (1));
       VI : constant Intersections.Set := Intersections.To_Set (I);
       PII : Precomputed_Intersection_Info := Prepare_Calculations (R, VI, VI.First);
@@ -507,12 +507,12 @@ package body Radatracer.Objects.Tests is
       );
 
       World : constant Radatracer.Objects.World := (
-         Light => (Intensity => White, Position => Make_Point (0, 0, 0)),
+         Light => (Intensity => White, Position => Origin),
          Objects => Lower_Plane & Upper_Plane
       );
 
       Ray : constant Radatracer.Ray := (
-         Origin => Make_Point (0, 0, 0),
+         Origin => Radatracer.Origin,
          Direction => Make_Vector (0, 1, 0)
       );
    begin

@@ -71,8 +71,8 @@ package Radatracer.Objects is
    function Reflect (V, Normal : Vector) return Vector;
 
    type Point_Light is record
-      Intensity : Color := Make_Color (1.0, 1.0, 1.0);
-      Position : Point := Make_Point (0, 0, 0);
+      Intensity : Color := White;
+      Position : Point := Origin;
    end record;
 
    function Lightning (
@@ -140,7 +140,7 @@ package Radatracer.Objects is
    function Make_Camera (
       H_Size, V_Size : Positive;
       FOV : Value;
-      From : Point := Make_Point (0, 0, 0);
+      From : Point := Origin;
       To : Point := Make_Point (0, 0, -1);
       Up : Vector := Make_Vector (0, 1, 0)
    ) return Camera;

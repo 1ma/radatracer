@@ -5,7 +5,7 @@
 [Jamis Buck's Raytracer Challenge](https://pragprog.com/titles/jbtracer/the-ray-tracer-challenge/) implemented in Ada.
 
 <div align="center">
-  <img alt="best render yet" src="https://i.imgur.com/95z0Hyx.jpg">
+  <img alt="best render yet" src="https://i.imgur.com/2EHxK0K.png">
 </div>
 
 

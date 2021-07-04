@@ -19,15 +19,15 @@ package body Radatracer.Objects.Patterns.Tests is
    begin
       AUnit.Assertions.Assert (P.A = White and P.B = Black, "Creating a stripe pattern");
 
-      AUnit.Assertions.Assert (Pattern_At (P, Make_Point (0, 0, 0)) = White, "A stripe pattern is constant in Y - part 1");
+      AUnit.Assertions.Assert (Pattern_At (P, Origin) = White, "A stripe pattern is constant in Y - part 1");
       AUnit.Assertions.Assert (Pattern_At (P, Make_Point (0, 1, 0)) = White, "A stripe pattern is constant in Y - part 2");
       AUnit.Assertions.Assert (Pattern_At (P, Make_Point (0, 2, 0)) = White, "A stripe pattern is constant in Y - part 3");
 
-      AUnit.Assertions.Assert (Pattern_At (P, Make_Point (0, 0, 0)) = White, "A stripe pattern is constant in Z - part 1");
+      AUnit.Assertions.Assert (Pattern_At (P, Origin) = White, "A stripe pattern is constant in Z - part 1");
       AUnit.Assertions.Assert (Pattern_At (P, Make_Point (0, 0, 1)) = White, "A stripe pattern is constant in Z - part 2");
       AUnit.Assertions.Assert (Pattern_At (P, Make_Point (0, 0, 2)) = White, "A stripe pattern is constant in Z - part 3");
 
-      AUnit.Assertions.Assert (Pattern_At (P, Make_Point (0, 0, 0)) = White, "A stripe pattern alternates in X - part 1");
+      AUnit.Assertions.Assert (Pattern_At (P, Origin) = White, "A stripe pattern alternates in X - part 1");
       AUnit.Assertions.Assert (Pattern_At (P, Make_Point (0.9, 0.0, 0.0)) = White, "A stripe pattern alternates in X - part 2");
       AUnit.Assertions.Assert (Pattern_At (P, Make_Point (1, 0, 0)) = Black, "A stripe pattern alternates in X - part 3");
       AUnit.Assertions.Assert (Pattern_At (P, Make_Point (-0.1, 0.0, 0.0)) = Black, "A stripe pattern alternates in X - part 4");
@@ -76,7 +76,7 @@ package body Radatracer.Objects.Patterns.Tests is
       Gradient : constant Radatracer.Objects.Patterns.Gradient := (A => White, B => Black, others => <>);
    begin
       AUnit.Assertions.Assert (
-         Pattern_At (Gradient, Make_Point (0, 0, 0)) = White,
+         Pattern_At (Gradient, Origin) = White,
          "A gradient linearly interpolates between colors - part 1"
       );
 
@@ -102,7 +102,7 @@ package body Radatracer.Objects.Patterns.Tests is
 
       Ring : constant Radatracer.Objects.Patterns.Ring := (A => White, B => Black, others => <>);
    begin
-      AUnit.Assertions.Assert (Pattern_At (Ring, Make_Point (0, 0, 0)) = White, "A ring should extend in both X and Z - part 1");
+      AUnit.Assertions.Assert (Pattern_At (Ring, Origin) = White, "A ring should extend in both X and Z - part 1");
       AUnit.Assertions.Assert (Pattern_At (Ring, Make_Point (1, 0, 0)) = Black, "A ring should extend in both X and Z - part 2");
       AUnit.Assertions.Assert (Pattern_At (Ring, Make_Point (0, 0, 1)) = Black, "A ring should extend in both X and Z - part 3");
       AUnit.Assertions.Assert (Pattern_At (Ring, Make_Point (0.708, 0.0, 0.708)) = Black, "A ring should extend in both X and Z - part 4");
@@ -114,15 +114,15 @@ package body Radatracer.Objects.Patterns.Tests is
 
       Checker : constant Radatracer.Objects.Patterns.Checkers := (A => White, B => Black, others => <>);
    begin
-      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0, 0, 0)) = White, "Checkers should repeat in X - part 1");
+      AUnit.Assertions.Assert (Pattern_At (Checker, Origin) = White, "Checkers should repeat in X - part 1");
       AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0.99, 0.0, 0.0)) = White, "Checkers should repeat in X - part 2");
       AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (1.01, 0.0, 0.0)) = Black, "Checkers should repeat in X - part 3");
 
-      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0, 0, 0)) = White, "Checkers should repeat in Y - part 1");
+      AUnit.Assertions.Assert (Pattern_At (Checker, Origin) = White, "Checkers should repeat in Y - part 1");
       AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0.0, 0.99, 0.0)) = White, "Checkers should repeat in Y - part 2");
       AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0.0, 1.01, 0.0)) = Black, "Checkers should repeat in Y - part 3");
 
-      AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0, 0, 0)) = White, "Checkers should repeat in Z - part 1");
+      AUnit.Assertions.Assert (Pattern_At (Checker, Origin) = White, "Checkers should repeat in Z - part 1");
       AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0.0, 0.0, 0.99)) = White, "Checkers should repeat in Z - part 2");
       AUnit.Assertions.Assert (Pattern_At (Checker, Make_Point (0.0, 0.0, 1.01)) = Black, "Checkers should repeat in Z - part 3");
 

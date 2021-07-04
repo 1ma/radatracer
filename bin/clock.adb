@@ -12,7 +12,7 @@ procedure Clock is
    Side_Length : constant := 100;
    Canvas : Radatracer.Images.Canvas (1 .. Side_Length, 1 .. Side_Length);
 
-   Hour : Radatracer.Point := Radatracer.Make_Point (0, 0, 0);
+   Hour : Radatracer.Point := Radatracer.Origin;
    Midnight : constant Radatracer.Point := Radatracer.Make_Point (0, 1, 0);
 
    Radians : Float;

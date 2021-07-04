@@ -8,7 +8,7 @@ package body Radatracer.Objects.Planes.Tests is
       P : constant Plane := (others => <>);
       Normal : constant Vector := Make_Vector (0, 1, 0);
    begin
-      AUnit.Assertions.Assert (P.Local_Normal_At (Make_Point (0, 0, 0)) = Normal, "The normal of a plane is constant everywhere");
+      AUnit.Assertions.Assert (P.Local_Normal_At (Origin) = Normal, "The normal of a plane is constant everywhere");
       AUnit.Assertions.Assert (P.Local_Normal_At (Make_Point (10, 0, -10)) = Normal, "The normal of a plane is constant everywhere");
       AUnit.Assertions.Assert (P.Local_Normal_At (Make_Point (-5, 0, 150)) = Normal, "The normal of a plane is constant everywhere");
    end Test_Plane_Normal_At;
@@ -21,7 +21,7 @@ package body Radatracer.Objects.Planes.Tests is
 
       P : constant Object_Access := new Plane;
       R1 : constant Ray := (Origin => Make_Point (0, 10, 0), Direction => Make_Vector (0, 0, 1));
-      R2 : constant Ray := (Origin => Make_Point (0, 0, 0), Direction => Make_Vector (0, 0, 1));
+      R2 : constant Ray := (Origin => Origin, Direction => Make_Vector (0, 0, 1));
       R3 : constant Ray := (Origin => Make_Point (0, 1, 0), Direction => Make_Vector (0, -1, 0));
       R4 : constant Ray := (Origin => Make_Point (0, -1, 0), Direction => Make_Vector (0, 1, 0));
 
