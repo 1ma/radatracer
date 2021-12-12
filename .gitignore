@@ -3,6 +3,6 @@
 *.ppm
 .idea/
 alire/
-out/
+config/
 obj/
-alire/
+out/
